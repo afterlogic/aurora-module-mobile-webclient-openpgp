@@ -1,0 +1,22 @@
+{
+    "Disabled": [
+		false,
+		"bool"
+	],
+    "AvailableFor": [
+		["MailWebclient"],
+		"array"
+	],
+    "IncludeInMobile": [
+		true,
+		"bool"
+	],
+    "IncludeInDesktop": [
+		false,
+		"bool"
+	],
+    "RequireInMobile": [
+		["OpenPgpWebclient"],
+		"array"
+	]
+}

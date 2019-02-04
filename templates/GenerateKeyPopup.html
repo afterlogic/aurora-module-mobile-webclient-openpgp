@@ -1,0 +1,50 @@
+<div class="popup" style="display: none;">
+	<div class="mask" data-bind="click: cancelPopup"></div>
+	<div class="popup_panel">
+		<span class="close" data-bind="click: cancelPopup"></span>
+		
+		<div class="popup_heading" data-bind="i18n: {'key': '%MODULENAME%/HEADING_GENERATE_NEW_KEY'}"></div>
+
+		<div class="list-block">
+			<ul>
+				<li>
+					<div class="item-content">
+						<div class="item-inner">
+							<div class="item-title label" data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_EMAIL'}"></div>
+							<div class="item-input">
+								<select data-bind="options: emails, value: selectedEmail"></select>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item-content">
+						<div class="item-inner">
+							<div class="item-title label" data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_PASSWORD'}"></div>
+							<div class="item-input">
+								<input type="password" data-bind="value: password" />
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item-content">
+						<div class="item-inner">
+							<div class="item-title label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_KEY_LENGTH'}"></div>
+							<div class="item-input">
+								<select data-bind="value: selectedKeyLength, options: keyLengthOptions"></select>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="content-block">
+			<p><a href="#" class="button" data-bind="visible: !process(), i18n: {'key': '%MODULENAME%/ACTION_GENERATE'}, click: generate"></a></p>
+			<p><a href="#" class="button color-gray" data-bind="visible: process, i18n: {'key': '%MODULENAME%/ACTION_GENERATE_IN_PROGRESS'}"></a></p>
+			<p><a href="#" class="button" data-bind="visible: !process(), i18n: {'key': 'COREWEBCLIENT/ACTION_CANCEL'}, click: cancelPopup"></a></p>
+		</div>
+	</div>
+	<span class="helper"></span>
+</div>
