@@ -4,7 +4,7 @@
 		"bool"
 	],
     "AvailableFor": [
-		["MailWebclient"],
+		["MailMobileWebclient"],
 		"array"
 	],
     "IncludeInMobile": [
