@@ -7,8 +7,11 @@ module.exports = function (oAppData) {
 	{
 		return {
 			start: function (ModulesManager) {
-				var OpenPgpSettingsFormView = require('modules/OpenPgpWebclient/js/views/OpenPgpSettingsFormView.js');
-				OpenPgpSettingsFormView.ViewTemplate = '%ModuleName%_OpenPgpSettingsFormView';
+				if (ModulesManager.isModuleAvailable('SettingsWebclient'))
+				{
+					var OpenPgpSettingsFormView = require('modules/OpenPgpWebclient/js/views/OpenPgpSettingsFormView.js');
+					OpenPgpSettingsFormView.ViewTemplate = '%ModuleName%_OpenPgpSettingsFormView';
+				}
 				
 				var ShowKeyArmorPopup = require('modules/OpenPgpWebclient/js/popups/ShowKeyArmorPopup.js');
 				ShowKeyArmorPopup.PopupTemplate = '%ModuleName%_ShowKeyArmorPopup';
