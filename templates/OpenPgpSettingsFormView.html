@@ -1,5 +1,5 @@
 <div class="content-block-title" data-bind="i18n: {'key': '%MODULENAME%/HEADING_SETTINGS_TAB'}"></div>
-<div class="content-block">
+<div class="content-block content-block-openpgp-settings">
 	<div class="block block-strong">
 		<div class="row">
 			<span class="value">
@@ -16,7 +16,28 @@
 		<p><a href="#" class="button button-fill color-gray" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE_IN_PROGRESS'}, visible: isSaving()"></a></p>
 	</div>
 </div>
-<div class="content-block" data-bind="visible: enableOpenPgp">
+<div class="content-block content-block-openpgp-settings" data-bind="visible: enableOpenPgp">
+	<div class="block block-strong">
+		<div class="data-table-title">
+			<b class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_EXTERNAL_PUBLIC_KEYS'}"></b>
+			<div class="value" data-bind="i18n: {'key': '%MODULENAME%/INFO_EMPTY_EXTERNAL_PUBLIC_KEYS'}, visible: externalPublicKeys().length === 0"></div>
+		</div>
+		<div class="data-table card">
+			<table>
+			  <tbody data-bind="foreach: externalPublicKeys">
+				<tr>
+				  <td class="col label-cell" data-bind="text: user"></td>
+				  <td class="col label-cell">
+					  <p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_VIEW_KEY'}, click: function () { $parent.showArmor(key); }"></a></p>
+					  <p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_DELETE_KEY'}, click: function () { $parent.removeOpenPgpKey(key); }"></a></p>
+				  </td>
+				</tr>
+			  </tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="content-block content-block-openpgp-settings" data-bind="visible: enableOpenPgp">
 	<div class="block block-strong">
 		<div class="data-table-title">
 			<b class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PUBLIC_KEYS'}"></b>
@@ -37,7 +58,7 @@
 		</div>
 	</div>
 </div>
-<div class="content-block" data-bind="visible: enableOpenPgp">
+<div class="content-block content-block-openpgp-settings" data-bind="visible: enableOpenPgp">
 	<div class="block block-strong">
 		<div class="data-table-title">
 			<b class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRIVATE_KEYS'}"></b>
