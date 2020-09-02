@@ -1,34 +1,73 @@
 <div class="popup" style="display: none;">
 	<div class="mask" data-bind="click: cancelPopup"></div>
-	<div class="popup_panel">
+	<div class="popup_panel import_pgp_key_popup">
 		<span class="close" data-bind="click: cancelPopup"></span>
-		
 		<div class="popup_heading" data-bind="i18n: {'key': '%MODULENAME%/HEADING_IMPORT_KEY'}"></div>
 
-		<div class="content-block" data-bind="visible: keys().length === 0">
+		<div class="content-block" data-bind="visible: !keysChecked()">
 			<textarea class="input import_pgp_key_area" data-bind="value: keyArmor, hasfocus: keyArmorFocused" style="width: 100%"></textarea>
 		</div>
-		<div class="content-block-title" data-bind="text: headlineText, visible: keys().length > 0"></div>
-		<div class="content-block" data-bind="visible: keys().length > 0">
-			<div data-bind="foreach: keys">
-				<div class="key_item" data-bind="css: {'disabled': disabled}">
-					<label data-bind="css: {'checked': needToImport, 'disabled': disabled}" class="custom_checkbox checked">
+		
+		<div data-bind="i18n: {'key': '%MODULENAME%/INFO_TEXT_CONTAINS_NO_KEYS_TO_IMPORT'}, visible: keysChecked() && keysToImport().length === 0" style="margin-bottom: 30px;"></div>
+		<div data-bind="i18n: {'key': '%MODULENAME%/INFO_TEXT_CONTAINS_KEYS_FOR_IMPORT'},  visible: keysToImport().length > 0"></div>
+		<div class="content-block" data-bind="visible: keysToImport().length > 0" style="margin-top: 6px;">
+			<div data-bind="foreach: keysToImport">
+				<div class="key_item">
+					<label data-bind="css: {'checked': needToImport}" class="custom_checkbox checked">
 						<span class="icon"></span>
-						<input type="checkbox" data-bind="checked: needToImport, attr: {'id': 'need_to_import_' + id}, disable: disabled">
+						<input type="checkbox" data-bind="checked: needToImport, attr: {'id': 'need_to_import_' + id}">
 					</label>
 					<label data-bind="attr: {'for': 'need_to_import_' + id}">
 						<span class="key_email" data-bind="text: email"></span>
 						<span data-bind="text: addInfo"></span>
+						<span data-bind="text: '(external)', visible: isExternal"></span>
 					</label>
 				</div>
 			</div>
 		</div>
-		<div class="content-block" data-bind="visible: keys().length > 0 && hasExistingKeys()">
-			<div class="hint" data-bind="i18n: {'key': '%MODULENAME%/INFO_EXISTING_KEYS_GREYED'}"></div>
+		
+		<div data-bind="i18n: {'key': '%MODULENAME%/INFO_TEXT_CONTAINS_KEYS_ALREADY_IN_SYSTEM'},  visible: keysAlreadyThere().length > 0"></div>
+		<div class="content-block" data-bind="visible: keysAlreadyThere().length > 0" style="margin-top: 6px;">
+			<div data-bind="foreach: keysAlreadyThere">
+				<div class="key_item disabled">
+					<label>
+						<span class="key_email" data-bind="text: email"></span>
+						<span data-bind="text: addInfo"></span>
+						<span data-bind="text: '(external)', visible: isExternal"></span>
+					</label>
+				</div>
+			</div>
 		</div>
+		
+		<div data-bind="i18n: {'key': '%MODULENAME%/INFO_TEXT_CONTAINS_KEYS_EXTERNAL_PRIVATE'},  visible: keysPrivateExternal().length > 0"></div>
+		<div class="content-block" data-bind="visible: keysPrivateExternal().length > 0" style="margin-top: 6px;">
+			<div data-bind="foreach: keysPrivateExternal">
+				<div class="key_item disabled">
+					<label>
+						<span class="key_email" data-bind="text: email"></span>
+						<span data-bind="text: addInfo"></span>
+						<span data-bind="text: '(external)', visible: isExternal"></span>
+					</label>
+				</div>
+			</div>
+		</div>
+		
+		<div data-bind="i18n: {'key': '%MODULENAME%/INFO_TEXT_CONTAINS_KEYS_WITH_NO_EMAIL'},  visible: keysBroken().length > 0"></div>
+		<div class="content-block" data-bind="visible: keysBroken().length > 0" style="margin-top: 6px;">
+			<div data-bind="foreach: keysBroken">
+				<div class="key_item disabled" style="color: red;">
+					<label>
+						<span class="key_email" data-bind="text: email"></span>
+						<span data-bind="text: addInfo"></span>
+						<span data-bind="text: '(external)', visible: isExternal"></span>
+					</label>
+				</div>
+			</div>
+		</div>
+		
 		<div class="content-block">
-			<p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_CHECK'}, click: checkArmor, visible: keys().length === 0"></a></p>
-			<p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_IMPORT_KEYS'}, click: importKey, visible: keys().length > 0"></a></p>
+			<p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_CHECK'}, click: checkArmor, visible: !keysChecked()"></a></p>
+			<p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_IMPORT_KEYS'}, click: importKey, visible: keysToImport().length > 0"></a></p>
 			<p><a href="#" class="button button-raised" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CANCEL'}, click: cancelPopup"></a></p>
 		</div>
 	</div>
