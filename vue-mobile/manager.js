@@ -10,7 +10,7 @@ const _getSettingsTabs = params => {
   params.settingsTabs = params.settingsTabs.concat([
     {
       routerPath: '/settings/open-pgp',
-      labelLangConst: 'OPENPGPWEBCLIENT.LABEL_SETTINGS_TAB',
+      tabNameLangConst: 'OPENPGPWEBCLIENT.LABEL_SETTINGS_TAB',
       getIconComponent: () => import('./components/icons/PgpIcon'),
     },
   ])
