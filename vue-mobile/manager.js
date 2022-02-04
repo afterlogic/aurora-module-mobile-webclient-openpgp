@@ -1,5 +1,6 @@
-import eventBus from 'src/event-bus'
 import _ from 'lodash'
+
+import eventBus from 'src/event-bus'
 
 import settings from './settings'
 
@@ -40,6 +41,30 @@ const _getSettingsPageChildren = params => {
   ])
 }
 
+const _getSettingsHeaderTitles = params => {
+  if (!_.isArray(params.settingsHeaderTitles)) {
+    params.settingsHeaderTitles = []
+  }
+  params.settingsHeaderTitles = params.settingsHeaderTitles.concat([
+    {
+      settingsPath: '/settings/open-pgp',
+      settingsTitle: 'Open PGP',
+    },
+    {
+      settingsPath: '/settings/open-pgp/external-keys',
+      settingsTitle: 'External Keys',
+    },
+    {
+      settingsPath: '/settings/open-pgp/external-keys/:key',
+      settingsTitle: 'View public key',
+    },
+    {
+      settingsPath: '/settings/open-pgp/my-keys',
+      settingsTitle: 'My keys',
+    },
+  ])
+}
+
 export default {
   moduleName: 'SettingsMobileWebclient',
 
@@ -55,5 +80,8 @@ export default {
 
     eventBus.$off('SettingsMobileWebclient::GetSettingsTabs', _getSettingsTabs)
     eventBus.$on('SettingsMobileWebclient::GetSettingsTabs', _getSettingsTabs)
+
+    eventBus.$off('SettingsMobileWebclient::GetSettingsHeaderTitles', _getSettingsHeaderTitles)
+    eventBus.$on('SettingsMobileWebclient::GetSettingsHeaderTitles', _getSettingsHeaderTitles)
   },
 }

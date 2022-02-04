@@ -1,37 +1,17 @@
 <template>
-  <div
-    style="flex-flow: row wrap; height: 93vh"
-    class="flex content-between q-py-lg"
-  >
+  <div style="flex-flow: row wrap; height: 93vh" class="flex content-between q-py-lg">
     <div class="q-px-lg">External public keys</div>
     <div style="max-height: 50vh; overflow-y: auto" class="full-width keys-list">
       <div>
         <div class="q-px-lg">
-          <key-item
-            v-for="key in externalKeys"
-            :key="key"
-            :label="key.Email"
-            @click="openKey(key)"
-          />
+          <open-pgp-tab v-for="key in externalKeys" :key="key" :label="key.Email" @click="openKey(key)" />
         </div>
       </div>
     </div>
     <div class="q-px-lg full-width">
-      <app-button
-        @click="enableBackwardCompatibility = true"
-        :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')"
-        class="q-mt-lg"
-      />
-      <app-button
-        @click="showImportKeys = true"
-        :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEY')"
-        class="q-mt-lg"
-      />
-      <app-button
-        @click="enableBackwardCompatibility = true"
-        label="Import keys from file"
-        class="q-mt-lg"
-      />
+      <app-button @click="enableBackwardCompatibility = true" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" class="q-mt-lg"/>
+      <app-button @click="showImportKeys = true" :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEY')" class="q-mt-lg"/>
+      <app-button @click="enableBackwardCompatibility = true" label="Import keys from file" class="q-mt-lg" />
     </div>
     <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false"/>
   </div>
@@ -43,13 +23,14 @@ import { mapActions, mapGetters } from 'vuex'
 import AppButton from 'src/components/common/AppButton'
 
 import ImportKeyDialog from './dialogs/ImportKeyDialog'
-import KeyItem from './OpenPgpTab'
+import OpenPgpTab from './OpenPgpTab'
 
 export default {
   name: 'ExternalKeys',
   components: {
+    OpenPgpTab,
     ImportKeyDialog,
-    KeyItem,
+    KeyItem: OpenPgpTab,
     AppButton,
   },
   data: () => ({
@@ -59,10 +40,10 @@ export default {
     this.getExternalKeys()
   },
   computed: {
-    ...mapGetters('openPGP', ['externalKeys']),
+    ...mapGetters('openpgpmobile', ['externalKeys']),
   },
   methods: {
-    ...mapActions('openPGP', ['asyncGetExternalsKeys', 'changeCurrentKeys']),
+    ...mapActions('openpgpmobile', ['asyncGetExternalsKeys', 'changeCurrentKeys']),
     async getExternalKeys() {
       await this.asyncGetExternalsKeys()
     },

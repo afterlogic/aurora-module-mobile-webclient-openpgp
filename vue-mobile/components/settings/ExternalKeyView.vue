@@ -17,7 +17,7 @@ import {mapActions, mapGetters} from 'vuex'
 export default {
   name: 'ExternalKeyView',
   computed: {
-    ...mapGetters('openPGP', ['currentKeys']),
+    ...mapGetters('openpgpmobile', ['currentKeys']),
     key() {
       const keys = this.currentKeys.keys
       const viewKeysValue = keys.map( key => {
@@ -27,7 +27,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('openPGP', ['changeCurrentKeys']),
+    ...mapActions('openpgpmobile', ['changeCurrentKeys']),
   },
   beforeUnmount() {
     this.changeCurrentKeys(null)
