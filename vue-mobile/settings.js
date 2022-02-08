@@ -1,10 +1,10 @@
-import typesUtils from 'src/utils/types'
+import types from 'src/utils/types'
 
 class OpenPgpSettings {
   constructor (appData) {
-    const openPgpWebclientData = typesUtils.pObject(appData.OpenPgpWebclient)
-    this.enableOpenPgpInMail = typesUtils.pBool(openPgpWebclientData.EnableModule)
-    this.rememberPassphrase = typesUtils.pBool(openPgpWebclientData.RememberPassphrase)
+    const openPgpWebclientData = types.pObject(appData.OpenPgpWebclient)
+    this.enableOpenPgpInMail = types.pBool(openPgpWebclientData.EnableModule)
+    this.rememberPassphrase = types.pBool(openPgpWebclientData.RememberPassphrase)
   }
 }
 

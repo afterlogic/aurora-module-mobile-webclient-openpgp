@@ -1,8 +1,9 @@
 export default {
-  SET_EXTERNAL_KEYS: (state, externalKeys) => {
+  setExternalKeys: (state, externalKeys) => {
     state.externalKeys = externalKeys
   },
-  SET_CURRENT_KEYS: (state, keys) => {
+
+  setCurrentKeys: (state, keys) => {
     state.currentKeys = keys
   }
 }

@@ -4,7 +4,7 @@ const openpgpHelper = require('openpgp')
 
 import store from 'src/store'
 import addressUtils from 'src/utils/address'
-import typesUtils from 'src/utils/types'
+import types from 'src/utils/types'
 import notification from 'src/utils/notification'
 
 /**
@@ -186,7 +186,7 @@ OpenPgp.prototype.getPrivateOwnKeyAndPassphrase = function (
 ) {
   return new Promise(async (resolve) => {
     let aPrivateKeys = this.getOwnKeysByEmails([sEmail], false),
-      oPrivateKey = typesUtils.isNonEmptyArray(aPrivateKeys)
+      oPrivateKey = types.isNonEmptyArray(aPrivateKeys)
         ? aPrivateKeys[0]
         : null
 
@@ -234,7 +234,7 @@ OpenPgp.prototype.verifyKeyPassword = async function (oKey, sPassphrase) {
     return { bVerified: true, oOpenPgpKey }
   } else if (oOpenPgpKey) {
     try {
-      await oOpenPgpKey.decrypt(typesUtils.pString(sPassphrase))
+      await oOpenPgpKey.decrypt(types.pString(sPassphrase))
       if (
         !oOpenPgpKey ||
         !oOpenPgpKey.primaryKey ||
@@ -276,11 +276,11 @@ OpenPgp.prototype.findKeyById = async function (sKeyId, bPublic) {
   for (let oOpenPgpKey of aAllOpenPgpKeys) {
     if (oOpenPgpKey && bPublic === oOpenPgpKey.bPublic) {
       let aNativeKeys = await this.convertToNativeKeys([oOpenPgpKey]),
-        aKeysIds = typesUtils.isNonEmptyArray(aNativeKeys)
+        aKeysIds = types.isNonEmptyArray(aNativeKeys)
           ? aNativeKeys[0].getKeyIds()
           : []
 
-      if (typesUtils.isNonEmptyArray(aKeysIds)) {
+      if (types.isNonEmptyArray(aKeysIds)) {
         let bFoundKeyId = !!_.find(aKeysIds, (oKeyId) => {
           return (
             oKeyId && oKeyId.toHex && sKeyId === oKeyId.toHex().toLowerCase()
@@ -383,7 +383,7 @@ OpenPgp.prototype.decryptAndVerifyTextWithPassphrase = async function (
       message: await openpgpHelper.message.readArmored(sData),
       privateKeys: [oOpenPgpKey], // for decryption
     }
-    if (typesUtils.isNonEmptyArray(aPublicKeys)) {
+    if (types.isNonEmptyArray(aPublicKeys)) {
       oOptions.publicKeys = await this.convertToNativeKeys(aPublicKeys) // for verification (optional)
     }
     let aKeyIds = oOptions.message
@@ -408,7 +408,7 @@ OpenPgp.prototype.decryptAndVerifyTextWithPassphrase = async function (
           oResult.sReport =
             'Message was successfully decrypted and it was not signed while creating.'
         } else if (
-          typesUtils.isNonEmptyArray(oPgpResult.signatures) &&
+          types.isNonEmptyArray(oPgpResult.signatures) &&
           oPgpResult.signatures[0].valid
         ) {
           oResult.sReport = 'Message was successfully decrypted and verified.'
@@ -446,7 +446,7 @@ OpenPgp.prototype.verifyText = async function (sData, aPublicKeys) {
   try {
     let oPgpResult = await openpgpHelper.verify(oOptions)
     if (
-      typesUtils.isNonEmptyArray(oPgpResult.signatures) &&
+      types.isNonEmptyArray(oPgpResult.signatures) &&
       oPgpResult.signatures[0].valid
     ) {
       return { sVerifiedData: oPgpResult.data }
