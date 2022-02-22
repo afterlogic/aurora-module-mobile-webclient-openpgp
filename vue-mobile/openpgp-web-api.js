@@ -22,7 +22,7 @@ export default {
     return webApi.sendRequest({
       moduleName: 'OpenPgpWebclient',
       methodName: 'AddPublicKeysToContacts',
-      parameters: parameters,
+      parameters,
     })
       .then((result) => {
         if (result) {

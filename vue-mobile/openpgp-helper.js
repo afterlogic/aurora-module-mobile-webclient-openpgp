@@ -6,14 +6,40 @@ import store from 'src/store'
 import addressUtils from 'src/utils/address'
 import types from 'src/utils/types'
 import notification from 'src/utils/notification'
+import OpenPgpKey from './classes/open-pgp-key';
 
 /**
  * @constructor
  */
 function OpenPgp() {
-  this.oKeyring = null
+  this.sPrefix = 'user_'
+  this.oKeyring = new openpgpHelper.Keyring(new openpgpHelper.Keyring.localstore(this.sPrefix))
   this.aKeys = []
 }
+
+OpenPgp.prototype.initKeys = async function ()
+{
+  await this.oKeyring.load();
+  await this.reloadKeysFromStorage();
+};
+
+/**
+ * @private
+ */
+OpenPgp.prototype.reloadKeysFromStorage = function () {
+  const oOpenpgpKeys = this.oKeyring.getAllKeys()
+
+  _.each(oOpenpgpKeys, (oItem) => {
+    if (oItem && oItem.primaryKey) {
+      this.aKeys.push(new OpenPgpKey({
+        armor: oItem.armor(),
+        email: addressUtils.getEmailParts(oItem.users[0].userId.userid).email,
+        isPublic: !oItem.isPrivate()
+      }))
+    }
+  })
+}
+
 
 /**
  * @private
@@ -21,10 +47,10 @@ function OpenPgp() {
  * @return {Array}
  */
 OpenPgp.prototype.convertToNativeKeys = async function (aKeys) {
-  let aNativeKeys = []
+  const aNativeKeys = []
 
   async function addNativeKey(oKey) {
-    let oKeysInfo = await openpgpHelper.key.readArmored(oKey.sArmor)
+    const oKeysInfo = await openpgpHelper.key.readArmored(oKey.armor)
     aNativeKeys.push(oKeysInfo.keys[0])
   }
 
@@ -113,7 +139,7 @@ OpenPgp.prototype.splitKeys = function (sArmor) {
  * @return {Boolean}
  */
 OpenPgp.prototype.isOwnEmail = function (sEmail) {
-  if (store.getters['user/getUserPublicId'] === sEmail) {
+  if (store.getters['core/userPublicId'] === sEmail) {
     return true
   }
 
@@ -121,14 +147,59 @@ OpenPgp.prototype.isOwnEmail = function (sEmail) {
   return _.find(aOwnEmails, (sOwnEmail) => {
     let oEmailParts = addressUtils.getEmailParts(sOwnEmail)
     return sEmail === oEmailParts.email
-  }) != undefined
-    ? true
-    : false
+  }) !== undefined
 }
 
 /**
  * @param {String} sArmor
- * @return {Array|boolean}
+ * @return {Promise}
+ */
+OpenPgp.prototype.importMyKeys = async function (sArmor) {
+  sArmor = _.trim(sArmor)
+  let iIndex = 0,
+      iCount = 0,
+      aData = null,
+      aKeys = []
+
+  if (!sArmor) {
+    return false
+  }
+
+  aKeys = this.splitKeys(sArmor)
+
+  for (iIndex = 0; iIndex < aKeys.length; iIndex++) {
+    aData = aKeys[iIndex]
+    if ('PRIVATE' === aData[0]) {
+      try {
+        await this.oKeyring.privateKeys.importKey(aData[1]);
+        iCount++
+      } catch (e) {
+        throw new Error(e.message ?? e);
+      }
+    } else if ('PUBLIC' === aData[0]) {
+      try {
+        await this.oKeyring.publicKeys.importKey(aData[1]);
+        iCount++
+      } catch (e) {
+        throw new Error(e.message ?? e);
+      }
+    }
+  }
+
+  if (0 < iCount) {
+    try {
+      await this.oKeyring.store();
+    } catch (e) {
+      throw new Error(e.message ?? e);
+    }
+  }
+
+  return true
+}
+
+/**
+ * @param {String} sArmor
+ * @return {Promise}
  */
 OpenPgp.prototype.getArmorInfo = async function (sArmor) {
   sArmor = _.trim(sArmor)
@@ -220,7 +291,7 @@ OpenPgp.prototype.getPrivateOwnKeyAndPassphrase = function (
  * @returns {Object}
  */
 OpenPgp.prototype.verifyKeyPassword = async function (oKey, sPassphrase) {
-  let oKeysInfo = await openpgpHelper.key.readArmored(oKey.sArmor)
+  let oKeysInfo = await openpgpHelper.key.readArmored(oKey.armor)
   let oOpenPgpKey = oKeysInfo.keys[0]
   let sDecodeKeyError =
     'You might have entered the wrong password for %USER% key.'
@@ -242,7 +313,7 @@ OpenPgp.prototype.verifyKeyPassword = async function (oKey, sPassphrase) {
       ) {
         return {
           bVerified: false,
-          sError: sDecodeKeyError.replace('%USER%', oKey.sEmail),
+          sError: sDecodeKeyError.replace('%USER%', oKey.email),
         }
       } else {
         return { bVerified: true, oOpenPgpKey }
@@ -250,13 +321,13 @@ OpenPgp.prototype.verifyKeyPassword = async function (oKey, sPassphrase) {
     } catch (e) {
       return {
         bVerified: false,
-        sError: sDecodeKeyError.replace('%USER%', oKey.sEmail),
+        sError: sDecodeKeyError.replace('%USER%', oKey.email),
       }
     }
   } else {
     return {
       bVerified: false,
-      sError: sDecodeKeyError.replace('%USER%', oKey.sEmail),
+      sError: sDecodeKeyError.replace('%USER%', oKey.email),
     }
   }
 }
@@ -299,7 +370,7 @@ OpenPgp.prototype.findKeyById = async function (sKeyId, bPublic) {
 
 /**
  * @param {String} sArmoredMessage
- * @retunr {Object|null}
+ * @return {Object|null}
  */
 OpenPgp.prototype.getEncryptionKeyFromArmoredMessage = async function (
   sArmoredMessage

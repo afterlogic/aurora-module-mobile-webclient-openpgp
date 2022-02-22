@@ -38,6 +38,10 @@ const _getSettingsPageChildren = params => {
       path: '/settings/open-pgp/my-keys',
       component: () => import('./components/settings/MyKeys'),
     },
+    {
+      path: '/settings/open-pgp/my-keys/:key',
+      component: () => import('./components/settings/MyKeyView'),
+    },
   ])
 }
 
@@ -61,6 +65,10 @@ const _getSettingsHeaderTitles = params => {
     {
       settingsPath: '/settings/open-pgp/my-keys',
       settingsTitle: 'My keys',
+    },
+    {
+      settingsPath: '/settings/open-pgp/my-keys/:key',
+      settingsTitle: 'My key',
     },
   ])
 }

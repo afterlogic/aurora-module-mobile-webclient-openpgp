@@ -7,14 +7,30 @@ export default {
   },
 
   asyncAddPublicKeys: async ({ commit }, keys) => {
-    const result = openpgpWebApi.addPublicKeys({Keys: keys})
+    const result = await openpgpWebApi.addPublicKeys({Keys: keys})
     if (result) {
       commit('setExternalKeys', keys)
     }
     return result
   },
 
+  setMyPublicKeys: ({ commit }, keys) => {
+    commit('setMyPublicKeys', keys)
+  },
+
+  setMyPrivateKeys: ({ commit }, keys) => {
+    commit('setMyPrivateKeys', keys)
+  },
+
+  setFilesKeys: ({ commit }, keys) => {
+    commit('setFilesKeys', keys)
+  },
+
   changeCurrentKeys: ({ commit }, keys) => {
     commit('setCurrentKeys', keys)
+  },
+
+  setCurrentMyKey: ({ commit }, key) => {
+    commit('setCurrentMyKey', key)
   }
 }
