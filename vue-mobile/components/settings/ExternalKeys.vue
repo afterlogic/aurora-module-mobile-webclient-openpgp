@@ -1,6 +1,6 @@
 <template>
   <div style="flex-flow: row wrap; height: 93vh" class="flex content-between q-py-lg">
-    <div class="q-px-lg">External public keys</div>
+    <div class="q-px-lg q-pb-lg keys-title">External public keys</div>
     <div style="max-height: 50vh; overflow-y: auto" class="full-width keys-list">
       <div>
         <div class="q-px-lg">
@@ -81,5 +81,11 @@ export default {
 <style scoped>
 .keys-list::-webkit-scrollbar {
   width: 0;
+}
+.keys-title {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: 0.3px;
 }
 </style>

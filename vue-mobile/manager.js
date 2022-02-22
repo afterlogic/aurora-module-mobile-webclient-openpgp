@@ -3,6 +3,7 @@ import _ from 'lodash'
 import eventBus from 'src/event-bus'
 
 import settings from './settings'
+import { i18n } from "../../CoreMobileWebclient/vue-mobile/src/boot/i18n";
 
 const _getSettingsTabs = params => {
   if (!_.isArray(params.settingsTabs)) {
@@ -52,7 +53,7 @@ const _getSettingsHeaderTitles = params => {
   params.settingsHeaderTitles = params.settingsHeaderTitles.concat([
     {
       settingsPath: '/settings/open-pgp',
-      settingsTitle: 'Open PGP',
+      settingsTitle: i18n.global.t('OPENPGPWEBCLIENT.LABEL_SETTINGS_TAB'),
     },
     {
       settingsPath: '/settings/open-pgp/external-keys',
