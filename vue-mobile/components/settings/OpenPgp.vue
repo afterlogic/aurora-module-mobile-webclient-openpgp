@@ -5,16 +5,16 @@
         class="settings__label"
         left-label
         v-model="rememberPassphrase"
-        label="Store OpenPGP key password within a session"
+        :label="$t('OPENPGPMOBILEWEBCLIENT.LABEL_STORE_KEYS_WITHIN_SESSION')"
       />
       <div class="q-my-md">
         <open-pgp-tab
           :action="() => $router.push('/settings/open-pgp/external-keys')"
-          label="External public keys"
+          :label="$t('OPENPGPWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS')"
         />
         <open-pgp-tab
           :action="() => $router.push('/settings/open-pgp/my-keys')"
-          label="My keys"
+          :label="$t('OPENPGPMOBILEWEBCLIENT.LABEL_MY_KEYS')"
         />
       </div>
     </div>

@@ -1,4 +1,5 @@
 import openpgpWebApi from '../openpgp-web-api'
+import OpenPgp from '../openpgp-helper'
 
 export default {
   asyncGetExternalsKeys: async ({ commit }) => {
@@ -12,6 +13,21 @@ export default {
       commit('setExternalKeys', keys)
     }
     return result
+  },
+
+  generateKeys: ({ commit }, parameters) => {
+    const { userId, password, keyLength } = parameters
+
+    const successResultFunction = (keyPair) => {
+      const armor = keyPair.privateKeyArmored + keyPair.publicKeyArmored
+      return OpenPgp.importMyKeys(armor)
+    }
+
+    return OpenPgp.generateKey(userId, password, keyLength, successResultFunction)
+  },
+
+  importMyKeys: ({ commit }, checkedMyKeys) => {
+    return OpenPgp.importMyKeys(checkedMyKeys)
   },
 
   setMyPublicKeys: ({ commit }, keys) => {

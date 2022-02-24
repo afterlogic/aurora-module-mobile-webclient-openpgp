@@ -1,12 +1,12 @@
 <template>
-  <div class="myKey q-px-lg q-pt-lg" v-if="currentMyKey">
+  <q-scroll-area :thumb-style="{width: '5px'}" class="myKey q-px-lg q-pt-lg" v-if="currentMyKey">
     <div class="q-mb-md">
       &lt;{{ currentMyKey.email }}&gt;
     </div>
     <div class="overflow-hidden">
-      <span style="white-space: break-spaces">{{ currentMyKey.armor }}</span>
+      <span style="word-break: break-all;">{{ currentMyKey.armor }}</span>
     </div>
-  </div>
+  </q-scroll-area>
 
   <div class="q-pa-lg full-width" v-if="currentMyKey">
     <app-button @click="" :label="$t('OPENPGPWEBCLIENT.ACTION_DOWNLOAD')" />

@@ -61,9 +61,9 @@ export default {
     ...mapGetters('openpgpmobile', ['externalKeys', 'myPublicKeys', 'myPrivateKeys', 'filesKeys']),
   },
   methods: {
-    ...mapActions('openpgpmobile', []),
+    ...mapActions('openpgpmobile', ['generateKeys']),
     async generate() {
-
+      this.generateKeys({userId: this.mailInput, password: this.passInput, keyLength: this.keyLengthOption})
     },
   },
 }
