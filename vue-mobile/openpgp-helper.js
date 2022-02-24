@@ -34,7 +34,8 @@ OpenPgp.prototype.reloadKeysFromStorage = function () {
       this.aKeys.push(new OpenPgpKey({
         armor: oItem.armor(),
         email: addressUtils.getEmailParts(oItem.users[0].userId.userid).email,
-        isPublic: !oItem.isPrivate()
+        isPublic: !oItem.isPrivate(),
+        id: oItem.getKeyId().toHex()
       }))
     }
   })
@@ -196,6 +197,27 @@ OpenPgp.prototype.importMyKeys = async function (sArmor) {
 
   return true
 }
+
+/**
+ * @param {OpenPgp} oKey
+ */
+OpenPgp.prototype.deleteKey = async function (oKey) {
+  if (oKey) {
+    if (!oKey.isExternal) {
+      try {
+        this.oKeyring[oKey.isPublic ? 'publicKeys' : 'privateKeys'].removeForId(oKey.id)
+        await this.oKeyring.store()
+
+        this.reloadKeysFromStorage()
+        return true
+      }
+      catch (e) {
+        throw new Error(e.message ?? e)
+      }
+    }
+  }
+  return false
+};
 
 /**
  * @param {String} sArmor

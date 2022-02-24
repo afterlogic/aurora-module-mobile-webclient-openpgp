@@ -1,9 +1,9 @@
-function OpenPgpKey({ armor, email, isPublic, isExternal = false }) {
+function OpenPgpKey({ armor, email, isPublic, id, isExternal = false }) {
   this.armor = armor
   this.email = email
   this.isPublic = isPublic
   this.isExternal = isExternal
-  this.id = 'key-' + Math.round(Math.random() * 1000000)
+  this.id = id ?? 'key-' + Math.round(Math.random() * 1000000)
   this.passphrase = null
 }
 

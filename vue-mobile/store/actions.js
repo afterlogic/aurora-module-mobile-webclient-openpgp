@@ -30,6 +30,10 @@ export default {
     return OpenPgp.importMyKeys(checkedMyKeys)
   },
 
+  deleteMyKey: ({ commit }, key) => {
+    return OpenPgp.deleteKey(key)
+  },
+
   setMyPublicKeys: ({ commit }, keys) => {
     commit('setMyPublicKeys', keys)
   },
