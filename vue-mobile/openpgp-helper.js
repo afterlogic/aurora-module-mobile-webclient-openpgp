@@ -870,7 +870,8 @@ OpenPgp.prototype.encryptData = async function (
   return new Promise(async (resolve) => {
     if (!bPasswordBasedEncryption && bSign) {
       if (oPrivateUserKey) {
-        let sPassphrase = oPrivateUserKey.getPassphrase()
+        //let sPassphrase = oPrivateUserKey.getPassphrase()
+        let sPassphrase = '111'
         if (sPassphrase === null) {
           fAskForKeyPassword(oPrivateUserKey.email, getParentComponent, async (sPassphrase) => {
             let oResult = await this.encryptDataWithPassphrase(
@@ -971,7 +972,6 @@ OpenPgp.prototype.encryptDataWithPassphrase = async function (
     }
     oOptions.publicKeys = await this.convertToNativeKeys(aPublicKeys)
   }
-
   if (!bPasswordBasedEncryption && bSign && oPrivateUserKey) {
     let { bVerified, oOpenPgpKey, sError } = await this.verifyKeyPassword(
       oPrivateUserKey,
