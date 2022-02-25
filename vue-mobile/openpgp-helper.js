@@ -17,10 +17,9 @@ function OpenPgp() {
   this.aKeys = []
 }
 
-OpenPgp.prototype.initKeys = async function ()
-{
+OpenPgp.prototype.initKeys = async function () {
   await this.oKeyring.load();
-  await this.reloadKeysFromStorage();
+  this.reloadKeysFromStorage();
 };
 
 /**
@@ -28,10 +27,11 @@ OpenPgp.prototype.initKeys = async function ()
  */
 OpenPgp.prototype.reloadKeysFromStorage = function () {
   const oOpenpgpKeys = this.oKeyring.getAllKeys()
+  const newKeys = []
 
   _.each(oOpenpgpKeys, (oItem) => {
     if (oItem && oItem.primaryKey) {
-      this.aKeys.push(new OpenPgpKey({
+      newKeys.push(new OpenPgpKey({
         armor: oItem.armor(),
         email: addressUtils.getEmailParts(oItem.users[0].userId.userid).email,
         isPublic: !oItem.isPrivate(),
@@ -39,6 +39,8 @@ OpenPgp.prototype.reloadKeysFromStorage = function () {
       }))
     }
   })
+
+  this.aKeys = newKeys
 }
 
 
@@ -95,6 +97,8 @@ OpenPgp.prototype.generateKey = function (
       }
     }
   )
+
+  this.reloadKeysFromStorage();
 }
 
 /**
@@ -194,6 +198,8 @@ OpenPgp.prototype.importMyKeys = async function (sArmor) {
       throw new Error(e.message ?? e);
     }
   }
+
+  this.reloadKeysFromStorage();
 
   return true
 }

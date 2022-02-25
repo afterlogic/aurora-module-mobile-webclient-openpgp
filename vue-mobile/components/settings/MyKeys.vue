@@ -1,13 +1,21 @@
 <template>
   <q-scroll-area :thumb-style="{width: '5px'}" class="myKeys__list q-px-lg q-pt-lg">
-    <div class="q-mb-md">
+    <div class="q-mb-md text-body1 text-weight-bold">
       {{ $t('OPENPGPWEBCLIENT.LABEL_PUBLIC_KEYS') }}
+    </div>
+
+    <div v-if="!myPublicKeys.length">
+      {{ $t('OPENPGPWEBCLIENT.ERROR_NO_PUBLIC_KEYS_FOR_USERS_PLURAL') }}
     </div>
 
     <open-pgp-tab v-for="key in myPublicKeys" :key="key" :label="key.email" @click="openKey(key)" />
 
-    <div class="q-my-md">
+    <div class="q-my-md text-body1 text-weight-bold">
       {{ $t('OPENPGPWEBCLIENT.LABEL_PRIVATE_KEYS') }}
+    </div>
+
+    <div v-if="!myPrivateKeys.length">
+      {{ $t('OPENPGPWEBCLIENT.ERROR_NO_PRIVATE_KEYS_FOR_USERS_PLURAL') }}
     </div>
 
     <open-pgp-tab v-for="key in myPrivateKeys" :key="key" :label="key.email" @click="openVerifyDialog(key)" />
@@ -34,6 +42,7 @@ import GenerateKeyDialog from './dialogs/GenerateKeyDialog'
 import ImportKeyDialog from './dialogs/ImportKeyDialog'
 import VerifyPrivateKeyDialog from './dialogs/VerifyPrivateKeyDialog'
 import OpenPgpTab from './OpenPgpTab'
+import { updateMyKeys } from '../../openpgp-utils';
 
 export default {
   name: 'MyKeys',
@@ -61,6 +70,12 @@ export default {
       this.showImportKeys = true
     }
   },
+  mounted() {
+    updateMyKeys()
+  },
+  updated() {
+    updateMyKeys()
+  },
   computed: {
     ...mapGetters('openpgpmobile', ['myPublicKeys', 'myPrivateKeys']),
   },
@@ -71,11 +86,11 @@ export default {
     },
     openKey(key) {
       this.setCurrentMyKey(key)
-      this.$router.push(`/settings/open-pgp/my-keys/${key.email}`)
+      this.$router.push(`/settings/open-pgp/my-keys/${key.id}`)
     },
     openVerifyDialog(key) {
-      this.showVerifyPrivateKey = true
       this.setCurrentMyKey(key)
+      this.showVerifyPrivateKey = true
     },
   },
 }

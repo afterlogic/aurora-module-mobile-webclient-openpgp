@@ -1,5 +1,6 @@
 import addressUtils from 'src/utils/address'
 import types from 'src/utils/types'
+import store from 'src/store'
 
 import openPgpHelper from './openpgp-helper'
 import OpenPgpKey from './classes/open-pgp-key'
@@ -77,4 +78,10 @@ export const verifyPrivateKeyPassword = async (key, password) => {
   const isVerified = await openPgpHelper.verifyKeyPassword(keyData, password)
 
   return isVerified?.bVerified
+}
+
+export const updateMyKeys = () => {
+  const { aKeys } = openPgpHelper
+  store.dispatch('openpgpmobile/setMyPrivateKeys', aKeys.filter(key => !key.isPublic))
+  store.dispatch('openpgpmobile/setMyPublicKeys', aKeys.filter(key => key.isPublic))
 }

@@ -62,8 +62,13 @@ export default {
   },
   methods: {
     ...mapActions('openpgpmobile', ['generateKeys']),
-    async generate() {
-      this.generateKeys({userId: this.mailInput, password: this.passInput, keyLength: this.keyLengthOption})
+    generate() {
+      this.generateKeys({
+        userId: this.mailInput,
+        password: this.passInput,
+        keyLength: this.keyLengthOption,
+        thenFn: () => this.$emit('close'),
+      })
     },
   },
 }

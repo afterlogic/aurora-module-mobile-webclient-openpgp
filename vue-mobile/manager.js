@@ -1,11 +1,11 @@
 import _ from 'lodash'
 
 import eventBus from 'src/event-bus'
-import store from 'src/store'
 
 import settings from './settings'
 import { i18n } from "../../CoreMobileWebclient/vue-mobile/src/boot/i18n";
 import OpenPgp from './openpgp-helper'
+import { updateMyKeys } from './openpgp-utils';
 
 const _getSettingsTabs = params => {
   if (!_.isArray(params.settingsTabs)) {
@@ -88,9 +88,7 @@ export default {
 
   async initMyKeys() {
     await OpenPgp.initKeys()
-    const { aKeys } = OpenPgp
-    store.dispatch('openpgpmobile/setMyPrivateKeys', aKeys.filter(key => !key.isPublic))
-    store.dispatch('openpgpmobile/setMyPublicKeys', aKeys.filter(key => key.isPublic))
+    updateMyKeys()
   },
 
   initSubscriptions (appData) {

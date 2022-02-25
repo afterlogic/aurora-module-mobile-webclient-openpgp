@@ -16,11 +16,11 @@ export default {
   },
 
   generateKeys: ({ commit }, parameters) => {
-    const { userId, password, keyLength } = parameters
+    const { userId, password, keyLength, thenFn } = parameters
 
     const successResultFunction = (keyPair) => {
       const armor = keyPair.privateKeyArmored + keyPair.publicKeyArmored
-      return OpenPgp.importMyKeys(armor)
+      return OpenPgp.importMyKeys(armor).then(thenFn)
     }
 
     return OpenPgp.generateKey(userId, password, keyLength, successResultFunction)
