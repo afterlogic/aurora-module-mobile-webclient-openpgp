@@ -34,7 +34,6 @@ import GenerateKeyDialog from './dialogs/GenerateKeyDialog'
 import ImportKeyDialog from './dialogs/ImportKeyDialog'
 import VerifyPrivateKeyDialog from './dialogs/VerifyPrivateKeyDialog'
 import OpenPgpTab from './OpenPgpTab'
-import OpenPgp from '../../openpgp-helper'
 
 export default {
   name: 'MyKeys',
@@ -52,13 +51,6 @@ export default {
     showVerifyPrivateKey: false,
     files: null,
   }),
-  async mounted() {
-    if (OpenPgp.aKeys.length) return
-
-    await OpenPgp.initKeys()
-    this.setMyPrivateKeys(OpenPgp.aKeys.filter(key => !key.isPublic))
-    this.setMyPublicKeys(OpenPgp.aKeys.filter(key => key.isPublic))
-  },
   watch: {
     async files() {
       const filesList = []
