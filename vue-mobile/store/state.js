@@ -4,7 +4,7 @@ export default function () {
     myPublicKeys: [],
     myPrivateKeys: [],
     filesKeys: [],
-    currentKeys: null,
+    currentKeys: [],
     currentMyKey: null,
     passphrase: null,
   }

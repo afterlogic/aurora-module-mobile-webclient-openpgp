@@ -51,7 +51,12 @@
         </div>
 
         <q-card-actions align="right">
-          <app-button-dialog :saving="saving" :action="importKeys" :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEYS')"/>
+          <app-button-dialog
+            :saving="saving"
+            :action="importKeys"
+            :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEYS')"
+            :disabled="!keysToImport.length"
+          />
         </q-card-actions>
       </q-card-section>
     </q-card>
@@ -126,7 +131,7 @@ export default {
         }
       })
       const resultExternal = await this.asyncAddPublicKeys(checkedExternalKeys)
-      const resultMy = await this.importMyKeys(checkedMyKeys)
+      const resultMy = checkedMyKeys.length ? await this.importMyKeys(checkedMyKeys) : true
 
       if (resultExternal && resultMy) {
         this.clearKeys()

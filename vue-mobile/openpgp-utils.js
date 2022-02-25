@@ -22,7 +22,7 @@ export const checkPgpKeys = async (keysArmorToImport, openPgpExternalKeys, myKey
           ),
           hasSameExternalKey = !!openPgpExternalKeys.find(
             (externalKey) =>
-              key.isPublic() && externalKey.sEmail === keyEmailParts.email
+              key.isPublic() && externalKey.Email === keyEmailParts.email
           ),
           hasSameMyKey = !!myKeys.find(
               (myKey) =>

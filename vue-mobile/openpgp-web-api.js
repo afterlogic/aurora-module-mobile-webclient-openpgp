@@ -18,6 +18,20 @@ export default {
       })
   },
 
+  removeExternalKey: async (parameters) => {
+    return webApi.sendRequest({
+      moduleName: 'OpenPgpWebclient',
+      methodName: 'RemovePublicKeyFromContact',
+      parameters,
+    })
+    .then((result) => {
+      return result
+    })
+    .catch((e) => {
+      throw new Error(e.message ?? e)
+    })
+  },
+
   addPublicKeys: async (parameters) => {
     return webApi.sendRequest({
       moduleName: 'OpenPgpWebclient',

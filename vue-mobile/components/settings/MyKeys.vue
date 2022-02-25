@@ -25,7 +25,7 @@
     <app-button @click="showGenerateKeys = true" :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE_NEW_KEY')" />
     <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
     <app-button @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
-    <q-input ref="myFileInput" style="display:none" multiple @update:model-value="(val) => this.files = val" type="file" />
+    <q-input ref="fileInput" class="hidden" multiple @update:model-value="(val) => this.files = val" type="file" />
   </div>
 
   <generate-key-dialog v-model="showGenerateKeys" @close="showGenerateKeys = false" />
@@ -75,7 +75,7 @@ export default {
   methods: {
     ...mapActions('openpgpmobile', ['setCurrentMyKey', 'setMyPublicKeys', 'setMyPrivateKeys', 'setFilesKeys']),
     getFiles() {
-      this.$refs.myFileInput.$el.click()
+      this.$refs.fileInput.$el.click()
     },
     openKey(key) {
       this.setCurrentMyKey(key)

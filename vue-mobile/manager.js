@@ -38,6 +38,10 @@ const _getSettingsPageChildren = params => {
       component: () => import('./components/settings/ExternalKeyView'),
     },
     {
+      path: '/settings/open-pgp/all-external-keys',
+      component: () => import('./components/settings/AllExternalKeysView')
+    },
+    {
       path: '/settings/open-pgp/my-keys',
       component: () => import('./components/settings/MyKeys'),
     },
@@ -59,19 +63,23 @@ const _getSettingsHeaderTitles = params => {
     },
     {
       settingsPath: '/settings/open-pgp/external-keys',
-      settingsTitle: 'External Keys',
+      settingsTitle: i18n.global.t('OPENPGPWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS'),
     },
     {
       settingsPath: '/settings/open-pgp/external-keys/:key',
-      settingsTitle: 'View public key',
+      settingsTitle: i18n.global.t('OPENPGPMOBILEWEBCLIENT.LABEL_VIEW_PUBLIC_KEY'),
+    },
+    {
+      settingsPath: '/settings/open-pgp/all-external-keys',
+      settingsTitle: i18n.global.t('OPENPGPMOBILEWEBCLIENT.LABEL_ALL_PUBLIC_KEYS'),
     },
     {
       settingsPath: '/settings/open-pgp/my-keys',
-      settingsTitle: 'My keys',
+      settingsTitle: i18n.global.t('OPENPGPMOBILEWEBCLIENT.LABEL_MY_KEYS'),
     },
     {
       settingsPath: '/settings/open-pgp/my-keys/:key',
-      settingsTitle: 'My key',
+      settingsTitle: i18n.global.t('OPENPGPMOBILEWEBCLIENT.LABEL_MY_KEY'),
     },
   ])
 }

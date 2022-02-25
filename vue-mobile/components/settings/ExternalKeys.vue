@@ -1,20 +1,24 @@
 <template>
-  <div style="flex-flow: row wrap; height: 93vh" class="flex content-between q-py-lg">
-    <div class="q-px-lg q-pb-lg keys-title">External public keys</div>
-    <div style="max-height: 50vh; overflow-y: auto" class="full-width keys-list">
-      <div>
-        <div class="q-px-lg">
-          <open-pgp-tab v-for="key in externalKeys" :key="key" :label="key.Email" @click="openKey(key)" />
-        </div>
-      </div>
+  <q-scroll-area :thumb-style="{width: '5px'}" class="keys_list q-px-lg q-pt-lg">
+    <div class="q-mb-md text-body1 text-weight-bold">
+      {{ $t('OPENPGPWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS') }}
     </div>
-    <div class="q-px-lg full-width">
-      <app-button @click="enableBackwardCompatibility = true" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" class="q-mt-lg"/>
-      <app-button @click="showImportKeys = true" :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEY')" class="q-mt-lg"/>
-      <app-button @click="enableBackwardCompatibility = true" label="Import keys from file" class="q-mt-lg" />
+
+    <div v-if="!externalKeys.length">
+      {{ $t('OPENPGPWEBCLIENT.INFO_EMPTY_EXTERNAL_PUBLIC_KEYS') }}
     </div>
-    <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false"/>
+
+    <open-pgp-tab v-for="key in externalKeys" :key="key" :label="key.Email" @click="openKey(key)" />
+  </q-scroll-area>
+
+  <div class="q-pa-lg full-width">
+    <app-button @click="exportAllKeys" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" :disabled="!externalKeys.length" />
+    <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
+    <app-button @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
+    <q-input ref="fileInput" class="hidden" multiple @update:model-value="(val) => this.files = val" type="file" />
   </div>
+
+  <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false"/>
 </template>
 
 <script>
@@ -30,12 +34,22 @@ export default {
   components: {
     OpenPgpTab,
     ImportKeyDialog,
-    KeyItem: OpenPgpTab,
     AppButton,
   },
   data: () => ({
     showImportKeys: false,
+    files: null,
   }),
+  watch: {
+    async files() {
+      const filesList = []
+      for (const file of this.files) {
+        filesList.push(await file.text())
+      }
+      this.setFilesKeys(filesList)
+      this.showImportKeys = true
+    }
+  },
   mounted() {
     this.getExternalKeys()
   },
@@ -43,49 +57,27 @@ export default {
     ...mapGetters('openpgpmobile', ['externalKeys']),
   },
   methods: {
-    ...mapActions('openpgpmobile', ['asyncGetExternalsKeys', 'changeCurrentKeys']),
+    ...mapActions('openpgpmobile', ['asyncGetExternalsKeys', 'changeCurrentKeys', 'setFilesKeys']),
     async getExternalKeys() {
       await this.asyncGetExternalsKeys()
     },
-    openKey(key) {
-      const keys = {
-        type: 'external',
-        keys: [key]
-      }
-      this.changeCurrentKeys(keys)
-      this.$router.push(`/settings/open-pgp/external-keys/${key.Email}`)
+    getFiles() {
+      this.$refs.fileInput.$el.click()
     },
-    viewKeys (aKeys) {
-      // if (aKeys.length === 1) {
-      //   if (aKeys[0].bPublic) {
-      //     this.viewKeysHeader = 'View OpenPGP public key for ' + aKeys[0].sEmail
-      //     this.viewKeysFileName = aKeys[0].sEmail + ' OpenPGP public key.asc'
-      //   } else {
-      //     this.viewKeysHeader = 'View OpenPGP private key for ' + aKeys[0].sEmail
-      //     this.viewKeysFileName = aKeys[0].sEmail + ' OpenPGP private key.asc'
-      //   }
-      // } else {
-      //   this.viewKeysHeader = 'View all OpenPGP public keys'
-      //   this.viewKeysFileName = 'OpenPGP public keys.asc'
-      // }
-      // let aArmors = _.map(aKeys, function (oKey) {
-      //   return oKey.sArmor
-      // })
-      // this.viewKeysValue = aArmors.join('\r\n\r\n')
-      // this.viewKeysDialog = true
+    exportAllKeys() {
+      this.changeCurrentKeys(this.externalKeys)
+      this.$router.push('/settings/open-pgp/all-external-keys')
+    },
+    openKey(key) {
+      this.changeCurrentKeys([key])
+      this.$router.push(`/settings/open-pgp/external-keys/${key.Email}`)
     },
   },
 }
 </script>
 
 <style scoped>
-.keys-list::-webkit-scrollbar {
-  width: 0;
-}
-.keys-title {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 16px;
-  letter-spacing: 0.3px;
+.keys_list {
+  height: calc(100vh - 295px);
 }
 </style>

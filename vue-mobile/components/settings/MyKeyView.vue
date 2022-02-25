@@ -3,6 +3,7 @@
     <div class="q-mb-md">
       &lt;{{ currentMyKey.email }}&gt;
     </div>
+
     <div class="overflow-hidden">
       <span style="word-break: break-all;">{{ currentMyKey.armor }}</span>
     </div>
