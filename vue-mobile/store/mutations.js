@@ -22,4 +22,7 @@ export default {
   setCurrentMyKey: (state, key) => {
     state.currentMyKey = key
   },
+  setPassphrase: (state, passphrase) => {
+    state.passphrase = passphrase
+  }
 }

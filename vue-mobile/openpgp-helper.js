@@ -731,11 +731,12 @@ OpenPgp.prototype.signAndEncryptTextWithPassphrase = async function (
  * @return {Array}
  */
 OpenPgp.prototype.getAllKeys = function () {
-  let aOwnOpenPgpKeys = store.getters['main/getOpenPgpKeys'],
-    aExternalOpenPgpKeys = store.getters['contacts/getOpenPgpExternalKeys'],
-    aAllOpenPgpKeys = aOwnOpenPgpKeys.concat(aExternalOpenPgpKeys)
+  let ownOpenPgpKeys = store.getters['openpgpmobile/myPublicKeys'],
+    //aExternalOpenPgpKeys = store.getters['contacts/getOpenPgpExternalKeys'],
+      externalOpenPgpKeys = []
+  const allOpenPgpKeys = ownOpenPgpKeys.concat(externalOpenPgpKeys)
+  return allOpenPgpKeys
 
-  return aAllOpenPgpKeys
 }
 
 /**
@@ -787,32 +788,32 @@ OpenPgp.prototype.getAllKeys = function () {
   })
 
 /**
- * @param {String} sEmail
+ * @param {String} email
  * @return {Object|null}
  */
-OpenPgp.prototype.getPrivateKeyByEmail = function (sEmail) {
-  let aOpenPgpKeys = store.getters['main/getOpenPgpKeys']
-  let aPrivateKeys = _.filter(aOpenPgpKeys, (oKey) => {
-    let oKeyEmail = addressUtils.getEmailParts(oKey.sEmail)
-    return !oKey.bPublic && oKeyEmail.email === sEmail
+OpenPgp.prototype.getPrivateKeyByEmail = function (email) {
+  let openPgpKeys = store.getters['openpgpmobile/myPrivateKeys']
+  let privateKeys = _.filter(openPgpKeys, (key) => {
+    let keyEmail = addressUtils.getEmailParts(key.email)
+    return !key.isPublic && keyEmail.email === email
   })
-  if (aPrivateKeys.length > 0) {
-    return aPrivateKeys[0]
+  if (privateKeys.length > 0) {
+    return privateKeys[0]
   } else {
     return null
   }
 }
 
 /**
- * @param {String} sEmail
+ * @param {String} email
  * @return {Object|null}
  */
-OpenPgp.prototype.getPublicKeyByEmail = function (sEmail) {
-  let oPublicKey = _.find(this.getAllKeys(), (oKey) => {
-    let oKeyEmail = addressUtils.getEmailParts(oKey.sEmail)
-    return oKey.bPublic && oKeyEmail.email === sEmail
+OpenPgp.prototype.getPublicKeyByEmail = function (email) {
+  let publicKey = _.find(this.getAllKeys(), (key) => {
+    let keyEmail = addressUtils.getEmailParts(key.email)
+    return key.isPublic && keyEmail.email === email
   })
-  return oPublicKey ? oPublicKey : null
+  return publicKey ? publicKey : null
 }
 
 /**
@@ -841,8 +842,10 @@ OpenPgp.prototype.generatePassword = function () {
  * @param {String} sUserEmail
  * @param {Array} aPrincipalsEmail
  * @param {Boolean} bPasswordBasedEncryption
+ * @param {Object} oPrivateUserKey
  * @param {Boolean} bSign
  * @param {Function} fAskForKeyPassword
+ * @param {Function} getParentComponent
  * @return {Object}
  */
 OpenPgp.prototype.encryptData = async function (
@@ -851,15 +854,16 @@ OpenPgp.prototype.encryptData = async function (
   aPrincipalsEmail,
   bPasswordBasedEncryption,
   bSign,
-  fAskForKeyPassword
+  fAskForKeyPassword,
+  getParentComponent,
+  oPrivateUserKey
 ) {
   return new Promise(async (resolve) => {
     if (!bPasswordBasedEncryption && bSign) {
-      let oPrivateUserKey = this.getPrivateKeyByEmail(sUserEmail)
       if (oPrivateUserKey) {
         let sPassphrase = oPrivateUserKey.getPassphrase()
         if (sPassphrase === null) {
-          fAskForKeyPassword(oPrivateUserKey.sEmail, async (sPassphrase) => {
+          fAskForKeyPassword(oPrivateUserKey.email, getParentComponent, async (sPassphrase) => {
             let oResult = await this.encryptDataWithPassphrase(
               mData,
               sUserEmail,
@@ -893,7 +897,7 @@ OpenPgp.prototype.encryptData = async function (
         this.encryptDataWithPassphrase(
           mData,
           sUserEmail,
-          null,
+          oPrivateUserKey,
           aPrincipalsEmail,
           bPasswordBasedEncryption,
           bSign,
@@ -907,6 +911,7 @@ OpenPgp.prototype.encryptData = async function (
 /**
  * @param {Mixed} mData
  * @param {String} sUserEmail
+ * @param {Object} oPrivateUserKey
  * @param {Array} aPrincipalsEmails
  * @param {Boolean} bPasswordBasedEncryption
  * @param {Boolean} bSign

@@ -1,4 +1,9 @@
+import { getOpenPgpSettings } from "../settings";
+import store from 'src/store'
+let settings = null
+
 function OpenPgpKey({ armor, email, isPublic, id, isExternal = false }) {
+  settings = getOpenPgpSettings()
   this.armor = armor
   this.email = email
   this.isPublic = isPublic
@@ -15,18 +20,18 @@ OpenPgpKey.prototype.getDataToSave = function () {
   }
 }
 
-// OpenPgpKey.prototype.getPassphrase = function () {
-//   if (!openpgpSettings.bRememberPassphrase) {
-//     store.commit('main/setPassphrase', { sId: this.sId, sPassphrase: null })
-//     return null
-//   }
-//   return this.sPassphrase
-// }
+OpenPgpKey.prototype.getPassphrase = function () {
+  if (!settings.rememberPassphrase) {
+    store.commit('openpgpmobile/setPassphrase', { sId: this.sId, sPassphrase: null })
+    return null
+  }
+  return this.passphrase
+}
 
-// OpenPgpKey.prototype.setPassphrase = function (sPassphrase) {
-//   if (openpgpSettings.bRememberPassphrase) {
-//     store.commit('main/setPassphrase', { sId: this.sId, sPassphrase })
-//   }
-// }
+OpenPgpKey.prototype.setPassphrase = function (sPassphrase) {
+  if (settings.rememberPassphrase) {
+    store.commit('openpgpmobile/setPassphrase', { sId: this.sId, sPassphrase })
+  }
+}
 
 export default OpenPgpKey

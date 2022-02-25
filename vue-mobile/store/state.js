@@ -6,5 +6,6 @@ export default function () {
     filesKeys: [],
     currentKeys: null,
     currentMyKey: null,
+    passphrase: null,
   }
 }

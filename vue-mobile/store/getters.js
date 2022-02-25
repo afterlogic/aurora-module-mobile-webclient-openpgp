@@ -17,4 +17,7 @@ export default {
   currentMyKey: (state) => {
     return state.currentMyKey
   },
+  passphrase: (state) => {
+    return state.passphrase
+  }
 }
