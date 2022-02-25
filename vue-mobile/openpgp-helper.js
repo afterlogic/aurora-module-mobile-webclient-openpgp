@@ -41,6 +41,9 @@ OpenPgp.prototype.reloadKeysFromStorage = function () {
   })
 
   this.aKeys = newKeys
+
+  store.dispatch('openpgpmobile/setMyPrivateKeys', this.aKeys.filter(key => !key.isPublic))
+  store.dispatch('openpgpmobile/setMyPublicKeys', this.aKeys.filter(key => key.isPublic))
 }
 
 

@@ -42,7 +42,6 @@ import GenerateKeyDialog from './dialogs/GenerateKeyDialog'
 import ImportKeyDialog from './dialogs/ImportKeyDialog'
 import VerifyPrivateKeyDialog from './dialogs/VerifyPrivateKeyDialog'
 import OpenPgpTab from './OpenPgpTab'
-import { updateMyKeys } from '../../openpgp-utils';
 
 export default {
   name: 'MyKeys',
@@ -69,12 +68,6 @@ export default {
       this.setFilesKeys(filesList)
       this.showImportKeys = true
     }
-  },
-  mounted() {
-    updateMyKeys()
-  },
-  updated() {
-    updateMyKeys()
   },
   computed: {
     ...mapGetters('openpgpmobile', ['myPublicKeys', 'myPrivateKeys']),
