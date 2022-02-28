@@ -22,6 +22,7 @@ import {mapActions, mapGetters} from 'vuex'
 
 import AppButton from 'src/components/common/AppButton'
 import DeleteKeyDialog from './dialogs/DeleteKeyDialog';
+import { downloadKey } from '../../utils';
 
 export default {
   name: 'MyKeyView',
@@ -41,21 +42,9 @@ export default {
       this.isDeleting = true
     },
     downloadKey() {
-      const makeTextFile = function (text) {
-        const data = new Blob([text], {type: 'text/plain'})
-        return window.URL.createObjectURL(data)
-      };
+      const fileName = `${this.currentMyKey.email}_${this.currentMyKey.isPublic ? 'public' : 'private'}.asc`
 
-      const link = document.createElement('a')
-      link.setAttribute('download', `${this.currentMyKey.email}_${this.currentMyKey.isPublic ? 'public' : 'private'}.asc`)
-      link.href = makeTextFile(this.currentMyKey.armor)
-      document.body.appendChild(link);
-
-      window.requestAnimationFrame(() => {
-        const event = new MouseEvent('click');
-        link.dispatchEvent(event)
-        document.body.removeChild(link)
-      });
+      return downloadKey(this.currentMyKey.armor, fileName)
     },
     deleteKey() {
       const isDeleted = this.deleteMyKey(this.currentMyKey)

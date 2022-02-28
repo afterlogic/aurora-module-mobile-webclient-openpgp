@@ -21,20 +21,32 @@
 import { mapActions, mapGetters } from 'vuex'
 
 import AppButton from 'src/components/common/AppButton'
+import { downloadKey } from '../../utils';
 
 export default {
   name: 'AllExternalKeysView',
   components: {
     AppButton,
   },
-  mounted() {},
   computed: {
     ...mapGetters('openpgpmobile', ['currentKeys']),
   },
   methods: {
     ...mapActions('openpgpmobile', ['changeCurrentKeys']),
     sendAllKeys() {},
-    downloadAllKeys() {},
+    downloadAllKeys() {
+      const text = this.currentKeys.reduce((acc, value) => {
+        acc += value.PublicPgpKey
+        return acc += '\n'
+      }, '')
+
+      return downloadKey(text, 'public_keys.asc')
+    },
+  },
+  mounted() {
+    if (!this.currentKeys.length) {
+      this.$router.push('/settings/open-pgp/external-keys')
+    }
   },
   beforeUnmount() {
     this.changeCurrentKeys([])
