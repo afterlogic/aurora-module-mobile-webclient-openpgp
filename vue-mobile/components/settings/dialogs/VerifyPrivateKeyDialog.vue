@@ -10,7 +10,9 @@
         />
       </q-item>
       <q-card-actions class="q-mx-md" align="right">
-        <app-button-dialog :saving="saving" :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')"/>
+        <app-button-dialog v-close-popup :label="$t('COREWEBCLIENT.ACTION_CANCEL')"/>
+        <q-space />
+        <app-button-dialog :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -31,7 +33,6 @@ export default {
     AppButtonDialog,
   },
   data: () => ({
-    saving: false,
     password: '',
   }),
   computed: {

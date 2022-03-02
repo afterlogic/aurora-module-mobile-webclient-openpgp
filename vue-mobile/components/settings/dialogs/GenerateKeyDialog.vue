@@ -5,8 +5,6 @@
         <div class="text-h6">
           {{ $t('OPENPGPWEBCLIENT.HEADING_GENERATE_NEW_KEY') }}
         </div>
-        <q-space />
-        <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
 
       <q-card-section>
@@ -29,8 +27,10 @@
         />
       </q-card-section>
 
-      <q-card-actions class="q-mx-md" align="right">
-        <app-button-dialog :saving="saving" :action="generate" :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE')"/>
+      <q-card-actions align="right">
+        <app-button-dialog v-close-popup :label="$t('COREWEBCLIENT.ACTION_CANCEL')"/>
+        <q-space />
+        <app-button-dialog :action="generate" :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE')"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -51,7 +51,6 @@ export default {
     ImportKeyItem,
   },
   data: () => ({
-    saving: false,
     mailInput: '',
     passInput: '',
     keyLengthOption: '',

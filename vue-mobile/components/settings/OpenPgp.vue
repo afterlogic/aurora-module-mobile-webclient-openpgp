@@ -9,11 +9,11 @@
       />
       <div class="q-my-md">
         <open-pgp-tab
-          :action="() => $router.push('/settings/open-pgp/external-keys')"
+          @click="$router.push('/settings/open-pgp/external-keys')"
           :label="$t('OPENPGPWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS')"
         />
         <open-pgp-tab
-          :action="() => $router.push('/settings/open-pgp/my-keys')"
+          @click="$router.push('/settings/open-pgp/my-keys')"
           :label="$t('OPENPGPMOBILEWEBCLIENT.LABEL_MY_KEYS')"
         />
       </div>

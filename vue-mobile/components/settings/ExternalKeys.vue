@@ -4,15 +4,15 @@
       {{ $t('OPENPGPWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS') }}
     </div>
 
-    <div v-if="!externalKeys.length">
+    <div v-if="!keysFromArmor.length">
       {{ $t('OPENPGPWEBCLIENT.INFO_EMPTY_EXTERNAL_PUBLIC_KEYS') }}
     </div>
 
-    <open-pgp-tab v-for="key in externalKeys" :key="key" :label="key.Email" @click="openKey(key)" />
+    <open-pgp-tab v-for="key in keysFromArmor" :key="key" :label="key.Email" @click="openKey(key)" />
   </q-scroll-area>
 
   <div class="q-pa-lg full-width">
-    <app-button @click="exportAllKeys" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" :disabled="!externalKeys.length" />
+    <app-button @click="exportAllKeys" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" :disabled="!keysFromArmor.length" />
     <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
     <app-button @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
     <q-input ref="fileInput" class="hidden" multiple @update:model-value="(val) => this.files = val" type="file" />
@@ -28,6 +28,7 @@ import AppButton from 'src/components/common/AppButton'
 
 import ImportKeyDialog from './dialogs/ImportKeyDialog'
 import OpenPgpTab from './OpenPgpTab'
+import openPgpHelper from '../../openpgp-helper';
 
 export default {
   name: 'ExternalKeys',
@@ -39,6 +40,7 @@ export default {
   data: () => ({
     showImportKeys: false,
     files: null,
+    keysFromArmor: [],
   }),
   watch: {
     async files() {
@@ -50,8 +52,19 @@ export default {
       this.showImportKeys = true
     }
   },
-  mounted() {
-    this.getExternalKeys()
+  async mounted() {
+    await this.getExternalKeys()
+
+    const armorText = this.externalKeys.reduce((acc, value) => {
+      acc += value.PublicPgpKey
+      return acc += '\n'
+    }, '')
+
+    const keysArmor = await openPgpHelper.getArmorInfo(armorText)
+    this.keysFromArmor = keysArmor?.map(item => ({
+      PublicPgpKey: item.armor(),
+      Email: item.getUserIds()[0],
+    }))
   },
   computed: {
     ...mapGetters('openpgpmobile', ['externalKeys']),

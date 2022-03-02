@@ -1,11 +1,11 @@
 <template>
-  <q-scroll-area :thumb-style="{width: '5px'}" class="keys_list__all q-px-lg q-pt-lg" v-if="key">
+  <q-scroll-area :thumb-style="{ width: '5px' }" class="externalKey q-px-lg q-pt-lg" v-if="key">
     <div class="q-mb-md text-bold">
-      {{ key.Email }}
+      {{ keyName }}
     </div>
 
     <div class="overflow-hidden">
-      <span style="word-break: break-all;">{{ key.PublicPgpKey }}</span>
+      <span style="white-space: pre;">{{ key.PublicPgpKey }}</span>
     </div>
   </q-scroll-area>
 
@@ -23,6 +23,7 @@ import { mapActions, mapGetters } from 'vuex'
 import AppButton from 'src/components/common/AppButton'
 import DeleteKeyDialog from './dialogs/DeleteKeyDialog';
 import { downloadKey } from '../../utils';
+import openPgpHelper from '../../openpgp-helper';
 
 export default {
   name: 'ExternalKeyView',
@@ -31,12 +32,16 @@ export default {
     AppButton,
   },
   data: () => ({
-    isDeleting: false
+    isDeleting: false,
+    keyArmor: {}
   }),
   computed: {
     ...mapGetters('openpgpmobile', ['currentKeys']),
     key() {
-      return this.currentKeys?.[0]
+      return this.currentKeys[0]
+    },
+    keyName() {
+      return this.keyArmor[0]?.getUserIds()[0]
     }
   },
   methods: {
@@ -44,8 +49,10 @@ export default {
     confirmDelete() {
       this.isDeleting = true
     },
-    downloadKey() {
-      return downloadKey(this.key.PublicPgpKey, `${this.key.Email}_public.asc`)
+    async downloadKey() {
+      const fileName = `${this.keyName.replace(/[<>]/g, '')} OpenPGP public key.asc`
+
+      return downloadKey(this.key.PublicPgpKey, fileName)
     },
     async deleteKey() {
       const isDeleted = await this.asyncRemoveExternalKey(this.key.Email)
@@ -54,10 +61,11 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
     if (!this.currentKeys.length) {
       this.$router.push('/settings/open-pgp/external-keys')
     }
+    this.keyArmor = await openPgpHelper.getArmorInfo(this.currentKeys[0]?.PublicPgpKey)
   },
   beforeUnmount() {
     this.changeCurrentKeys([])
@@ -66,7 +74,7 @@ export default {
 </script>
 
 <style scoped>
-.keys_list__all {
+.externalKey {
   height: calc(100vh - 223px);
 }
 </style>

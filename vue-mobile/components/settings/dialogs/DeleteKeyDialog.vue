@@ -1,16 +1,16 @@
 <template>
   <q-dialog v-bind="$attrs">
     <q-card class="q-dialog-size" style="min-width: 300px">
-      <q-card-section class="row no-wrap items-center q-pb-none">
-        <div class="">
-          {{ $t('OPENPGPWEBCLIENT.CONFIRM_DELETE_KEY', {KEYEMAIL: mail}) }}
+      <q-card-section class="row no-wrap items-center">
+        <div class="text-subtitle1">
+          {{ $t('COREWEBCLIENT.CONFIRM_ARE_YOU_SURE') }}
         </div>
-        <q-space />
-        <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
 
-      <q-card-actions class="q-mx-md" align="right">
-        <app-button-dialog :action="deleteKey" :label="$t('COREWEBCLIENT.ACTION_OK')"/>
+      <q-card-actions align="right">
+        <app-button-dialog v-close-popup :label="$t('COREWEBCLIENT.ACTION_CANCEL')"/>
+        <q-space />
+        <app-button-dialog :action="deleteKey" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -30,7 +30,7 @@ export default {
     mail: String
   },
   methods: {
-    async deleteKey() {
+    deleteKey() {
       this.$emit('delete')
     },
   },

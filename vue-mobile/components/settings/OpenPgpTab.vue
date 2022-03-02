@@ -1,10 +1,10 @@
 <template>
-  <div @click="action" class="q-pt-md">
+  <div class="q-pt-md">
     <div class="flex content-between">
       <div class="flex-1">
         <p>{{ label }}</p>
       </div>
-      <div class="flex items-end content-center icon-margin">
+      <div class="flex items-end content-center q-mr-sm">
         <arrow-right-icon />
       </div>
     </div>
@@ -22,8 +22,7 @@ export default {
     ArrowRightIcon,
   },
   props: {
-    label: { type: String, default: '' },
-    action: { type: Function, default: null },
+    label: String,
   },
 }
 </script>
@@ -31,8 +30,5 @@ export default {
 <style scoped>
 .flex-1 {
   flex: 1;
-}
-.icon-margin {
-  margin-right: 13px;
 }
 </style>

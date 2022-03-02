@@ -242,7 +242,7 @@ OpenPgp.prototype.getArmorInfo = async function (sArmor) {
     aKeys = []
 
   if (!sArmor) {
-    return false
+    return aResult
   }
 
   aKeys = this.splitKeys(sArmor)

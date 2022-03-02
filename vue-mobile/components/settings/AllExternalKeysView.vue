@@ -1,12 +1,12 @@
 <template>
-  <q-scroll-area :thumb-style="{width: '5px'}" class="keys_list__all q-px-lg q-pt-lg" v-if="currentKeys.length">
-    <template v-for="key of currentKeys">
-      <div class="q-mb-md text-bold">
+  <q-scroll-area :thumb-style="{ width: '5px' }" class="keys_list__all q-px-lg q-pt-lg" v-if="currentKeys.length">
+    <template v-for="key of keysFromArmor">
+      <div class="key_email q-mb-md text-bold">
         {{ key.Email }}
       </div>
 
       <div class="overflow-hidden">
-        <span style="word-break: break-all;">{{ key.PublicPgpKey }}</span>
+        <span style="white-space: pre;">{{ key.PublicPgpKey }}</span>
       </div>
     </template>
   </q-scroll-area>
@@ -22,31 +22,43 @@ import { mapActions, mapGetters } from 'vuex'
 
 import AppButton from 'src/components/common/AppButton'
 import { downloadKey } from '../../utils';
+import openPgpHelper from '../../openpgp-helper';
 
 export default {
   name: 'AllExternalKeysView',
   components: {
     AppButton,
   },
+  data: () => ({
+    keysFromArmor: [],
+  }),
   computed: {
     ...mapGetters('openpgpmobile', ['currentKeys']),
+    armorText() {
+      return this.currentKeys.reduce((acc, value) => {
+        acc += value.PublicPgpKey
+        return acc += '\n'
+      }, '')
+    }
   },
   methods: {
     ...mapActions('openpgpmobile', ['changeCurrentKeys']),
     sendAllKeys() {},
     downloadAllKeys() {
-      const text = this.currentKeys.reduce((acc, value) => {
-        acc += value.PublicPgpKey
-        return acc += '\n'
-      }, '')
-
-      return downloadKey(text, 'public_keys.asc')
+      return downloadKey(this.armorText, 'public_keys.asc')
     },
   },
-  mounted() {
+  async mounted() {
     if (!this.currentKeys.length) {
       this.$router.push('/settings/open-pgp/external-keys')
     }
+
+    const keysArmor = await openPgpHelper.getArmorInfo(this.armorText)
+    console.log('keysArmor', keysArmor);
+    this.keysFromArmor = keysArmor?.map(item => ({
+      PublicPgpKey: item.armor(),
+      Email: item.getUserIds()[0],
+    }))
   },
   beforeUnmount() {
     this.changeCurrentKeys([])
@@ -57,5 +69,9 @@ export default {
 <style scoped>
 .keys_list__all {
   height: calc(100vh - 223px);
+}
+
+.key_email:not(:first-child) {
+  margin-top: 16px;
 }
 </style>

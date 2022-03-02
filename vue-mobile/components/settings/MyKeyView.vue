@@ -1,11 +1,11 @@
 <template>
-  <q-scroll-area :thumb-style="{width: '5px'}" class="myKey q-px-lg q-pt-lg" v-if="currentMyKey">
-    <div class="q-mb-md">
-      &lt;{{ currentMyKey.email }}&gt;
+  <q-scroll-area :thumb-style="{ width: '5px' }" class="myKey q-px-lg q-pt-lg" v-if="currentMyKey">
+    <div class="q-mb-md text-bold">
+      {{ keyName }}
     </div>
 
     <div class="overflow-hidden">
-      <span style="word-break: break-all;">{{ currentMyKey.armor }}</span>
+      <span style="white-space: pre;">{{ currentMyKey.armor }}</span>
     </div>
   </q-scroll-area>
 
@@ -23,6 +23,7 @@ import {mapActions, mapGetters} from 'vuex'
 import AppButton from 'src/components/common/AppButton'
 import DeleteKeyDialog from './dialogs/DeleteKeyDialog';
 import { downloadKey } from '../../utils';
+import openPgpHelper from '../../openpgp-helper';
 
 export default {
   name: 'MyKeyView',
@@ -31,10 +32,14 @@ export default {
     AppButton,
   },
   data: () => ({
-    isDeleting: false
+    isDeleting: false,
+    keyArmor: {}
   }),
   computed: {
     ...mapGetters('openpgpmobile', ['currentMyKey']),
+    keyName() {
+      return this.keyArmor[0]?.getUserIds()[0]
+    }
   },
   methods: {
     ...mapActions('openpgpmobile', ['setCurrentMyKey', 'deleteMyKey']),
@@ -42,7 +47,7 @@ export default {
       this.isDeleting = true
     },
     downloadKey() {
-      const fileName = `${this.currentMyKey.email}_${this.currentMyKey.isPublic ? 'public' : 'private'}.asc`
+      const fileName = `${this.keyName.replace(/[<>]/g, '')} OpenPGP ${this.currentMyKey.isPublic ? 'public' : 'private'} key.asc`
 
       return downloadKey(this.currentMyKey.armor, fileName)
     },
@@ -53,10 +58,11 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
     if (!this.currentMyKey) {
       this.$router.push('/settings/open-pgp/my-keys')
     }
+    this.keyArmor = await openPgpHelper.getArmorInfo(this.currentMyKey?.armor)
   },
   beforeUnmount() {
     this.setCurrentMyKey(null)

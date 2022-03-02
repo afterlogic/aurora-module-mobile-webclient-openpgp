@@ -11,10 +11,10 @@ export default {
     return openpgpWebApi.removeExternalKey({ Email: email })
   },
 
-  asyncAddPublicKeys: async ({ commit }, keys) => {
+  asyncAddPublicKeys: async ({ dispatch }, keys) => {
     const result = await openpgpWebApi.addPublicKeys({Keys: keys})
     if (result) {
-      commit('setExternalKeys', keys)
+      dispatch('asyncGetExternalsKeys')
     }
     return result
   },
