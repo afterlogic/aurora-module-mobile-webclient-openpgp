@@ -12,7 +12,6 @@ let settings = null
 
 export default {
   init (appData) {
-    console.log('settings')
     settings = new OpenPgpSettings(appData)
   },
 }

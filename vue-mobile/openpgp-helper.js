@@ -374,14 +374,12 @@ OpenPgp.prototype.findKeyById = async function (sKeyId, bPublic) {
 
   let aAllOpenPgpKeys = this.getAllKeys(),
     oFoundOpenPgpKey = null
-
   for (let oOpenPgpKey of aAllOpenPgpKeys) {
-    if (oOpenPgpKey && bPublic === oOpenPgpKey.bPublic) {
+    if (oOpenPgpKey && bPublic === oOpenPgpKey.isPublic) {
       let aNativeKeys = await this.convertToNativeKeys([oOpenPgpKey]),
         aKeysIds = types.isNonEmptyArray(aNativeKeys)
           ? aNativeKeys[0].getKeyIds()
           : []
-
       if (types.isNonEmptyArray(aKeysIds)) {
         let bFoundKeyId = !!_.find(aKeysIds, (oKeyId) => {
           return (
@@ -428,18 +426,20 @@ OpenPgp.prototype.getEncryptionKeyFromArmoredMessage = async function (
  * @param {Object} oPrivateKey
  * @param {Array} aPublicKeys
  * @param {Function} fAskForKeyPassword
+ * @param {Function} getParentComponent
  * @return {Promise}
  */
 OpenPgp.prototype.decryptAndVerifyText = function (
   sData,
   oPrivateKey,
   aPublicKeys,
-  fAskForKeyPassword
+  fAskForKeyPassword,
+  getParentComponent
 ) {
   return new Promise(async (resolve) => {
     let sPassphrase = oPrivateKey.getPassphrase()
     if (sPassphrase === null) {
-      fAskForKeyPassword(oPrivateKey.sEmail, (sPassphrase) => {
+      fAskForKeyPassword(oPrivateKey.sEmail, getParentComponent, (sPassphrase) => {
         resolve(
           this.decryptAndVerifyTextWithPassphrase(
             sData,
@@ -488,10 +488,11 @@ OpenPgp.prototype.decryptAndVerifyTextWithPassphrase = async function (
     if (types.isNonEmptyArray(aPublicKeys)) {
       oOptions.publicKeys = await this.convertToNativeKeys(aPublicKeys) // for verification (optional)
     }
+    console.log(oOptions, 'oOptions')
     let aKeyIds = oOptions.message
       .getEncryptionKeyIds()
       .map((oKeyId) => oKeyId.toHex())
-    let hasPrivateKey = await this.findKeyById(aKeyIds[0], /*bPublic*/ false)
+    let hasPrivateKey = await this.findKeyById(aKeyIds[0], /*bPublic*/ true)
     if (!hasPrivateKey) {
       return {
         sError: 'No private key found for file decryption.',
@@ -740,11 +741,10 @@ OpenPgp.prototype.signAndEncryptTextWithPassphrase = async function (
  * @return {Array}
  */
 OpenPgp.prototype.getAllKeys = function () {
-  let ownOpenPgpKeys = store.getters['openpgpmobile/myPublicKeys'],
+  const ownOpenPgpKeys = store.getters['openpgpmobile/myPublicKeys'],
+  externalOpenPgpKeys = store.getters['openpgpmobile/externalKeys']
     //aExternalOpenPgpKeys = store.getters['contacts/getOpenPgpExternalKeys'],
-      externalOpenPgpKeys = []
-  const allOpenPgpKeys = ownOpenPgpKeys.concat(externalOpenPgpKeys)
-  return allOpenPgpKeys
+  return ownOpenPgpKeys.concat(externalOpenPgpKeys)
 
 }
 
@@ -870,8 +870,7 @@ OpenPgp.prototype.encryptData = async function (
   return new Promise(async (resolve) => {
     if (!bPasswordBasedEncryption && bSign) {
       if (oPrivateUserKey) {
-        //let sPassphrase = oPrivateUserKey.getPassphrase()
-        let sPassphrase = '111'
+        let sPassphrase = oPrivateUserKey.getPassphrase()
         if (sPassphrase === null) {
           fAskForKeyPassword(oPrivateUserKey.email, getParentComponent, async (sPassphrase) => {
             let oResult = await this.encryptDataWithPassphrase(

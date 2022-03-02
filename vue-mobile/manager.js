@@ -2,10 +2,12 @@ import _ from 'lodash'
 
 import eventBus from 'src/event-bus'
 import store from 'src/store'
+import { defineAsyncComponent } from "vue";
 
 import settings from './settings'
 import { i18n } from "../../CoreMobileWebclient/vue-mobile/src/boot/i18n";
 import openPgpHelper from './openpgp-helper'
+
 
 const _getSettingsTabs = params => {
   if (!_.isArray(params.settingsTabs)) {
@@ -18,6 +20,14 @@ const _getSettingsTabs = params => {
       getIconComponent: () => import('./components/icons/PgpIcon'),
     },
   ])
+}
+
+
+const setComponents = (components) => {
+  components.push({
+    name: 'AskOpenPgpKeyPassword',
+    component: defineAsyncComponent(() => import('./components/common/AskOpenPgpKeyPassword')),
+  })
 }
 
 const _getSettingsPageChildren = params => {
@@ -105,6 +115,9 @@ export default {
   initSubscriptions (appData) {
     eventBus.$off('SettingsMobileWebclient::GetSettingsPageChildren', _getSettingsPageChildren)
     eventBus.$on('SettingsMobileWebclient::GetSettingsPageChildren', _getSettingsPageChildren)
+
+    eventBus.$off('checkComponents', setComponents)
+    eventBus.$on('checkComponents', setComponents)
 
     eventBus.$off('SettingsMobileWebclient::GetSettingsTabs', _getSettingsTabs)
     eventBus.$on('SettingsMobileWebclient::GetSettingsTabs', _getSettingsTabs)
