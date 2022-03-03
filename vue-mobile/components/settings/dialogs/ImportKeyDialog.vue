@@ -5,6 +5,8 @@
         <div class="text-h6">
           {{ $t('OPENPGPWEBCLIENT.HEADING_IMPORT_KEY') }}
         </div>
+        <q-space />
+        <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
 
       <q-card-section v-if="!showKeys" class="q-pb-none">
@@ -14,9 +16,7 @@
           :autofocus="true"
         />
         <q-card-actions align="right">
-          <app-button-dialog v-close-popup :label="$t('COREWEBCLIENT.ACTION_CANCEL')"/>
-          <q-space />
-          <app-button-dialog :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')"/>
+          <app-button-dialog :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')" />
         </q-card-actions>
       </q-card-section>
 
@@ -51,8 +51,6 @@
         </div>
 
         <q-card-actions align="right">
-          <app-button-dialog v-close-popup :label="$t('COREWEBCLIENT.ACTION_CANCEL')"/>
-          <q-space />
           <app-button-dialog
             :action="importKeys"
             :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEYS')"

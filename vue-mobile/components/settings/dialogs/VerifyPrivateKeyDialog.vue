@@ -8,11 +8,12 @@
           :placeholder="$t('OPENPGPWEBCLIENT.HEADING_VERIFY_PASSWORD')"
           :autofocus="true"
         />
-      </q-item>
-      <q-card-actions class="q-mx-md" align="right">
-        <app-button-dialog v-close-popup :label="$t('COREWEBCLIENT.ACTION_CANCEL')"/>
         <q-space />
-        <app-button-dialog :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')"/>
+        <q-btn icon="close" flat round dense v-close-popup class="absolute-top-right q-mr-md" />
+      </q-item>
+
+      <q-card-actions class="q-mx-md" align="right">
+        <app-button-dialog :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')" />
       </q-card-actions>
     </q-card>
   </q-dialog>

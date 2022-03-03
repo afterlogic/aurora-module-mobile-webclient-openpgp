@@ -5,12 +5,12 @@
         <div class="text-subtitle1">
           {{ $t('COREWEBCLIENT.CONFIRM_ARE_YOU_SURE') }}
         </div>
+        <q-space />
+        <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
 
       <q-card-actions align="right">
-        <app-button-dialog v-close-popup :label="$t('COREWEBCLIENT.ACTION_CANCEL')"/>
-        <q-space />
-        <app-button-dialog :action="deleteKey" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')"/>
+        <app-button-dialog :action="deleteKey" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')" />
       </q-card-actions>
     </q-card>
   </q-dialog>
