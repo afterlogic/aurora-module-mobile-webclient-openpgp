@@ -33,9 +33,6 @@ const setComponents = (components) => {
   console.log(components, 'setComponents components')
 }
 
-console.log('events OPEN PGP')
-eventBus.$off('CoreMobileWebclient::CheckComponents', setComponents)
-eventBus.$on('CoreMobileWebclient::CheckComponents', setComponents)
 
 const _getSettingsPageChildren = params => {
   if (!_.isArray(params.settingsPageChildren)) {
@@ -107,7 +104,6 @@ export default {
   requiredModules: [],
 
   async init(appdata) {
-    console.log('init')
     settings.init(appdata)
     await this.initMyKeys()
   },
@@ -118,18 +114,23 @@ export default {
     const { aKeys } = openPgpHelper
     store.dispatch('openpgpmobile/setMyPrivateKeys', aKeys.filter(key => !key.isPublic))
     store.dispatch('openpgpmobile/setMyPublicKeys', aKeys.filter(key => key.isPublic))
-
-    console.log('initMyKeys OPEN PGP')
   },
 
   initSubscriptions (appData) {
+    console.log('initSubscriptions (appData) {')
+    eventBus.$off('CoreMobileWebclient::CheckComponents', setComponents)
+    eventBus.$on('CoreMobileWebclient::CheckComponents', setComponents)
+
     eventBus.$off('SettingsMobileWebclient::GetSettingsPageChildren', _getSettingsPageChildren)
     eventBus.$on('SettingsMobileWebclient::GetSettingsPageChildren', _getSettingsPageChildren)
+
 
     eventBus.$off('SettingsMobileWebclient::GetSettingsTabs', _getSettingsTabs)
     eventBus.$on('SettingsMobileWebclient::GetSettingsTabs', _getSettingsTabs)
 
     eventBus.$off('SettingsMobileWebclient::GetSettingsHeaderTitles', _getSettingsHeaderTitles)
     eventBus.$on('SettingsMobileWebclient::GetSettingsHeaderTitles', _getSettingsHeaderTitles)
+
+    eventBus.$emit('CoreMobileWebclient::InitSubscription')
   },
 }
