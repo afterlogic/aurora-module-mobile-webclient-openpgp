@@ -11,18 +11,26 @@
 
       <q-card-section>
         <q-input
+          outlined
+          dense
           v-model="mailInput"
           autocomplete="nope"
           :placeholder="$t('COREWEBCLIENT.LABEL_EMAIL')"
-          :autofocus="true"
+          autofocus
+          class="q-mb-md"
         />
         <q-input
+          outlined
+          dense
           v-model="passInput"
           autocomplete="nope"
           type="password"
           :placeholder="$t('COREWEBCLIENT.LABEL_PASSWORD')"
+          class="q-mb-md"
         />
         <q-select
+          outlined
+          dense
           v-model="keyLengthOption"
           :options="keyLengthOptions"
           :label="$t('OPENPGPWEBCLIENT.LABEL_KEY_LENGTH')"
@@ -53,11 +61,14 @@ export default {
   data: () => ({
     mailInput: '',
     passInput: '',
-    keyLengthOption: '',
-    keyLengthOptions: ['1024', '2048', '3072', '4096', '8192']
+    keyLengthOption: '2048',
+    keyLengthOptions: ['2048', '4096', '8192']
   }),
+  mounted() {
+    this.mailInput = this.userPublicId
+  },
   computed: {
-    ...mapGetters('openpgpmobile', ['externalKeys', 'myPublicKeys', 'myPrivateKeys', 'filesKeys']),
+    ...mapGetters('core', ['userPublicId']),
   },
   methods: {
     ...mapActions('openpgpmobile', ['generateKeys']),

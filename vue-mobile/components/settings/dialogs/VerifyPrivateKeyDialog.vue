@@ -1,19 +1,31 @@
 <template>
   <q-dialog @hide="close" v-bind="$attrs">
-    <q-card class="q-dialog-size q-pt-md" style="min-width: 300px">
-      <q-item>
+    <q-card class="q-dialog-size" style="min-width: 300px">
+      <q-card-section class="row items-center q-pb-none q-px-lg">
+        <div class="text-h6">
+          {{ $t('OPENPGPWEBCLIENT.HEADING_VERIFY_PASSWORD') }}
+        </div>
+        <q-space />
+        <q-btn icon="close" flat round dense v-close-popup />
+      </q-card-section>
+
+      <q-card-section class="row items-center q-pb-none q-px-lg">
+        <div class="text-caption text-grey">
+          {{ $t('OPENPGPWEBCLIENT.INFO_VERIFY_PASSWORD') }}
+        </div>
+      </q-card-section>
+
+      <q-item class="q-px-sm">
         <app-dialog-input
+          outlined
           v-model="password"
           type="password"
-          :placeholder="$t('OPENPGPWEBCLIENT.HEADING_VERIFY_PASSWORD')"
-          :autofocus="true"
+          autofocus
         />
-        <q-space />
-        <q-btn icon="close" flat round dense v-close-popup class="absolute-top-right q-mr-md" />
       </q-item>
 
-      <q-card-actions class="q-mx-md" align="right">
-        <app-button-dialog :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')" />
+      <q-card-actions align="right">
+        <app-button-dialog :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_VIEW_KEY')" />
       </q-card-actions>
     </q-card>
   </q-dialog>
