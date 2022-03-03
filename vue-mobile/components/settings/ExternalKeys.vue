@@ -1,6 +1,6 @@
 <template>
   <q-scroll-area :thumb-style="{width: '5px'}" class="keys_list q-px-lg q-pt-lg" v-if="!loading">
-    <div v-if="!keysFromArmor.length">
+    <div v-if="!keysFromArmor.length" class="q-px-lg text-grey text-subtitle1 text-center">
       {{ $t('OPENPGPWEBCLIENT.INFO_EMPTY_EXTERNAL_PUBLIC_KEYS') }}
     </div>
 

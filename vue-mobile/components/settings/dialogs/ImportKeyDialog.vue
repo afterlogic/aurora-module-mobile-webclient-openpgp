@@ -46,6 +46,20 @@
           <import-key-item disabled v-for="key in keysPrivateExternal" :key="key.id" :pgpKey="key" />
         </div>
 
+        <div v-if="keysPrivateNotImported.length">
+          <div class="q-my-md">
+            {{ $t('OPENPGPMOBILEWEBCLIENT.INFO_TEXT_CONTAINS_KEYS_EXTERNAL_NOT_IMPORTED') }}
+          </div>
+          <import-key-item disabled v-for="key in keysPrivateNotImported" :key="key.id" :pgpKey="key" />
+        </div>
+
+        <div v-if="myKeysNotImported.length">
+          <div class="q-my-md">
+            {{ $t('OPENPGPMOBILEWEBCLIENT.INFO_TEXT_NOT_CONTAINS_KEYS_EXTERNAL_NOT_IMPORTED') }}
+          </div>
+          <import-key-item disabled v-for="key in myKeysNotImported" :key="key.id" :pgpKey="key" />
+        </div>
+
         <div v-if="keysBroken.length">
           <import-key-item disabled keysBroken v-for="key in keysBroken" :key="key.id" :pgpKey="key" />
         </div>
@@ -86,6 +100,8 @@ export default {
     keysBroken: [],
     keysAlreadyThere: [],
     keysPrivateExternal: [],
+    keysPrivateNotImported: [],
+    myKeysNotImported: [],
     keysToImport: [],
   }),
   watch: {
@@ -103,6 +119,8 @@ export default {
         this.keysBroken.length ||
         this.keysAlreadyThere.length ||
         this.keysPrivateExternal.length ||
+        this.keysPrivateNotImported.length ||
+        this.myKeysNotImported.length ||
         this.keysToImport.length
       )
     },
@@ -116,6 +134,8 @@ export default {
       this.keysBroken = []
       this.keysAlreadyThere = []
       this.keysPrivateExternal = []
+      this.keysPrivateNotImported = []
+      this.myKeysNotImported = []
       this.keysToImport = []
     },
     async importKeys() {
@@ -152,6 +172,8 @@ export default {
       this.keysBroken = keysFromArmor.keysBroken
       this.keysAlreadyThere = keysFromArmor.keysAlreadyThere
       this.keysPrivateExternal = keysFromArmor.keysPrivateExternal
+      this.keysPrivateNotImported = keysFromArmor.keysPrivateNotImported
+      this.myKeysNotImported = keysFromArmor.myKeysNotImported
       this.keysToImport = keysFromArmor.keysToImport
     },
   },

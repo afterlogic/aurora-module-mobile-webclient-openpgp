@@ -9,6 +9,8 @@ export const checkPgpKeys = async (keysArmorToImport, openPgpExternalKeys, myKey
     keysBroken = [],
     keysAlreadyThere = [],
     keysPrivateExternal = [],
+    keysPrivateNotImported = [],
+    myKeysNotImported = [],
     keysToImport = []
   if (types.isNonEmptyArray(keysFromArmor)) {
     keysFromArmor.forEach((key) => {
@@ -44,13 +46,16 @@ export const checkPgpKeys = async (keysArmorToImport, openPgpExternalKeys, myKey
           : '(' + bitSize + '-bit, private)'
         keyData.checked = !hasSameKey && !noEmail
 
-        if (isExternalKeys && !isExternal || !isExternalKeys && isExternal) {
-        } else if (noEmail) {
+        if (noEmail) {
           keysBroken.push(keyData)
+        } else if (!key.isPublic() && isExternal) {
+          keysPrivateExternal.push(keyData)
+        } else if (isExternalKeys && !isExternal) {
+          myKeysNotImported.push(keyData)
+        } else if (!isExternalKeys && isExternal) {
+          keysPrivateNotImported.push(keyData)
         } else if (hasSameKey) {
           keysAlreadyThere.push(keyData)
-        } else if (!key.isPublic() && !openPgpHelper.isOwnEmail(keyEmailParts.email)) {
-          keysPrivateExternal.push(keyData)
         } else {
           keysToImport.push(keyData)
         }
@@ -62,6 +67,8 @@ export const checkPgpKeys = async (keysArmorToImport, openPgpExternalKeys, myKey
     keysBroken,
     keysAlreadyThere,
     keysPrivateExternal,
+    keysPrivateNotImported,
+    myKeysNotImported,
     keysToImport,
   }
 }
