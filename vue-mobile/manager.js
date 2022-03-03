@@ -9,6 +9,7 @@ import { i18n } from "../../CoreMobileWebclient/vue-mobile/src/boot/i18n";
 import openPgpHelper from './openpgp-helper'
 
 
+
 const _getSettingsTabs = params => {
   if (!_.isArray(params.settingsTabs)) {
     params.settingsTabs = []
@@ -31,6 +32,10 @@ const setComponents = (components) => {
   })
   console.log(components, 'setComponents components')
 }
+
+console.log('events OPEN PGP')
+eventBus.$off('CoreMobileWebclient::CheckComponents', setComponents)
+eventBus.$on('CoreMobileWebclient::CheckComponents', setComponents)
 
 const _getSettingsPageChildren = params => {
   if (!_.isArray(params.settingsPageChildren)) {
@@ -102,6 +107,7 @@ export default {
   requiredModules: [],
 
   async init(appdata) {
+    console.log('init')
     settings.init(appdata)
     await this.initMyKeys()
   },
@@ -117,12 +123,8 @@ export default {
   },
 
   initSubscriptions (appData) {
-    console.log('initSubscriptions OPEN PGP')
     eventBus.$off('SettingsMobileWebclient::GetSettingsPageChildren', _getSettingsPageChildren)
     eventBus.$on('SettingsMobileWebclient::GetSettingsPageChildren', _getSettingsPageChildren)
-
-    eventBus.$off('CoreMobileWebclient::CheckComponents', setComponents)
-    eventBus.$on('CoreMobileWebclient::CheckComponents', setComponents)
 
     eventBus.$off('SettingsMobileWebclient::GetSettingsTabs', _getSettingsTabs)
     eventBus.$on('SettingsMobileWebclient::GetSettingsTabs', _getSettingsTabs)
