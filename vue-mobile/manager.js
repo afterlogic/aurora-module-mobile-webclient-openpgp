@@ -121,8 +121,8 @@ export default {
     eventBus.$off('SettingsMobileWebclient::GetSettingsPageChildren', _getSettingsPageChildren)
     eventBus.$on('SettingsMobileWebclient::GetSettingsPageChildren', _getSettingsPageChildren)
 
-    eventBus.$off('checkComponents', setComponents)
-    eventBus.$on('checkComponents', setComponents)
+    eventBus.$off('CoreMobileWebclient::CheckComponents', setComponents)
+    eventBus.$on('CoreMobileWebclient::CheckComponents', setComponents)
 
     eventBus.$off('SettingsMobileWebclient::GetSettingsTabs', _getSettingsTabs)
     eventBus.$on('SettingsMobileWebclient::GetSettingsTabs', _getSettingsTabs)
