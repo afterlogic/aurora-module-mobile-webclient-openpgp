@@ -18,7 +18,7 @@
     <q-input ref="fileInput" class="hidden" multiple @update:model-value="(val) => this.files = val" type="file" />
   </div>
 
-  <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false" />
+  <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false" is-external-keys />
 </template>
 
 <script>

@@ -4,7 +4,7 @@ import types from 'src/utils/types'
 import openPgpHelper from './openpgp-helper'
 import OpenPgpKey from './classes/open-pgp-key'
 
-export const checkPgpKeys = async (keysArmorToImport, openPgpExternalKeys, myKeys) => {
+export const checkPgpKeys = async (keysArmorToImport, openPgpExternalKeys, myKeys, isExternalKeys) => {
   const keysFromArmor = await openPgpHelper.getArmorInfo(keysArmorToImport),
     keysBroken = [],
     keysAlreadyThere = [],
@@ -25,32 +25,31 @@ export const checkPgpKeys = async (keysArmorToImport, openPgpExternalKeys, myKey
               key.isPublic() && externalKey.Email === keyEmailParts.email
           ),
           hasSameMyKey = !!myKeys.find(
-              (myKey) =>
-                  (key.isPublic() && myKey.isPublic && myKey.email === keyEmailParts.email) ||
-                  (!key.isPublic() && !myKey.isPublic && myKey.email === keyEmailParts.email)
+            (myKey) =>
+              (key.isPublic() && myKey.isPublic && myKey.email === keyEmailParts.email) ||
+              (!key.isPublic() && !myKey.isPublic && myKey.email === keyEmailParts.email)
           ),
           hasSameKey = sameUserKeys.length > 0 || hasSameExternalKey || hasSameMyKey,
           noEmail = !addressUtils.isCorrectEmail(keyEmailParts.email),
           bitSize = key.primaryKey.params[0].byteLength() * 8,
+          isExternal = !openPgpHelper.isOwnEmail(keyEmailParts.email),
           keyData = new OpenPgpKey({
             armor: key.armor(),
             email: keyEmail,
             isPublic: key.isPublic(),
-            isExternal: !openPgpHelper.isOwnEmail(keyEmailParts.email),
+            isExternal,
           })
         keyData.addInfo = key.isPublic()
           ? '(' + bitSize + '-bit, public)'
           : '(' + bitSize + '-bit, private)'
         keyData.checked = !hasSameKey && !noEmail
 
-        if (noEmail) {
+        if (isExternalKeys && !isExternal || !isExternalKeys && isExternal) {
+        } else if (noEmail) {
           keysBroken.push(keyData)
         } else if (hasSameKey) {
           keysAlreadyThere.push(keyData)
-        } else if (
-          !key.isPublic() &&
-          !openPgpHelper.isOwnEmail(keyEmailParts.email)
-        ) {
+        } else if (!key.isPublic() && !openPgpHelper.isOwnEmail(keyEmailParts.email)) {
           keysPrivateExternal.push(keyData)
         } else {
           keysToImport.push(keyData)

@@ -80,6 +80,9 @@ export default {
     AppButtonDialog,
     ImportKeyItem,
   },
+  props: {
+    isExternalKeys: Boolean
+  },
   data: () => ({
     keysArmorToImport: '',
     keysBroken: [],
@@ -144,7 +147,8 @@ export default {
       const keysFromArmor = await checkPgpKeys(
         this.keysArmorToImport,
         this.externalKeys,
-        myKeys
+        myKeys,
+        this.isExternalKeys
       )
       this.keysArmorToImport = ''
       this.keysBroken = keysFromArmor.keysBroken
