@@ -6,7 +6,7 @@
       </div>
 
       <div class="overflow-hidden">
-        <span style="white-space: pre;">{{ key.PublicPgpKey }}</span>
+        <span class="keyView">{{ key.PublicPgpKey }}</span>
       </div>
     </template>
   </q-scroll-area>
@@ -54,7 +54,6 @@ export default {
     }
 
     const keysArmor = await openPgpHelper.getArmorInfo(this.armorText)
-    console.log('keysArmor', keysArmor);
     this.keysFromArmor = keysArmor?.map(item => ({
       PublicPgpKey: item.armor(),
       Email: item.getUserIds()[0],
@@ -70,8 +69,13 @@ export default {
 .keys_list__all {
   height: calc(100vh - 223px);
 }
-
 .key_email:not(:first-child) {
   margin-top: 16px;
+}
+.keyView {
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: monospace, serif;
 }
 </style>

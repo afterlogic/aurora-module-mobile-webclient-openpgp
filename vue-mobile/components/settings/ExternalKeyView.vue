@@ -5,7 +5,7 @@
     </div>
 
     <div class="overflow-hidden">
-      <span style="white-space: pre;">{{ key.PublicPgpKey }}</span>
+      <span class="keyView">{{ key.PublicPgpKey }}</span>
     </div>
   </q-scroll-area>
 
@@ -55,7 +55,8 @@ export default {
       return downloadKey(this.key.PublicPgpKey, fileName)
     },
     async deleteKey() {
-      const isDeleted = await this.asyncRemoveExternalKey(this.key.Email)
+      const email = this.key.Email.substring(this.key.Email.lastIndexOf("<")+1, this.key.Email.lastIndexOf(">"))
+      const isDeleted = await this.asyncRemoveExternalKey(email)
       if (isDeleted) {
         this.$router.replace('/settings/open-pgp/external-keys')
       }
@@ -76,5 +77,11 @@ export default {
 <style scoped>
 .externalKey {
   height: calc(100vh - 223px);
+}
+.keyView {
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: monospace, serif;
 }
 </style>

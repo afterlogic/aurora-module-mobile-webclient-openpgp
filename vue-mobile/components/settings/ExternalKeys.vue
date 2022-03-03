@@ -18,7 +18,7 @@
     <q-input ref="fileInput" class="hidden" multiple @update:model-value="(val) => this.files = val" type="file" />
   </div>
 
-  <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false"/>
+  <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false" />
 </template>
 
 <script>
@@ -50,21 +50,23 @@ export default {
       }
       this.setFilesKeys(filesList)
       this.showImportKeys = true
+    },
+
+    async externalKeys() {
+      const armorText = this.externalKeys.reduce((acc, value) => {
+        acc += value.PublicPgpKey
+        return acc += '\n'
+      }, '')
+
+      const keysArmor = await openPgpHelper.getArmorInfo(armorText)
+      this.keysFromArmor = keysArmor?.map(item => ({
+        PublicPgpKey: item.armor(),
+        Email: item.getUserIds()[0],
+      }))
     }
   },
-  async mounted() {
-    await this.getExternalKeys()
-
-    const armorText = this.externalKeys.reduce((acc, value) => {
-      acc += value.PublicPgpKey
-      return acc += '\n'
-    }, '')
-
-    const keysArmor = await openPgpHelper.getArmorInfo(armorText)
-    this.keysFromArmor = keysArmor?.map(item => ({
-      PublicPgpKey: item.armor(),
-      Email: item.getUserIds()[0],
-    }))
+  mounted() {
+    this.getExternalKeys()
   },
   computed: {
     ...mapGetters('openpgpmobile', ['externalKeys']),

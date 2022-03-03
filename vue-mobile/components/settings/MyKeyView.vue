@@ -5,7 +5,7 @@
     </div>
 
     <div class="overflow-hidden">
-      <span style="white-space: pre;">{{ currentMyKey.armor }}</span>
+      <span class="keyView">{{ currentMyKey.armor }}</span>
     </div>
   </q-scroll-area>
 
@@ -73,5 +73,11 @@ export default {
 <style scoped>
 .myKey {
   height: calc(100vh - 223px);
+}
+.keyView {
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: monospace, serif;
 }
 </style>

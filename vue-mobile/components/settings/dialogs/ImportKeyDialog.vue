@@ -123,9 +123,9 @@ export default {
       this.keysToImport.forEach(key => {
         if (key.isExternal && key.checked) {
           checkedExternalKeys.push({
-            Email: key.email.substring(key.email.lastIndexOf("<")+1,key.email.lastIndexOf(">")),
+            Email: key.email.substring(key.email.lastIndexOf("<") + 1, key.email.lastIndexOf(">")),
             Key: key.armor,
-            Name: ''
+            Name: key.email.substring(0, key.email.lastIndexOf("<")),
           })
         } else if (!key.isExternal && key.checked) {
           checkedMyKeys.push(key.armor)
