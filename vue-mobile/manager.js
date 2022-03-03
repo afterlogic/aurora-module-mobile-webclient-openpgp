@@ -24,10 +24,12 @@ const _getSettingsTabs = params => {
 
 
 const setComponents = (components) => {
+  console.log('setComponents')
   components.push({
     name: 'AskOpenPgpKeyPassword',
     component: defineAsyncComponent(() => import('./components/common/AskOpenPgpKeyPassword')),
   })
+  console.log(components, 'setComponents components')
 }
 
 const _getSettingsPageChildren = params => {
@@ -110,9 +112,12 @@ export default {
     const { aKeys } = openPgpHelper
     store.dispatch('openpgpmobile/setMyPrivateKeys', aKeys.filter(key => !key.isPublic))
     store.dispatch('openpgpmobile/setMyPublicKeys', aKeys.filter(key => key.isPublic))
+
+    console.log('initMyKeys OPEN PGP')
   },
 
   initSubscriptions (appData) {
+    console.log('initSubscriptions OPEN PGP')
     eventBus.$off('SettingsMobileWebclient::GetSettingsPageChildren', _getSettingsPageChildren)
     eventBus.$on('SettingsMobileWebclient::GetSettingsPageChildren', _getSettingsPageChildren)
 
