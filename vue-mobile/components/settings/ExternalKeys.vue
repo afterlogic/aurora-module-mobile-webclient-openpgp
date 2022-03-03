@@ -1,5 +1,5 @@
 <template>
-  <q-scroll-area :thumb-style="{width: '5px'}" class="keys_list q-px-lg q-pt-lg">
+  <q-scroll-area :thumb-style="{width: '5px'}" class="keys_list q-px-lg q-pt-lg" v-if="!loading">
     <div v-if="!keysFromArmor.length">
       {{ $t('OPENPGPWEBCLIENT.INFO_EMPTY_EXTERNAL_PUBLIC_KEYS') }}
     </div>
@@ -7,11 +7,20 @@
     <open-pgp-tab v-for="key in keysFromArmor" :key="key" :label="key.Email" @click="openKey(key)" />
   </q-scroll-area>
 
-  <div class="q-pa-lg full-width">
+  <div class="q-pa-lg full-width" v-if="!loading">
     <app-button @click="exportAllKeys" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" :disabled="!keysFromArmor.length" />
     <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
     <app-button @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
     <q-input ref="fileInput" class="hidden" multiple @update:model-value="(val) => this.files = val" type="file" />
+  </div>
+
+  <div class="q-mt-xl flex items-center justify-center" v-if="loading">
+    <q-circular-progress
+      indeterminate
+      size="40px"
+      color="primary"
+      class="q-ma-md"
+    />
   </div>
 
   <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false" is-external-keys />
@@ -34,6 +43,7 @@ export default {
     AppButton,
   },
   data: () => ({
+    loading: false,
     showImportKeys: false,
     files: null,
     keysFromArmor: [],
@@ -70,7 +80,9 @@ export default {
   methods: {
     ...mapActions('openpgpmobile', ['asyncGetExternalsKeys', 'changeCurrentKeys', 'setFilesKeys']),
     async getExternalKeys() {
+      this.loading = true
       await this.asyncGetExternalsKeys()
+      this.loading = false
     },
     getFiles() {
       this.$refs.fileInput.$el.click()
