@@ -1,9 +1,5 @@
 <template>
   <q-scroll-area :thumb-style="{width: '5px'}" class="keys_list q-px-lg q-pt-lg">
-    <div class="q-mb-md text-body1 text-weight-bold">
-      {{ $t('OPENPGPWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS') }}
-    </div>
-
     <div v-if="!keysFromArmor.length">
       {{ $t('OPENPGPWEBCLIENT.INFO_EMPTY_EXTERNAL_PUBLIC_KEYS') }}
     </div>
@@ -93,6 +89,6 @@ export default {
 
 <style scoped>
 .keys_list {
-  height: calc(100vh - 295px);
+  height: calc(100vh - 355px);
 }
 </style>
