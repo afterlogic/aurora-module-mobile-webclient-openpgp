@@ -25,12 +25,14 @@ const _getSettingsTabs = params => {
 
 
 const setComponents = (components) => {
-  console.log('setComponents')
   components.push({
     name: 'AskOpenPgpKeyPassword',
     component: defineAsyncComponent(() => import('./components/common/AskOpenPgpKeyPassword')),
   })
-  console.log(components, 'setComponents components')
+  components.push({
+    name: 'FileUploadTypeSelectionDialog',
+    component: defineAsyncComponent(() => import('../../CoreParanoidEncryptionWebclientPlugin/vue-mobile/components/files/dialogs/FileUploadTypeSelectionDialog'))
+  })
 }
 
 
@@ -117,7 +119,6 @@ export default {
   },
 
   initSubscriptions (appData) {
-    console.log('initSubscriptions (appData) {')
     eventBus.$off('CoreMobileWebclient::CheckComponents', setComponents)
     eventBus.$on('CoreMobileWebclient::CheckComponents', setComponents)
 

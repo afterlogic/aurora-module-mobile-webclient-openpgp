@@ -36,6 +36,13 @@ export default {
   components: {
     AppDialog
   },
+  watch: {
+    enterOpenPgpKeyPassword(val) {
+      if (!val) {
+        this.close()
+      }
+    }
+  },
   methods: {
     askOpenPgpKeyPassword: async function (sFullEmail, fCallback) {
       this.enterOpenPgpKeyPassword = true
