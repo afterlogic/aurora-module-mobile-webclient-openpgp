@@ -9,7 +9,7 @@
       </div>
       <q-item>
         <app-input
-            placeholder="Enter folder name"
+            placeholder="Password"
             outlined
             autofocus
             dense
