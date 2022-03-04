@@ -1,30 +1,38 @@
 <template>
   <app-dialog v-model="enterOpenPgpKeyPassword" @close="close" :close="close">
     <template v-slot:head>
-      <q-card-section>
-        <div class="text-h6">Enter password</div>
-      </q-card-section>
-      <q-card-section>
-        <span>Enter password for {{ openPgpKeyFullEmail }} OpenPGP key</span>
-      </q-card-section>
+      <div class="q-px-md dialog__header-text">
+        <span>Enter password</span>
+      </div>
+      <div class="q-px-md q-py-md text__caption">
+        <span>Please enter OpenPGP key's password to unlock the key.</span>
+      </div>
       <q-item>
-        <q-item-section side>
-          <q-item-label>OpenPGP key password</q-item-label>
-        </q-item-section>
-        <q-item-section>
-          <q-input outlined dense v-model="openPgpKeyPassword" @keyup.enter="setOpenPgpKeyPassword" ref="openPgpPassword" />
-        </q-item-section>
+        <app-input
+            placeholder="Enter folder name"
+            outlined
+            autofocus
+            dense
+            v-model="openPgpKeyPassword"
+            style="width: 100%"
+            @keyup.enter="setOpenPgpKeyPassword"
+        />
       </q-item>
     </template>
     <template v-slot:actions>
-      <q-btn flat label="Ok" color="primary" @click="setOpenPgpKeyPassword" />
-      <q-btn flat label="Cancel" color="grey-6" @click="close" />
+      <button-dialog
+          :action="setOpenPgpKeyPassword"
+          label="Unlock"
+      />
     </template>
   </app-dialog>
 </template>
 
 <script>
 import AppDialog from "components/common/AppDialog";
+import AppInput from "components/common/AppInput";
+import ButtonDialog from "components/common/ButtonDialog";
+
 export default {
   name: "AskOpenPgpKeyPassword",
   data: () => ({
@@ -34,7 +42,9 @@ export default {
     openPgpKeyPassword: ''
   }),
   components: {
-    AppDialog
+    AppDialog,
+    AppInput,
+    ButtonDialog
   },
   watch: {
     enterOpenPgpKeyPassword(val) {
@@ -51,7 +61,6 @@ export default {
       this.openPgpKeyCallback = fCallback || null
 
       await this.$nextTick()
-      this.$refs.openPgpPassword.$el.focus()
     },
     setOpenPgpKeyPassword() {
       this.openPgpKeyCallback(this.openPgpKeyPassword)
