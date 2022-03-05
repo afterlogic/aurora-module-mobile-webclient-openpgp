@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pt-md">
+  <div class="q-pt-md cursor-pointer">
     <div class="flex content-between">
       <div class="flex-1">
         <p>{{ label }}</p>

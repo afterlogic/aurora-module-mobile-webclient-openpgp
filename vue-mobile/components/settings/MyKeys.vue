@@ -25,11 +25,11 @@
     <app-button @click="showGenerateKeys = true" :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE_NEW_KEY')" />
     <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
     <app-button @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
-    <q-input ref="fileInput" class="hidden" multiple @update:model-value="(val) => this.files = val" type="file" />
+    <q-file ref="fileInput" v-model="files" class="hidden" multiple />
   </div>
 
   <generate-key-dialog v-model="showGenerateKeys" @close="showGenerateKeys = false" />
-  <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false" />
+  <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false" @clear-files="clearFiles" />
   <verify-private-key-dialog v-model="showVerifyPrivateKey" @close="showVerifyPrivateKey = false" />
 </template>
 
@@ -57,17 +57,19 @@ export default {
     showGenerateKeys: false,
     showImportKeys: false,
     showVerifyPrivateKey: false,
-    files: null,
+    files: [],
   }),
   watch: {
     async files() {
-      const filesList = []
-      for (const file of this.files) {
-        filesList.push(await file.text())
+      if (this.files.length) {
+        const filesList = []
+        for (const file of this.files) {
+          filesList.push(await file.text())
+        }
+        this.setFilesKeys(filesList)
+        this.showImportKeys = true
       }
-      this.setFilesKeys(filesList)
-      this.showImportKeys = true
-    }
+    },
   },
   computed: {
     ...mapGetters('openpgpmobile', ['myPublicKeys', 'myPrivateKeys']),
@@ -76,6 +78,9 @@ export default {
     ...mapActions('openpgpmobile', ['setCurrentMyKey', 'setMyPublicKeys', 'setMyPrivateKeys', 'setFilesKeys']),
     getFiles() {
       this.$refs.fileInput.$el.click()
+    },
+    clearFiles() {
+      this.files = []
     },
     openKey(key) {
       this.setCurrentMyKey(key)

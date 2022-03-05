@@ -11,7 +11,7 @@
     <app-button @click="exportAllKeys" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" :disabled="!keysFromArmor.length" />
     <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
     <app-button @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
-    <q-input ref="fileInput" class="hidden" multiple @update:model-value="(val) => this.files = val" type="file" />
+    <q-file ref="fileInput" v-model="files" class="hidden" multiple />
   </div>
 
   <div class="q-mt-xl flex items-center justify-center" v-if="loading">
@@ -23,7 +23,7 @@
     />
   </div>
 
-  <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false" is-external-keys />
+  <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false" @clear-files="clearFiles" is-external-keys />
 </template>
 
 <script>
@@ -45,17 +45,19 @@ export default {
   data: () => ({
     loading: false,
     showImportKeys: false,
-    files: null,
+    files: [],
     keysFromArmor: [],
   }),
   watch: {
     async files() {
-      const filesList = []
-      for (const file of this.files) {
-        filesList.push(await file.text())
+      if (this.files.length) {
+        const filesList = []
+        for (const file of this.files) {
+          filesList.push(await file.text())
+        }
+        this.setFilesKeys(filesList)
+        this.showImportKeys = true
       }
-      this.setFilesKeys(filesList)
-      this.showImportKeys = true
     },
 
     async externalKeys() {
@@ -86,6 +88,9 @@ export default {
     },
     getFiles() {
       this.$refs.fileInput.$el.click()
+    },
+    clearFiles() {
+      this.files = []
     },
     exportAllKeys() {
       this.changeCurrentKeys(this.externalKeys)

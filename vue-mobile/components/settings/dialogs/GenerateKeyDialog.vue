@@ -6,7 +6,7 @@
           {{ $t('OPENPGPWEBCLIENT.HEADING_GENERATE_NEW_KEY') }}
         </div>
         <q-space />
-        <q-btn icon="close" flat round dense v-close-popup />
+        <q-btn icon="close" color="blue" flat round dense v-close-popup />
       </q-card-section>
 
       <q-card-section>

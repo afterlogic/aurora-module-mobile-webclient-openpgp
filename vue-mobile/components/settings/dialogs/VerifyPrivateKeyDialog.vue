@@ -6,7 +6,7 @@
           {{ $t('OPENPGPWEBCLIENT.HEADING_VERIFY_PASSWORD') }}
         </div>
         <q-space />
-        <q-btn icon="close" flat round dense v-close-popup />
+        <q-btn icon="close" color="blue" flat round dense v-close-popup />
       </q-card-section>
 
       <q-card-section class="row items-center q-pb-none q-px-lg">
@@ -18,9 +18,9 @@
       <q-item class="q-px-sm">
         <app-dialog-input
           outlined
+          autofocus
           v-model="password"
           type="password"
-          autofocus
         />
       </q-item>
 
@@ -36,6 +36,7 @@ import {mapActions, mapGetters} from 'vuex'
 
 import { verifyPrivateKeyPassword } from '../../../openpgp-utils'
 
+import notification from 'src/utils/notification';
 import AppDialogInput from 'src/components/common/AppDialogInput'
 import AppButtonDialog from "src/components/common/AppButtonDialog";
 
@@ -61,8 +62,11 @@ export default {
         this.currentMyKey,
         this.password
       )
+
       if (isVerified) {
         this.$router.push(`/settings/open-pgp/my-keys/${this.currentMyKey.email}`)
+      } else {
+        notification.showError(this.$t('OPENPGPMOBILEWEBCLIENT.ERROR_INVALID_PASSWORD'))
       }
     },
   },

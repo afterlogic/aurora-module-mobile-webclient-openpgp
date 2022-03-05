@@ -6,7 +6,7 @@
           {{ $t('OPENPGPWEBCLIENT.HEADING_IMPORT_KEY') }}
         </div>
         <q-space />
-        <q-btn icon="close" flat round dense v-close-popup />
+        <q-btn icon="close" color="blue" flat round dense v-close-popup />
       </q-card-section>
 
       <q-card-section v-if="!showKeys" class="q-pb-none">
@@ -129,6 +129,7 @@ export default {
     ...mapActions('openpgpmobile', ['asyncAddPublicKeys', 'importMyKeys']),
     close() {
       this.clearKeys()
+      this.$emit('clearFiles')
     },
     clearKeys() {
       this.keysBroken = []
