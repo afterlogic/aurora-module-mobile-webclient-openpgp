@@ -15,6 +15,7 @@
             dense
             v-model="openPgpKeyPassword"
             style="width: 100%"
+            type="password"
             @keyup.enter="setOpenPgpKeyPassword"
         />
       </q-item>
