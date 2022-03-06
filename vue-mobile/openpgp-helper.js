@@ -488,7 +488,6 @@ OpenPgp.prototype.decryptAndVerifyTextWithPassphrase = async function (
     if (types.isNonEmptyArray(aPublicKeys)) {
       oOptions.publicKeys = await this.convertToNativeKeys(aPublicKeys) // for verification (optional)
     }
-    console.log(oOptions, 'oOptions')
     let aKeyIds = oOptions.message
       .getEncryptionKeyIds()
       .map((oKeyId) => oKeyId.toHex())

@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 import eventBus from 'src/event-bus'
 import store from 'src/store'
-import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent, shallowRef } from "vue";
 
 import settings from './settings'
 import { i18n } from "../../CoreMobileWebclient/vue-mobile/src/boot/i18n";
@@ -27,11 +27,11 @@ const _getSettingsTabs = params => {
 const setComponents = (components) => {
   components.push({
     name: 'AskOpenPgpKeyPassword',
-    component: defineAsyncComponent(() => import('./components/common/AskOpenPgpKeyPassword')),
+    component: shallowRef(defineAsyncComponent(() => import('./components/common/AskOpenPgpKeyPassword'))),
   })
   components.push({
     name: 'FileUploadTypeSelectionDialog',
-    component: defineAsyncComponent(() => import('../../CoreParanoidEncryptionWebclientPlugin/vue-mobile/components/files/dialogs/FileUploadTypeSelectionDialog'))
+    component: shallowRef(defineAsyncComponent(() => import('../../CoreParanoidEncryptionWebclientPlugin/vue-mobile/components/files/dialogs/FileUploadTypeSelectionDialog')))
   })
 }
 
