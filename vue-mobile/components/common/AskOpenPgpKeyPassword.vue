@@ -40,7 +40,8 @@ export default {
     enterOpenPgpKeyPassword: false,
     openPgpKeyCallback: null,
     openPgpKeyFullEmail: '',
-    openPgpKeyPassword: ''
+    openPgpKeyPassword: '',
+    isDataSent: false,
   }),
   components: {
     AppDialog,
@@ -65,11 +66,15 @@ export default {
     },
     setOpenPgpKeyPassword() {
       this.openPgpKeyCallback(this.openPgpKeyPassword)
+      this.isDataSent = true
       this.enterOpenPgpKeyPassword = false
     },
     close() {
-      this.enterOpenPgpKeyPassword = false
-      this.openPgpKeyCallback(null)
+      if (!this.isDataSent) {
+        this.enterOpenPgpKeyPassword = false
+        this.openPgpKeyCallback(null)
+      }
+      this.isDataSent = false
     }
   }
 }
