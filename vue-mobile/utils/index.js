@@ -5,13 +5,11 @@ export const askOpenPgpKeyPassword = (sFullEmail, getParentComponent, fCallback)
   const oAskOpenPgpKeyPasswordComponent = oAppComponent ? oAppComponent.$refs.AskOpenPgpKeyPassword : null
   if (_.isObject(oAskOpenPgpKeyPasswordComponent)) {
     if (_.isFunction(oAskOpenPgpKeyPasswordComponent.askOpenPgpKeyPassword)) {
-      console.log('_.isObject(oAskOpenPgpKeyPasswordComponent)')
       oAskOpenPgpKeyPasswordComponent.askOpenPgpKeyPassword(sFullEmail, fCallback)
     }
   }
   if (_.isArray(oAskOpenPgpKeyPasswordComponent)) {
     if (_.isFunction(oAskOpenPgpKeyPasswordComponent[0].askOpenPgpKeyPassword)) {
-      console.log('_.isArray(oAskOpenPgpKeyPasswordComponent)')
       oAskOpenPgpKeyPasswordComponent[0].askOpenPgpKeyPassword(sFullEmail, fCallback)
     }
   }

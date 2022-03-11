@@ -818,7 +818,7 @@ OpenPgp.prototype.getPrivateKeyByEmail = function (email) {
  */
 OpenPgp.prototype.getPublicKeyByEmail = function (email) {
   let publicKey = _.find(this.getAllKeys(), (key) => {
-    let keyEmail = addressUtils.getEmailParts(key.email)
+    let keyEmail = addressUtils.getEmailParts(key.email || key.Email)
     return key.isPublic && keyEmail.email === email
   })
   return publicKey ? publicKey : null
