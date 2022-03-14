@@ -14,7 +14,7 @@
     <app-button @click="confirmDelete" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')" class="q-mt-lg" />
   </div>
 
-  <delete-key-dialog v-model="isDeleting" @close="isDeleting = false" @delete="deleteKey" :mail="currentMyKey?.email" />
+  <delete-key-dialog v-model="isDeleting" @close="closeDeleteKeyDialog" @delete="deleteKey" :mail="currentMyKey?.email" />
 </template>
 
 <script>
@@ -56,6 +56,9 @@ export default {
       if (isDeleted) {
         this.$router.replace('/settings/open-pgp/my-keys')
       }
+    },
+    closeDeleteKeyDialog() {
+      this.isDeleting = false
     }
   },
   async mounted() {
