@@ -78,7 +78,7 @@ export default {
 
 <style scoped>
 .myKey {
-  height: calc(100vh - 350px);
+  height: calc(100vh - 400px);
 }
 .keyView {
   font-size: 12px;
