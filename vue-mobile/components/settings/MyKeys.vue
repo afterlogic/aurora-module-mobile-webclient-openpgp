@@ -96,6 +96,6 @@ export default {
 
 <style scoped>
 .myKeys__list {
-  height: calc(100vh - 355px);
+  height: calc(100vh - 455px);
 }
 </style>

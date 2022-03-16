@@ -1,5 +1,5 @@
 <template>
-  <q-scroll-area :thumb-style="{ width: '5px' }" class="myKey q-px-lg q-pt-lg" v-if="currentMyKey">
+  <q-scroll-area  :thumb-style="{ width: '5px' }" class="myKey q-px-lg q-pt-lg" v-if="currentMyKey">
     <div class="q-mb-md text-bold">
       {{ keyName }}
     </div>
@@ -9,7 +9,7 @@
     </div>
   </q-scroll-area>
 
-  <div class="q-pa-lg full-width" v-if="currentMyKey">
+  <div class="q-pa-lg full-width full-height" v-if="currentMyKey">
     <app-button @click="downloadKey" :label="$t('OPENPGPWEBCLIENT.ACTION_DOWNLOAD')" />
     <app-button @click="confirmDelete" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')" class="q-mt-lg" />
   </div>
@@ -51,6 +51,9 @@ export default {
 
       return downloadKey(this.currentMyKey.armor, fileName)
     },
+    size() {
+      console.log(window, 'window')
+    },
     deleteKey() {
       const isDeleted = this.deleteMyKey(this.currentMyKey)
       if (isDeleted) {
@@ -75,7 +78,7 @@ export default {
 
 <style scoped>
 .myKey {
-  height: calc(100vh - 283px);
+  height: calc(100vh - 350px);
 }
 .keyView {
   font-size: 12px;
