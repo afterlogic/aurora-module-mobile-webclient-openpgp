@@ -7,7 +7,7 @@
     <open-pgp-tab v-for="key in keysFromArmor" :key="key" :label="key.Email" @click="openKey(key)" />
   </q-scroll-area>
 
-  <div class="q-pa-lg full-width flex items-center" style="height: 50%" v-if="!loading">
+  <div class="q-pa-lg full-width flex items-center" v-if="!loading">
     <div>
       <app-button @click="exportAllKeys" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" :disabled="!keysFromArmor.length" />
       <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
@@ -108,6 +108,6 @@ export default {
 
 <style scoped>
 .keys_list {
-  height: 50%;
+  flex-grow: 1;
 }
 </style>

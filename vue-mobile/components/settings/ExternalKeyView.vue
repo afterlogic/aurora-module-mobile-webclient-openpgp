@@ -9,7 +9,7 @@
     </div>
   </q-scroll-area>
 
-  <div class="q-pa-lg full-width flex items-center" style="height: 40%" v-if="key">
+  <div class="q-pa-lg full-width flex items-center" v-if="key">
     <div class="full-width">
       <app-button @click="downloadKey" :label="$t('OPENPGPWEBCLIENT.ACTION_DOWNLOAD')" />
       <app-button @click="confirmDelete" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')" class="q-mt-lg" />
@@ -78,7 +78,7 @@ export default {
 
 <style scoped>
 .externalKey {
-  height: 60%;
+  flex-grow: 1;
 }
 .keyView {
   font-size: 12px;
