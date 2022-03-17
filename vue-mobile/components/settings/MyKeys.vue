@@ -21,11 +21,13 @@
     <open-pgp-tab v-for="key in myPrivateKeys" :key="key" :label="key.email" @click="openVerifyDialog(key)" />
   </q-scroll-area>
 
-  <div class="q-pa-lg full-width">
-    <app-button @click="showGenerateKeys = true" :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE_NEW_KEY')" />
-    <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
-    <app-button @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
-    <q-file ref="fileInput" v-model="files" class="hidden" multiple />
+  <div class="q-pa-lg full-width flex items-center" style="height: 60%">
+    <div class="full-width">
+      <app-button @click="showGenerateKeys = true" :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE_NEW_KEY')" />
+      <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
+      <app-button @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
+      <q-file ref="fileInput" v-model="files" class="hidden" multiple />
+    </div>
   </div>
 
   <generate-key-dialog v-model="showGenerateKeys" @close="showGenerateKeys = false" />
@@ -96,6 +98,6 @@ export default {
 
 <style scoped>
 .myKeys__list {
-  height: calc(100vh - 455px);
+  height: 40%;
 }
 </style>

@@ -11,9 +11,11 @@
     </template>
   </q-scroll-area>
 
-  <div class="q-pa-lg full-width" v-if="currentKeys.length">
-    <app-button @click="sendAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_SEND_ALL')" />
-    <app-button @click="downloadAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_DOWNLOAD_ALL')" class="q-mt-lg" />
+  <div class="q-pa-lg full-width flex items-center" style="height: 50%" v-if="currentKeys.length">
+    <div>
+      <app-button @click="sendAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_SEND_ALL')" />
+      <app-button @click="downloadAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_DOWNLOAD_ALL')" class="q-mt-lg" />
+    </div>
   </div>
 </template>
 
@@ -67,7 +69,7 @@ export default {
 
 <style scoped>
 .keys_list__all {
-  height: calc(100vh - 283px);
+  height: 50%;
 }
 .key_email:not(:first-child) {
   margin-top: 16px;

@@ -9,9 +9,11 @@
     </div>
   </q-scroll-area>
 
-  <div class="q-pa-lg full-width" v-if="key">
-    <app-button @click="downloadKey" :label="$t('OPENPGPWEBCLIENT.ACTION_DOWNLOAD')" />
-    <app-button @click="confirmDelete" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')" class="q-mt-lg" />
+  <div class="q-pa-lg full-width flex items-center" style="height: 40%" v-if="key">
+    <div class="full-width">
+      <app-button @click="downloadKey" :label="$t('OPENPGPWEBCLIENT.ACTION_DOWNLOAD')" />
+      <app-button @click="confirmDelete" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')" class="q-mt-lg" />
+    </div>
   </div>
 
   <delete-key-dialog v-model="isDeleting" @close="isDeleting = false" @delete="deleteKey" :mail="key?.Email" />
@@ -76,7 +78,7 @@ export default {
 
 <style scoped>
 .externalKey {
-  height: calc(100vh - 283px);
+  height: 60%;
 }
 .keyView {
   font-size: 12px;

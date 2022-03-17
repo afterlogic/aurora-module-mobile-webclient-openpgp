@@ -9,9 +9,11 @@
     </div>
   </q-scroll-area>
 
-  <div class="q-pa-lg full-width full-height" v-if="currentMyKey">
-    <app-button @click="downloadKey" :label="$t('OPENPGPWEBCLIENT.ACTION_DOWNLOAD')" />
-    <app-button @click="confirmDelete" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')" class="q-mt-lg" />
+  <div class="q-pa-lg full-width flex items-center" style="height: 50%" v-if="currentMyKey">
+    <div class="full-width">
+      <app-button @click="downloadKey" :label="$t('OPENPGPWEBCLIENT.ACTION_DOWNLOAD')" />
+      <app-button @click="confirmDelete" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')" class="q-mt-lg" />
+    </div>
   </div>
 
   <delete-key-dialog v-model="isDeleting" @close="closeDeleteKeyDialog" @delete="deleteKey" :mail="currentMyKey?.email" />
@@ -78,7 +80,7 @@ export default {
 
 <style scoped>
 .myKey {
-  height: calc(100vh - 400px);
+  height: 50%;
 }
 .keyView {
   font-size: 12px;

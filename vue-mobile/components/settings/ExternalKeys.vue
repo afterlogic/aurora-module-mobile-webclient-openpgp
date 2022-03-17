@@ -7,11 +7,13 @@
     <open-pgp-tab v-for="key in keysFromArmor" :key="key" :label="key.Email" @click="openKey(key)" />
   </q-scroll-area>
 
-  <div class="q-pa-lg full-width" v-if="!loading">
-    <app-button @click="exportAllKeys" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" :disabled="!keysFromArmor.length" />
-    <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
-    <app-button @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
-    <q-file ref="fileInput" v-model="files" class="hidden" multiple />
+  <div class="q-pa-lg full-width flex items-center" style="height: 50%" v-if="!loading">
+    <div>
+      <app-button @click="exportAllKeys" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" :disabled="!keysFromArmor.length" />
+      <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
+      <app-button @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
+      <q-file ref="fileInput" v-model="files" class="hidden" multiple />
+    </div>
   </div>
 
   <div class="q-mt-xl flex items-center justify-center" v-if="loading">
@@ -106,6 +108,6 @@ export default {
 
 <style scoped>
 .keys_list {
-  height: calc(100vh - 355px);
+  height: 50%;
 }
 </style>
