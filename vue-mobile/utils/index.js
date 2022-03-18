@@ -7,8 +7,7 @@ export const askOpenPgpKeyPassword = (sFullEmail, getParentComponent, fCallback)
     if (_.isFunction(oAskOpenPgpKeyPasswordComponent.askOpenPgpKeyPassword)) {
       oAskOpenPgpKeyPasswordComponent.askOpenPgpKeyPassword(sFullEmail, fCallback)
     }
-  }
-  if (_.isArray(oAskOpenPgpKeyPasswordComponent)) {
+  } else if (_.isArray(oAskOpenPgpKeyPasswordComponent)) {
     if (_.isFunction(oAskOpenPgpKeyPasswordComponent[0].askOpenPgpKeyPassword)) {
       oAskOpenPgpKeyPasswordComponent[0].askOpenPgpKeyPassword(sFullEmail, fCallback)
     }

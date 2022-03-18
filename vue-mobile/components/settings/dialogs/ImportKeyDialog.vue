@@ -1,26 +1,20 @@
 <template>
-  <q-dialog @hide="close" v-bind="$attrs">
-    <q-card class="q-dialog-size" style="min-width: 300px">
-      <q-card-section class="row items-center q-pb-none">
-        <div class="text-h6">
-          {{ $t('OPENPGPWEBCLIENT.HEADING_IMPORT_KEY') }}
-        </div>
-        <q-space />
-        <q-btn icon="close" color="blue" flat round dense v-close-popup />
-      </q-card-section>
-
-      <q-card-section v-if="!showKeys" class="q-pb-none">
+  <app-dialog v-bind="$attrs" :close="close">
+    <template v-slot:head>
+      <div class="q-px-lg q-pb-sm dialog__title-text">
+            <span>{{
+                $t('OPENPGPWEBCLIENT.HEADING_IMPORT_KEY')
+              }}</span>
+      </div>
+      <div v-if="!showKeys" class="q-mx-md">
         <app-dialog-input
-          v-model="keysArmorToImport"
-          type="textarea"
-          :autofocus="true"
+            v-model="keysArmorToImport"
+            type="textarea"
+            :autofocus="true"
         />
-        <q-card-actions align="right">
-          <app-button-dialog :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')" />
-        </q-card-actions>
-      </q-card-section>
+      </div>
 
-      <q-card-section v-if="showKeys" class="q-pb-none">
+      <div v-if="showKeys" class="q-mx-lg q-mt-lg">
         <div v-if="keysToImport.length">
           <div class="q-mb-md">
             {{ $t('OPENPGPWEBCLIENT.INFO_TEXT_CONTAINS_KEYS_FOR_IMPORT') }}
@@ -63,17 +57,19 @@
         <div v-if="keysBroken.length">
           <import-key-item disabled keysBroken v-for="key in keysBroken" :key="key.id" :pgpKey="key" />
         </div>
+      </div>
 
-        <q-card-actions align="right">
-          <app-button-dialog
-            :action="importKeys"
-            :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEYS')"
-            :disabled="!keysToImport.length"
-          />
-        </q-card-actions>
-      </q-card-section>
-    </q-card>
-  </q-dialog>
+    </template>
+    <template v-slot:actions>
+      <button-dialog class="q-ma-sm"  v-if="!showKeys" :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')" />
+      <button-dialog class="q-ma-sm"
+          v-if="showKeys"
+          :action="importKeys"
+          :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEYS')"
+          :disabled="!keysToImport.length"
+      />
+    </template>
+  </app-dialog>
 </template>
 
 <script>
@@ -82,15 +78,17 @@ import {mapActions, mapGetters} from 'vuex'
 import { checkPgpKeys } from '../../../openpgp-utils'
 
 import AppDialogInput from 'src/components/common/AppDialogInput'
-import AppButtonDialog from "src/components/common/AppButtonDialog";
+import ButtonDialog from "src/components/common/ButtonDialog";
 import ImportKeyItem from './ImportKeyItem'
+import AppDialog from "src/components/common/AppDialog";
 
 export default {
   name: 'ImportKeyDialog',
   components: {
     AppDialogInput,
-    AppButtonDialog,
     ImportKeyItem,
+    AppDialog,
+    ButtonDialog
   },
   props: {
     isExternalKeys: Boolean
@@ -128,8 +126,13 @@ export default {
   methods: {
     ...mapActions('openpgpmobile', ['asyncAddPublicKeys', 'importMyKeys']),
     close() {
-      this.clearKeys()
-      this.$emit('clearFiles')
+      if (this.showKeys) {
+        this.clearKeys()
+        this.$emit('clearFiles')
+      } else {
+        this.keysArmorToImport = ''
+        this.$emit('close')
+      }
     },
     clearKeys() {
       this.keysBroken = []

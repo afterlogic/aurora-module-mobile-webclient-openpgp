@@ -67,8 +67,9 @@ export default {
         acc += value.PublicPgpKey
         return acc += '\n'
       }, '')
-
+      console.log(armorText, 'armorText')
       const keysArmor = await openPgpHelper.getArmorInfo(armorText)
+      console.log(keysArmor, 'keysArmor')
       this.keysFromArmor = keysArmor?.map(item => ({
         PublicPgpKey: item.armor(),
         Email: item.getUserIds()[0],

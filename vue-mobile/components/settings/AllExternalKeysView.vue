@@ -1,5 +1,5 @@
 <template>
-  <q-scroll-area :thumb-style="{ width: '5px' }" class="keys_list__all q-px-lg q-pt-lg" v-if="currentKeys.length">
+  <q-scroll-area :thumb-style="{ width: '5px' }" class="keys_list__all q-px-lg q-pt-lg" style="flex-grow: 1" v-if="currentKeys.length">
     <template v-for="key of keysFromArmor">
       <div class="key_email q-mb-md text-bold">
         {{ key.Email }}
@@ -11,11 +11,9 @@
     </template>
   </q-scroll-area>
 
-  <div class="q-pa-lg full-width flex items-center" style="height: 50%" v-if="currentKeys.length">
-    <div>
-      <app-button @click="sendAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_SEND_ALL')" />
-      <app-button @click="downloadAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_DOWNLOAD_ALL')" class="q-mt-lg" />
-    </div>
+  <div class="q-pa-lg full-width flex items-center full-width" v-if="currentKeys.length">
+    <app-button @click="sendAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_SEND_ALL')" />
+    <app-button @click="downloadAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_DOWNLOAD_ALL')" class="q-mt-lg" />
   </div>
 </template>
 

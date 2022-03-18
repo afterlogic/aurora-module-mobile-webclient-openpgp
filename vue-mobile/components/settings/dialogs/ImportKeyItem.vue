@@ -1,5 +1,5 @@
 <template>
-  <q-item :disable="disabled" v-if="pgpKey" dense tag="label">
+  <q-item :disable="disabled" v-if="pgpKey" class="q-px-none" dense tag="label">
     <q-item-section>
       <q-item-label :style="styles" lines="1">
         <div class="text-bold">{{ pgpKey.email }}</div>

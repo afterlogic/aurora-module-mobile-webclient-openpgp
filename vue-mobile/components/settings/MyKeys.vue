@@ -32,7 +32,6 @@
 
   <generate-key-dialog v-model="showGenerateKeys" @close="showGenerateKeys = false" />
   <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false" @clear-files="clearFiles" />
-  <verify-private-key-dialog v-model="showVerifyPrivateKey" @close="showVerifyPrivateKey = false" />
 </template>
 
 <script>
@@ -42,8 +41,10 @@ import AppButton from 'src/components/common/AppButton'
 
 import GenerateKeyDialog from './dialogs/GenerateKeyDialog'
 import ImportKeyDialog from './dialogs/ImportKeyDialog'
-import VerifyPrivateKeyDialog from './dialogs/VerifyPrivateKeyDialog'
 import OpenPgpTab from './OpenPgpTab'
+import { askOpenPgpKeyPassword } from "../../utils";
+import { verifyPrivateKeyPassword } from "../../openpgp-utils";
+import notification from "src/utils/notification";
 
 export default {
   name: 'MyKeys',
@@ -51,14 +52,12 @@ export default {
     OpenPgpTab,
     GenerateKeyDialog,
     ImportKeyDialog,
-    VerifyPrivateKeyDialog,
     KeyItem: OpenPgpTab,
     AppButton,
   },
   data: () => ({
     showGenerateKeys: false,
     showImportKeys: false,
-    showVerifyPrivateKey: false,
     files: [],
   }),
   watch: {
@@ -74,7 +73,8 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('openpgpmobile', ['myPublicKeys', 'myPrivateKeys']),
+    ...mapGetters('openpgpmobile', ['myPublicKeys', 'myPrivateKeys', 'currentMyKey']),
+    ...mapGetters('core', ['userPublicId'])
   },
   methods: {
     ...mapActions('openpgpmobile', ['setCurrentMyKey', 'setMyPublicKeys', 'setMyPrivateKeys', 'setFilesKeys']),
@@ -88,9 +88,22 @@ export default {
       this.setCurrentMyKey(key)
       this.$router.push(`/settings/open-pgp/my-keys/${key.id}`)
     },
+    async check(pass) {
+      if (pass !== null) {
+        const isVerified = await verifyPrivateKeyPassword(
+            this.currentMyKey,
+            pass
+        )
+        if (isVerified) {
+          this.$router.push(`/settings/open-pgp/my-keys/${this.currentMyKey.email}`)
+        } else {
+          notification.showError(this.$t('OPENPGPMOBILEWEBCLIENT.ERROR_INVALID_PASSWORD'))
+        }
+      }
+    },
     openVerifyDialog(key) {
       this.setCurrentMyKey(key)
-      this.showVerifyPrivateKey = true
+      askOpenPgpKeyPassword(this.userPublicId, this.$root._getParentComponent, this.check)
     },
   },
 }
