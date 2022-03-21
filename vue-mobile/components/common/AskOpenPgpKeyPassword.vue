@@ -63,20 +63,21 @@ export default {
       this.openPgpKeyFullEmail = sFullEmail
       this.openPgpKeyPassword = ''
       this.openPgpKeyCallback = fCallback || null
-
+      this.isDataSent = false
       await this.$nextTick()
     },
     setOpenPgpKeyPassword() {
-      this.openPgpKeyCallback(this.openPgpKeyPassword)
-      this.isDataSent = true
-      this.enterOpenPgpKeyPassword = false
+      if (!this.isDataSent) {
+        this.openPgpKeyCallback(this.openPgpKeyPassword)
+        this.isDataSent = true
+        this.enterOpenPgpKeyPassword = false
+      }
     },
     close() {
       if (!this.isDataSent) {
         this.enterOpenPgpKeyPassword = false
         this.openPgpKeyCallback(null)
       }
-      this.isDataSent = false
     }
   }
 }
