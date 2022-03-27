@@ -35,6 +35,12 @@ const setComponents = (components) => {
   })
 }
 
+const setContactsMobileWebclientComponents = (components) => {
+  components.push({
+    name: 'ImportKeyForString',
+    component: shallowRef(defineAsyncComponent(() => import('./components/contacts/dialogs/ImportKeyForString'))),
+  })
+}
 
 const _getSettingsPageChildren = params => {
   if (!_.isArray(params.settingsPageChildren)) {
@@ -131,6 +137,9 @@ export default {
 
     eventBus.$off('SettingsMobileWebclient::GetSettingsHeaderTitles', _getSettingsHeaderTitles)
     eventBus.$on('SettingsMobileWebclient::GetSettingsHeaderTitles', _getSettingsHeaderTitles)
+
+    eventBus.$off('ContactsMobileWebclient::setComponents', setContactsMobileWebclientComponents)
+    eventBus.$on('ContactsMobileWebclient::setComponents', setContactsMobileWebclientComponents)
 
     eventBus.$emit('CoreMobileWebclient::InitSubscription')
   },

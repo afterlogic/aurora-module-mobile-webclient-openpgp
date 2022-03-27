@@ -742,7 +742,6 @@ OpenPgp.prototype.signAndEncryptTextWithPassphrase = async function (
 OpenPgp.prototype.getAllKeys = function () {
   const ownOpenPgpKeys = store.getters['openpgpmobile/myPublicKeys'],
   externalOpenPgpKeys = store.getters['openpgpmobile/externalKeys']
-    //aExternalOpenPgpKeys = store.getters['contacts/getOpenPgpExternalKeys'],
   return ownOpenPgpKeys.concat(externalOpenPgpKeys)
 
 }
