@@ -963,6 +963,7 @@ OpenPgp.prototype.encryptDataWithPassphrase = async function (
           return { sError: 'No public key found for ' + email + ' user.' }
         }
       })
+      console.log(aPublicKeys, 'aPublicKeys emails')
     }
     let oUserPublicKey = this.getPublicKeyByEmail(sUserEmail)
     if (oUserPublicKey) {
