@@ -1,10 +1,28 @@
 import openpgpWebApi from '../openpgp-web-api'
 import OpenPgp from '../openpgp-helper'
+import OpenPgpKey from "../classes/open-pgp-key";
+import types from "../../../CoreMobileWebclient/vue-mobile/src/utils/types";
 
 export default {
   asyncGetExternalsKeys: async ({ commit }) => {
     const externalKeys = await openpgpWebApi.getExternalKeys()
-    commit('setExternalKeys', externalKeys)
+    const openPgpExternalKeys = []
+    for (const key of externalKeys) {
+      let aKeys = await OpenPgp.getArmorInfo(key.PublicPgpKey)
+      if (types.isNonEmptyArray(aKeys)) {
+        let aKeyUsersIds = aKeys[0].getUserIds()
+        let sKeyEmail = aKeyUsersIds.length > 0 ? aKeyUsersIds[0] : '0'
+        let oOpenPgpKey = new OpenPgpKey({
+          armor: key.PublicPgpKey,
+          email: key.Email,
+          isPublic: true,
+          isExternal: true,
+        })
+        oOpenPgpKey.fullEmail = sKeyEmail
+        openPgpExternalKeys.push(oOpenPgpKey)
+      }
+    }
+    commit('setExternalKeys', openPgpExternalKeys)
   },
 
   asyncRemoveExternalKey: ({ dispatch }, email) => {
