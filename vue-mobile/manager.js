@@ -122,6 +122,7 @@ export default {
     const { aKeys } = openPgpHelper
     store.dispatch('openpgpmobile/setMyPrivateKeys', aKeys.filter(key => !key.isPublic))
     store.dispatch('openpgpmobile/setMyPublicKeys', aKeys.filter(key => key.isPublic))
+    store.dispatch('openpgpmobile/asyncGetExternalsKeys')
   },
 
   initSubscriptions (appData) {

@@ -23,13 +23,12 @@ export const checkPgpKeys = async (keysArmorToImport, openPgpExternalKeys, myKey
             key.isPublic()
           ),
           hasSameExternalKey = !!openPgpExternalKeys.find(
-            (externalKey) =>
-              key.isPublic() && externalKey.Email === keyEmailParts.email
+            (externalKey) => key.isPublic() && (externalKey.Email || externalKey.email) === keyEmailParts.email
           ),
           hasSameMyKey = !!myKeys.find(
             (myKey) =>
-              (key.isPublic() && myKey.isPublic && myKey.email === keyEmailParts.email) ||
-              (!key.isPublic() && !myKey.isPublic && myKey.email === keyEmailParts.email)
+                (key.isPublic() && myKey.isPublic && myKey.email === keyEmailParts.email) ||
+                  (!key.isPublic() && !myKey.isPublic && myKey.email === keyEmailParts.email)
           ),
           hasSameKey = sameUserKeys.length > 0 || hasSameExternalKey || hasSameMyKey,
           noEmail = !addressUtils.isCorrectEmail(keyEmailParts.email),
@@ -45,7 +44,6 @@ export const checkPgpKeys = async (keysArmorToImport, openPgpExternalKeys, myKey
           ? '(' + bitSize + '-bit, public)'
           : '(' + bitSize + '-bit, private)'
         keyData.checked = !hasSameKey && !noEmail
-
         if (noEmail) {
           keysBroken.push(keyData)
         } else if (!key.isPublic() && isExternal) {
@@ -62,7 +60,6 @@ export const checkPgpKeys = async (keysArmorToImport, openPgpExternalKeys, myKey
       }
     })
   }
-
   return {
     keysBroken,
     keysAlreadyThere,

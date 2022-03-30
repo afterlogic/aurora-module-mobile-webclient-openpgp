@@ -64,7 +64,7 @@ export default {
 
     async externalKeys() {
       const armorText = this.externalKeys.reduce((acc, value) => {
-        acc += value.PublicPgpKey
+        acc += value.armor
         return acc += '\n'
       }, '')
       const keysArmor = await openPgpHelper.getArmorInfo(armorText)

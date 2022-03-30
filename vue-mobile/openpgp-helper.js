@@ -776,13 +776,11 @@ OpenPgp.prototype.getAllKeys = function () {
    */
   (OpenPgp.prototype.getOwnKeysByEmails = function (aEmail, bIsPublic) {
     bIsPublic = !!bIsPublic
-
     let aOpenPgpKeys = store.getters['openpgpmobile/externalKeys']
     let aResult = []
-
     _.each(aEmail, (sEmail) => {
       let oKey = _.find(aOpenPgpKeys, (oKey) => {
-        let oKeyEmail = addressUtils.getEmailParts(oKey.Email)
+        let oKeyEmail = addressUtils.getEmailParts(oKey.Email || oKey.email)
         return oKey.bPublic === bIsPublic && oKeyEmail.email === sEmail
       })
 
@@ -790,7 +788,6 @@ OpenPgp.prototype.getAllKeys = function () {
         aResult.push(oKey)
       }
     })
-
     return aResult
   })
 
@@ -816,7 +813,6 @@ OpenPgp.prototype.getPrivateKeyByEmail = function (email) {
  * @return {Object|null}
  */
 OpenPgp.prototype.getPublicKeyByEmail = function (email) {
-  console.log(this.getAllKeys(), 'this.getAllKeys()')
   let publicKey = _.find(this.getAllKeys(), (key) => {
     let keyEmail = addressUtils.getEmailParts(key.email || key.Email)
     return key.isPublic && keyEmail.email === email
@@ -963,7 +959,6 @@ OpenPgp.prototype.encryptDataWithPassphrase = async function (
           return { sError: 'No public key found for ' + email + ' user.' }
         }
       })
-      console.log(aPublicKeys, 'aPublicKeys emails')
     }
     let oUserPublicKey = this.getPublicKeyByEmail(sUserEmail)
     if (oUserPublicKey) {

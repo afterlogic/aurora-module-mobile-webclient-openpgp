@@ -22,6 +22,7 @@ export default {
         openPgpExternalKeys.push(oOpenPgpKey)
       }
     }
+    console.log(openPgpExternalKeys, 'openPgpExternalKeys')
     commit('setExternalKeys', openPgpExternalKeys)
   },
 

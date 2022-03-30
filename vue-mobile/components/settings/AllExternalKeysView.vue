@@ -36,7 +36,7 @@ export default {
     ...mapGetters('openpgpmobile', ['currentKeys']),
     armorText() {
       return this.currentKeys.reduce((acc, value) => {
-        acc += value.PublicPgpKey
+        acc += value.armor
         return acc += '\n'
       }, '')
     }
@@ -52,7 +52,6 @@ export default {
     if (!this.currentKeys.length) {
       this.$router.push('/settings/open-pgp/external-keys')
     }
-
     const keysArmor = await openPgpHelper.getArmorInfo(this.armorText)
     this.keysFromArmor = keysArmor?.map(item => ({
       PublicPgpKey: item.armor(),
