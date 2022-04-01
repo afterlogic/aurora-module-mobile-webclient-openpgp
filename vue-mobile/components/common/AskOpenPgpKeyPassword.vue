@@ -1,6 +1,6 @@
 <template>
   <app-dialog v-model="enterOpenPgpKeyPassword" :close="close">
-    <template v-slot:head>
+    <template v-slot:content>
       <div class="q-px-lg dialog__title-text">
         <span>Enter password</span>
       </div>

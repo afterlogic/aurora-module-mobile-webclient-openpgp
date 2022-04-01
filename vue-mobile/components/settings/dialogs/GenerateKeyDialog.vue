@@ -1,6 +1,6 @@
 <template>
   <app-dialog v-bind="$attrs" :close="() => $emit('close')">
-    <template v-slot:head>
+    <template v-slot:content>
       <div class="dialog__title-text q-mx-lg q-mb-lg">
         {{ $t('OPENPGPWEBCLIENT.HEADING_GENERATE_NEW_KEY') }}
       </div>

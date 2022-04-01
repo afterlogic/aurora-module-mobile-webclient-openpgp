@@ -1,6 +1,6 @@
 <template>
   <app-dialog v-bind="$attrs" :close="close">
-    <template v-slot:head>
+    <template v-slot:content>
         <div class="q-mx-lg dialog__title-text">
           {{ $t('COREWEBCLIENT.CONFIRM_ARE_YOU_SURE') }}
         </div>
