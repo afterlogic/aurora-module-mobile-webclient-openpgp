@@ -7,15 +7,8 @@ export default {
       methodName: 'GetPublicKeysFromContacts',
       parameters: {},
     })
-      .then((result) => {
-        if (result) {
-          return result
-        }
-        return []
-      })
-      .catch(() => {
-        return []
-      })
+      .then(result => result || [])
+      .catch(error => [])
   },
 
   removeExternalKey: async (parameters) => {
@@ -24,12 +17,10 @@ export default {
       methodName: 'RemovePublicKeyFromContact',
       parameters,
     })
-    .then((result) => {
-      return result
-    })
-    .catch((e) => {
-      throw new Error(e.message ?? e)
-    })
+      .then(result => result)
+      .catch(error => {
+        throw error
+      })
   },
 
   addPublicKeys: async (parameters) => {
@@ -38,14 +29,7 @@ export default {
       methodName: 'AddPublicKeysToContacts',
       parameters,
     })
-      .then((result) => {
-        if (result) {
-          return result
-        }
-        return []
-      })
-      .catch(() => {
-        return []
-      })
+      .then(result => result || [])
+      .catch(error => [])
   },
 }
