@@ -1,22 +1,46 @@
 {
-    "Disabled": [
-		true,
-		"bool"
-	],
-    "AvailableFor": [
-		["MailMobileWebclient"],
-		"array"
-	],
-    "IncludeInMobile": [
-		true,
-		"bool"
-	],
-    "IncludeInDesktop": [
-		false,
-		"bool"
-	],
-    "RequireInMobile": [
-		["OpenPgpWebclient"],
-		"array"
-	]
+  "Disabled": [
+    true,
+    "bool"
+  ],
+  "Disabled_Description": [
+    "",
+    "string"
+  ],
+  "AvailableFor": [
+    [
+      "MailMobileWebclient"
+    ],
+    "array"
+  ],
+  "AvailableFor_Description": [
+    "",
+    "string"
+  ],
+  "IncludeInMobile": [
+    true,
+    "bool"
+  ],
+  "IncludeInMobile_Description": [
+    "",
+    "string"
+  ],
+  "IncludeInDesktop": [
+    false,
+    "bool"
+  ],
+  "IncludeInDesktop_Description": [
+    "",
+    "string"
+  ],
+  "RequireInMobile": [
+    [
+      "OpenPgpWebclient"
+    ],
+    "array"
+  ],
+  "RequireInMobile_Description": [
+    "",
+    "string"
+  ]
 }
