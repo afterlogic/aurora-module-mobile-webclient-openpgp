@@ -19,18 +19,26 @@
 <div class="content-block content-block-openpgp-settings" data-bind="visible: enableOpenPgp">
 	<div class="block block-strong">
 		<div class="data-table-title">
-			<b class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_EXTERNAL_PUBLIC_KEYS'}"></b>
-			<div class="value" data-bind="i18n: {'key': '%MODULENAME%/INFO_EMPTY_EXTERNAL_PUBLIC_KEYS'}, visible: externalPublicKeys().length === 0"></div>
+			<b class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PUBLIC_KEYS_FROM_PERSONAL_CONTACTS'}"></b>
+			<div class="value" data-bind="i18n: {'key': '%MODULENAME%/INFO_NO_PUBLIC_KEYS_FROM_PERSONAL_CONTACTS'},
+				 visible: keysFromPersonalContacts().length === 0"
+			></div>
 		</div>
 		<div class="data-table card">
 			<table>
-			  <tbody data-bind="foreach: externalPublicKeys">
+			  <tbody data-bind="foreach: keysFromPersonalContacts">
 				<tr>
-				  <td class="col label-cell" data-bind="text: user"></td>
-				  <td class="col label-cell">
-					  <p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_VIEW_KEY'}, click: function () { $parent.showArmor(key); }"></a></p>
-					  <p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_DELETE_KEY'}, click: function () { $parent.removeOpenPgpKey(key); }"></a></p>
-				  </td>
+					<td class="col label-cell" data-bind="text: $data.getUser()"></td>
+					<td class="col label-cell">
+						<p><a href="#" class="button button-raised"
+							  data-bind="i18n: {'key': '%MODULENAME%/ACTION_VIEW_KEY'},
+							  click: function () { $parent.showArmor($data); }"
+						></a></p>
+						<p><a href="#" class="button button-raised"
+							  data-bind="i18n: {'key': '%MODULENAME%/ACTION_DELETE_KEY'},
+							  click: function () { $parent.removeKeyFromContacts($data); }"
+						></a></p>
+					</td>
 				</tr>
 			  </tbody>
 			</table>
@@ -41,17 +49,25 @@
 	<div class="block block-strong">
 		<div class="data-table-title">
 			<b class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PUBLIC_KEYS'}"></b>
-			<div class="value" data-bind="i18n: {'key': '%MODULENAME%/INFO_EMPTY_PUBLIC_KEYS'}, visible: publicKeys().length === 0"></div>
+			<div class="value" data-bind="i18n: {'key': '%MODULENAME%/INFO_EMPTY_PUBLIC_KEYS'},
+				 visible: publicKeysFromThisDevice().length === 0"
+			></div>
 		</div>
 		<div class="data-table card">
 			<table>
-			  <tbody data-bind="foreach: publicKeys">
+			  <tbody data-bind="foreach: publicKeysFromThisDevice">
 				<tr>
-				  <td class="col label-cell" data-bind="text: user"></td>
-				  <td class="col label-cell">
-					  <p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_VIEW_KEY'}, click: function () { $parent.showArmor(key); }"></a></p>
-					  <p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_DELETE_KEY'}, click: function () { $parent.removeOpenPgpKey(key); }"></a></p>
-				  </td>
+					<td class="col label-cell" data-bind="text: $data.getUser()"></td>
+					<td class="col label-cell">
+						<p><a href="#" class="button button-raised"
+							  data-bind="i18n: {'key': '%MODULENAME%/ACTION_VIEW_KEY'},
+							  click: function () { $parent.showArmor($data); }"
+						></a></p>
+						<p><a href="#" class="button button-raised"
+							  data-bind="i18n: {'key': '%MODULENAME%/ACTION_DELETE_KEY'},
+							  click: function () { $parent.removeKeyFromThisDevice($data); }"
+						></a></p>
+					</td>
 				</tr>
 			  </tbody>
 			</table>
@@ -62,17 +78,25 @@
 	<div class="block block-strong">
 		<div class="data-table-title">
 			<b class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRIVATE_KEYS'}"></b>
-			<div class="value" data-bind="i18n: {'key': '%MODULENAME%/INFO_EMPTY_PRIVATE_KEYS'}, visible: privateKeys().length === 0"></div>
+			<div class="value" data-bind="i18n: {'key': '%MODULENAME%/INFO_EMPTY_PRIVATE_KEYS'},
+				 visible: privateKeysFromThisDevice().length === 0"
+			></div>
 		</div>
 		<div class="data-table card">
 			<table>
-			  <tbody data-bind="foreach: privateKeys">
+			  <tbody data-bind="foreach: privateKeysFromThisDevice">
 				<tr>
-				  <td class="col label-cell" data-bind="text: user"></td>
-				  <td class="col label-cell">
-					  <p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_VIEW_KEY'}, click: function () { $parent.verifyPassword(key); }"></a></p>
-					  <p><a href="#" class="button button-raised" data-bind="i18n: {'key': '%MODULENAME%/ACTION_DELETE_KEY'}, click: function () { $parent.removeOpenPgpKey(key); }"></a></p>
-				  </td>
+					<td class="col label-cell" data-bind="text: $data.getUser()"></td>
+					<td class="col label-cell">
+						<p><a href="#" class="button button-raised"
+							  data-bind="i18n: {'key': '%MODULENAME%/ACTION_VIEW_KEY'},
+							  click: function () { $parent.showArmor(key); }"
+						></a></p>
+						<p><a href="#" class="button button-raised"
+							  data-bind="i18n: {'key': '%MODULENAME%/ACTION_DELETE_KEY'},
+							  click: function () { $parent.removeKeyFromThisDevice($data); }"
+						></a></p>
+					</td>
 				</tr>
 			  </tbody>
 			</table>
