@@ -7,7 +7,7 @@
 
 		<div class="list-block">
 			<ul>
-				<li>
+				<li data-bind="visible: emails().length > 0">
 					<div class="item-content">
 						<div class="item-inner">
 							<div class="item-title label" data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_EMAIL'}"></div>
@@ -17,7 +17,7 @@
 						</div>
 					</div>
 				</li>
-				<li>
+				<li data-bind="visible: emails().length > 0">
 					<div class="item-content">
 						<div class="item-inner">
 							<div class="item-title label" data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_PASSWORD'}"></div>
@@ -27,7 +27,7 @@
 						</div>
 					</div>
 				</li>
-				<li>
+				<li data-bind="visible: emails().length > 0">
 					<div class="item-content">
 						<div class="item-inner">
 							<div class="item-title label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_KEY_LENGTH'}"></div>
@@ -37,13 +37,33 @@
 						</div>
 					</div>
 				</li>
+				<li data-bind="visible: emails().length === 0">
+					<div class="item-content">
+						<div class="item-inner" data-bind="text: keysExistText"></div>
+					</div>
+				</li>
 			</ul>
 		</div>
 		
 		<div class="content-block">
-			<p><a href="#" class="button button-raised" data-bind="visible: !process(), i18n: {'key': '%MODULENAME%/ACTION_GENERATE'}, click: generate"></a></p>
-			<p><a href="#" class="button button-raised color-gray" data-bind="visible: process, i18n: {'key': '%MODULENAME%/ACTION_GENERATE_IN_PROGRESS'}"></a></p>
-			<p><a href="#" class="button button-raised" data-bind="visible: !process(), i18n: {'key': 'COREWEBCLIENT/ACTION_CANCEL'}, click: cancelPopup"></a></p>
+			<p>
+				<a href="#" class="button button-raised"
+				   data-bind="visible: !process(), i18n: {'key': '%MODULENAME%/ACTION_GENERATE'},
+				   css: {'disabled': emails().length === 0},
+				   click: generate"
+				></a>
+			</p>
+			<p>
+				<a href="#" class="button button-raised disabled"
+				   data-bind="visible: process, i18n: {'key': '%MODULENAME%/ACTION_GENERATE_IN_PROGRESS'}"
+				></a>
+			</p>
+			<p>
+				<a href="#" class="button button-raised"
+				   data-bind="visible: !process(), i18n: {'key': 'COREWEBCLIENT/ACTION_CANCEL'},
+				   click: cancelPopup"
+				></a>
+			</p>
 		</div>
 	</div>
 	<span class="helper"></span>
