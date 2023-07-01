@@ -1,0 +1,69 @@
+<div class="content-block content-block-openpgp-settings">
+	<div class="block block-strong">
+		<div class="data-table-title">
+			<b class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_KEYS_FROM_THIS_DEVICE'}"></b>
+		</div>
+		<div class="data-table-title">
+			<b class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PUBLIC_KEYS'}"></b>
+			<div class="value" data-bind="i18n: {'key': '%MODULENAME%/INFO_EMPTY_PUBLIC_KEYS'},
+				 visible: publicKeysFromThisDevice().length === 0"
+			></div>
+		</div>
+		<div class="data-table card">
+			<table>
+			  <tbody data-bind="foreach: publicKeysFromThisDevice">
+				<tr>
+					<td class="col label-cell" data-bind="text: user"></td>
+					<td class="col label-cell">
+						<p>
+							<a href="#" class="button button-raised"
+							   data-bind="i18n: {'key': '%MODULENAME%/ACTION_VIEW_KEY'},
+							   click: function () { $parent.showArmor(key); }"
+							></a>
+						</p>
+						<p>
+							<a href="#" class="button button-raised"
+							   data-bind="i18n: {'key': '%MODULENAME%/ACTION_DELETE_KEY'},
+							   click: function () { $parent.removeKeyFromThisDevice(key); }"
+							></a>
+						</p>
+					</td>
+				</tr>
+			  </tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="content-block content-block-openpgp-settings" data-bind="visible: enableOpenPgp">
+	<div class="block block-strong">
+		<div class="data-table-title">
+			<b class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRIVATE_KEYS'}"></b>
+			<div class="value" data-bind="i18n: {'key': '%MODULENAME%/INFO_EMPTY_PRIVATE_KEYS'},
+				 visible: privateKeysFromThisDevice().length === 0"
+			></div>
+		</div>
+		<div class="data-table card">
+			<table>
+			  <tbody data-bind="foreach: privateKeysFromThisDevice">
+				<tr>
+					<td class="col label-cell" data-bind="text: user"></td>
+					<td class="col label-cell">
+						<p>
+							<a href="#" class="button button-raised"
+							   data-bind="i18n: {'key': '%MODULENAME%/ACTION_VIEW_KEY'},
+							   click: function () { $parent.showArmor(key); }"
+							></a>
+						</p>
+						<p>
+							<a href="#" class="button button-raised"
+							   data-bind="i18n: {'key': '%MODULENAME%/ACTION_DELETE_KEY'},
+							   click: function () { $parent.removeKeyFromThisDevice(key); }"
+							></a>
+						</p>
+					</td>
+				</tr>
+			  </tbody>
+			</table>
+		</div>
+	</div>
+</div>
