@@ -85,7 +85,7 @@ const _getSettingsHeaderTitles = params => {
     },
     {
       settingsPath: '/settings/open-pgp/external-keys',
-      settingsTitle: i18n.global.t('OPENPGPWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS'),
+      settingsTitle: i18n.global.t('OPENPGPMOBILEWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS'),
     },
     {
       settingsPath: '/settings/open-pgp/external-keys/:key',

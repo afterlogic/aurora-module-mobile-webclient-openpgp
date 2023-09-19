@@ -17,7 +17,7 @@
       <div v-if="showKeys" class="q-mx-lg q-mt-lg">
         <div v-if="keysToImport.length">
           <div class="q-mb-md">
-            {{ $t('OPENPGPWEBCLIENT.INFO_TEXT_CONTAINS_KEYS_FOR_IMPORT') }}
+            {{ $t('OPENPGPMOBILEWEBCLIENT.INFO_TEXT_CONTAINS_KEYS_FOR_IMPORT') }}
           </div>
           <import-key-item keysToImport v-for="key in keysToImport" v-model="key.checked" :key="key.id" :pgpKey="key"/>
         </div>

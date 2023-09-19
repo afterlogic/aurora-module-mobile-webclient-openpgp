@@ -10,7 +10,7 @@
       <div class="q-my-md">
         <open-pgp-tab
           @click="$router.push('/settings/open-pgp/external-keys')"
-          :label="$t('OPENPGPWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS')"
+          :label="$t('OPENPGPMOBILEWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS')"
         />
         <open-pgp-tab
           @click="$router.push('/settings/open-pgp/my-keys')"

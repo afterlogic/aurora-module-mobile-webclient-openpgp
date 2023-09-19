@@ -1,7 +1,7 @@
 <template>
   <q-scroll-area :thumb-style="{width: '5px'}" class="keys_list q-px-lg q-pt-lg" v-if="!loading">
     <div v-if="!keysFromArmor.length" class="q-px-lg text-grey text-subtitle1 text-center">
-      {{ $t('OPENPGPWEBCLIENT.INFO_EMPTY_EXTERNAL_PUBLIC_KEYS') }}
+      {{ $t('OPENPGPWEBCLIENT.INFO_EMPTY_PUBLIC_KEYS') }}
     </div>
 
     <open-pgp-tab v-for="key in keysFromArmor" :key="key" :label="key.Email" @click="openKey(key)" />
