@@ -2,7 +2,10 @@ import _ from 'lodash'
 
 const openpgpHelper = require('openpgp')
 
-import store from 'src/store'
+// import store from 'src/stores'
+import { useCoreStore} from 'src/stores/index-pinia'
+import { useOpenPGPStore} from './store/index-pinia'
+
 import addressUtils from 'src/utils/address'
 import types from 'src/utils/types'
 import notification from 'src/utils/notification'
@@ -28,6 +31,7 @@ OpenPgp.prototype.initKeys = async function () {
 OpenPgp.prototype.reloadKeysFromStorage = function () {
   const oOpenpgpKeys = this.oKeyring.getAllKeys()
   const newKeys = []
+  const openpgpStore = useOpenPGPStore()
 
   _.each(oOpenpgpKeys, (oItem) => {
     if (oItem && oItem.primaryKey) {
@@ -41,11 +45,12 @@ OpenPgp.prototype.reloadKeysFromStorage = function () {
   })
 
   this.aKeys = newKeys
-
-  store.dispatch('openpgpmobile/setMyPrivateKeys', this.aKeys.filter(key => !key.isPublic))
-  store.dispatch('openpgpmobile/setMyPublicKeys', this.aKeys.filter(key => key.isPublic))
+  
+  // store.dispatch('openpgpmobile/setMyPrivateKeys', this.aKeys.filter(key => !key.isPublic))
+  // store.dispatch('openpgpmobile/setMyPublicKeys', this.aKeys.filter(key => key.isPublic))
+  openpgpStore.setMyPrivateKeys(this.aKeys.filter(key => !key.isPublic))
+  openpgpStore.setMyPublicKeys(this.aKeys.filter(key => key.isPublic))
 }
-
 
 /**
  * @private
@@ -147,11 +152,16 @@ OpenPgp.prototype.splitKeys = function (sArmor) {
  * @return {Boolean}
  */
 OpenPgp.prototype.isOwnEmail = function (sEmail) {
-  if (store.getters['core/userPublicId'] === sEmail) {
+  const coreStore = useCoreStore()
+  const mailStore = useMailStore()
+
+  if (coreStore.userPublicId === sEmail) {
     return true
   }
 
-  let aOwnEmails = store.getters['mail/getAllAccountsFullEmails']
+  // let aOwnEmails = mailStore.getAllAccountsFullEmails()
+  // TODO
+  let aOwnEmails = []
   return _.find(aOwnEmails, (sOwnEmail) => {
     let oEmailParts = addressUtils.getEmailParts(sOwnEmail)
     return sEmail === oEmailParts.email
@@ -740,10 +750,11 @@ OpenPgp.prototype.signAndEncryptTextWithPassphrase = async function (
  * @return {Array}
  */
 OpenPgp.prototype.getAllKeys = function () {
-  const ownOpenPgpKeys = store.getters['openpgpmobile/myPublicKeys'],
-  externalOpenPgpKeys = store.getters['openpgpmobile/externalKeys']
-  return ownOpenPgpKeys.concat(externalOpenPgpKeys)
+  const openpgpStore = useOpenPGPStore()
+  const ownOpenPgpKeys = openpgpStore.myPublicKeys
+  const externalOpenPgpKeys = openpgpStore.externalKeys
 
+  return ownOpenPgpKeys.concat(externalOpenPgpKeys)
 }
 
 /**
@@ -752,6 +763,7 @@ OpenPgp.prototype.getAllKeys = function () {
 ;(OpenPgp.prototype.getCurrentPrivateOwnKey = function (
   bAllowShowError = true
 ) {
+  
   let aOpenPgpKeys = store.getters['main/getOpenPgpKeys'],
     oCurrentAccount = store.getters['mail/getCurrentAccount'],
     oPrivateCurrentKey = _.find(aOpenPgpKeys, (oKey) => {

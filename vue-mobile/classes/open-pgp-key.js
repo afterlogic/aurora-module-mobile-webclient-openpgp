@@ -1,5 +1,7 @@
 import { getOpenPgpSettings } from "../settings";
-import store from 'src/store'
+import store from 'src/stores'
+// import { useCoreStore } from 'src/stores/core-pinia'
+// const coreStore = useCoreStore()
 let settings = null
 
 function OpenPgpKey({ armor, email, isPublic, id, isExternal = false }) {

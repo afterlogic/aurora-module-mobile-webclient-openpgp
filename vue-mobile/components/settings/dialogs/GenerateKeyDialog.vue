@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'
+import {mapActions, mapGetters} from 'pinia'
 
 import AppDialog from "src/components/common/AppDialog";
 import AppDialogInput from 'src/components/common/AppDialogInput'

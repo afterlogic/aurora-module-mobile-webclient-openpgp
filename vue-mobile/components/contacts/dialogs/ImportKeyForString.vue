@@ -78,7 +78,7 @@ import ButtonDialog from "src/components/common/ButtonDialog";
 import ImportKeyItem from "../../settings/dialogs/ImportKeyItem";
 import OpenPgp from "../../../openpgp-helper";
 import eventBus from "src/event-bus";
-import { mapGetters } from "vuex"
+import { mapGetters } from "pinia"
 
 export default {
   name: "ImportKeyForString",

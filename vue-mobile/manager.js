@@ -1,7 +1,10 @@
 import _ from 'lodash'
 
 import eventBus from 'src/event-bus'
-import store from 'src/store'
+// import store from 'src/store'
+
+import { useOpenPGPStore } from './store/index-pinia'
+
 import { defineAsyncComponent, shallowRef } from "vue";
 
 import settings from './settings'
@@ -117,12 +120,18 @@ export default {
   },
 
   async initMyKeys() {
+    const OpenPGPStore = useOpenPGPStore()
+    
     await openPgpHelper.initKeys()
 
     const { aKeys } = openPgpHelper
-    store.dispatch('openpgpmobile/setMyPrivateKeys', aKeys.filter(key => !key.isPublic))
-    store.dispatch('openpgpmobile/setMyPublicKeys', aKeys.filter(key => key.isPublic))
-    store.dispatch('openpgpmobile/asyncGetExternalsKeys')
+    // store.dispatch('openpgpmobile/setMyPrivateKeys', )
+    // store.dispatch('openpgpmobile/setMyPublicKeys', aKeys.filter(key => key.isPublic))
+    // store.dispatch('openpgpmobile/asyncGetExternalsKeys')
+
+    OpenPGPStore.setMyPrivateKeys(aKeys.filter(key => !key.isPublic))
+    OpenPGPStore.setMyPublicKeys(aKeys.filter(key => key.isPublic))
+    OpenPGPStore.asyncGetExternalsKeys()
   },
 
   initSubscriptions (appData) {

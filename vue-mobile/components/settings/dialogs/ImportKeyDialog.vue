@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'
+import {mapActions, mapGetters} from 'pinia'
 
 import { checkPgpKeys } from '../../../openpgp-utils'
 
