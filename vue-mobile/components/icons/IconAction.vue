@@ -5,7 +5,6 @@
 </template>
 
 <script>
-
 import CopyIcon from "./actions/CopyIcon";
 import DeleteIcon from "./actions/DeleteIcon";
 import DownloadIcon from "./actions/DownloadIcon";

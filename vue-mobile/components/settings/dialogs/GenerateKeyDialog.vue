@@ -1,5 +1,5 @@
 <template>
-  <app-dialog v-bind="$attrs" :close="() => $emit('close')">
+  <AppDialog v-bind="$attrs" :close="() => $emit('close')">
     <template v-slot:content>
       <div class="dialog__title-text q-mx-lg q-mb-lg">
         {{ $t('OPENPGPWEBCLIENT.HEADING_GENERATE_NEW_KEY') }}
@@ -33,26 +33,26 @@
       </div>
     </template>
     <template v-slot:actions>
-      <button-dialog class="q-ma-sm" :action="generate" :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE')" />
+      <ButtonDialog class="q-ma-sm" :action="generate" :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE')" />
     </template>
-  </app-dialog>
+  </AppDialog>
 </template>
 
 <script>
 import {mapActions, mapGetters} from 'pinia'
 
 import AppDialog from "src/components/common/AppDialog";
-import AppDialogInput from 'src/components/common/AppDialogInput'
+// import AppDialogInput from 'src/components/common/AppDialogInput'
 import ButtonDialog from "src/components/common/ButtonDialog";
-import ImportKeyItem from './ImportKeyItem'
+// import ImportKeyItem from './ImportKeyItem'
 
 export default {
   name: 'GenerateKeyDialog',
   components: {
-    AppDialogInput,
+    AppDialog,
+    // AppDialogInput,
     ButtonDialog,
-    ImportKeyItem,
-    AppDialog
+    // ImportKeyItem,
   },
   data: () => ({
     mailInput: '',
@@ -79,5 +79,3 @@ export default {
   },
 }
 </script>
-
-<style scoped></style>

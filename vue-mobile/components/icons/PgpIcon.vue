@@ -18,5 +18,3 @@ export default {
   name: 'PgpIcon',
 }
 </script>
-
-<style scoped></style>

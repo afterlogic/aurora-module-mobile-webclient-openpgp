@@ -2,7 +2,7 @@
   <div class="dropdown-more flex justify-center items-center">
     <q-btn-dropdown :menu-offset="[8, -45]" flat unelevated dense>
       <template v-slot:label>
-        <icon-action class="q-mr-md" icon="MoreIcon" />
+        <IconAction class="q-mr-md" icon="MoreIcon" />
       </template>
       <q-list>
         <q-item
@@ -12,7 +12,7 @@
             :key="action.name"
             @click="action.action"
         >
-          <icon-action class="q-mr-md" :icon="action.icon" />
+          <IconAction class="q-mr-md" :icon="action.icon" />
           <q-item-section>
             <q-item-label>{{ action.label }}</q-item-label>
           </q-item-section>
@@ -34,7 +34,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

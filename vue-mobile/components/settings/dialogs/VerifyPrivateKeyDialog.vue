@@ -16,7 +16,7 @@
       </q-card-section>
 
       <q-item class="q-px-sm">
-        <app-dialog-input
+        <AppDialogInput
           outlined
           autofocus
           v-model="password"
@@ -25,7 +25,7 @@
       </q-item>
 
       <q-card-actions align="right">
-        <app-button-dialog :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_VIEW_KEY')" />
+        <AppButtonDialog :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_VIEW_KEY')" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -72,7 +72,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-
-</style>

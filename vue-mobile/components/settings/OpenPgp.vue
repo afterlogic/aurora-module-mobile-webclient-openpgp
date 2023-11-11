@@ -1,18 +1,18 @@
 <template>
   <div class="q-pa-lg settings">
     <div>
-      <app-checkbox
+      <AppCheckbox
         class="settings__label"
         left-label
         v-model="rememberPassphrase"
         :label="$t('OPENPGPMOBILEWEBCLIENT.LABEL_STORE_KEYS_WITHIN_SESSION')"
       />
       <div class="q-my-md">
-        <open-pgp-tab
+        <OpenPgpTab
           @click="$router.push('/settings/open-pgp/external-keys')"
           :label="$t('OPENPGPMOBILEWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS')"
         />
-        <open-pgp-tab
+        <OpenPgpTab
           @click="$router.push('/settings/open-pgp/my-keys')"
           :label="$t('OPENPGPMOBILEWEBCLIENT.LABEL_MY_KEYS')"
         />

@@ -11,12 +11,12 @@
 
   <div class="q-pa-lg full-width flex items-center" v-if="currentMyKey">
     <div class="full-width">
-      <app-button @click="downloadKey" :label="$t('OPENPGPWEBCLIENT.ACTION_DOWNLOAD')" />
-      <app-button @click="confirmDelete" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')" class="q-mt-lg" />
+      <AppButton @click="downloadKey" :label="$t('OPENPGPWEBCLIENT.ACTION_DOWNLOAD')" />
+      <AppButton @click="confirmDelete" :label="$t('OPENPGPWEBCLIENT.ACTION_DELETE_KEY')" class="q-mt-lg" />
     </div>
   </div>
 
-  <delete-key-dialog v-model="isDeleting" @close="closeDeleteKeyDialog" @delete="deleteKey" :mail="currentMyKey?.email" />
+  <DeleteKeyDialog v-model="isDeleting" @close="closeDeleteKeyDialog" @delete="deleteKey" :mail="currentMyKey?.email" />
 </template>
 
 <script>

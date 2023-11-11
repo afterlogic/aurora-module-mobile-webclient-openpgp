@@ -5,7 +5,7 @@
         <p>{{ label }}</p>
       </div>
       <div class="flex items-end content-center q-mr-sm">
-        <arrow-right-icon />
+        <ArrowRightIcon />
       </div>
     </div>
     <q-separator class="q-mt-md" />

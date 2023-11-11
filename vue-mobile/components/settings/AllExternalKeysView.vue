@@ -12,8 +12,8 @@
   </q-scroll-area>
 
   <div class="q-pa-lg full-width flex items-center full-width" v-if="currentKeys.length">
-    <app-button @click="sendAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_SEND_ALL')" />
-    <app-button @click="downloadAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_DOWNLOAD_ALL')" class="q-mt-lg" />
+    <AppButton @click="sendAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_SEND_ALL')" />
+    <AppButton @click="downloadAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_DOWNLOAD_ALL')" class="q-mt-lg" />
   </div>
 </template>
 

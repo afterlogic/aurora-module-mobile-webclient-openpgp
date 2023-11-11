@@ -4,14 +4,14 @@
       {{ $t('OPENPGPWEBCLIENT.INFO_EMPTY_PUBLIC_KEYS') }}
     </div>
 
-    <open-pgp-tab v-for="key in keysFromArmor" :key="key" :label="key.Email" @click="openKey(key)" />
+    <OpenPgpTab v-for="key in keysFromArmor" :key="key" :label="key.Email" @click="openKey(key)" />
   </q-scroll-area>
 
   <div class="q-pa-lg full-width flex items-center" v-if="!loading">
     <div>
-      <app-button @click="exportAllKeys" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" :disabled="!keysFromArmor.length" />
-      <app-button @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
-      <app-button @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
+      <AppButton @click="exportAllKeys" :label="$t('OPENPGPWEBCLIENT.ACTION_EXPORT_ALL_PUBLIC_KEYS')" :disabled="!keysFromArmor.length" />
+      <AppButton @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
+      <AppButton @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
       <q-file ref="fileInput" v-model="files" class="hidden" multiple />
     </div>
   </div>
@@ -25,7 +25,7 @@
     />
   </div>
 
-  <import-key-dialog v-model="showImportKeys" @close="showImportKeys = false" @clear-files="clearFiles" is-external-keys />
+  <ImportKeyDialog v-model="showImportKeys" @close="showImportKeys = false" @clear-files="clearFiles" is-external-keys />
 </template>
 
 <script>

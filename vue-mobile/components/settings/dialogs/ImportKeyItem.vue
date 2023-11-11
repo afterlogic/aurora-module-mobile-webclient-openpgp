@@ -10,13 +10,12 @@
       </q-item-label>
     </q-item-section>
     <q-item-section class="q-mb-md" v-if="keysToImport" side top>
-      <app-checkbox :disable="disabled" :leftLabel="true" v-bind="$attrs" />
+      <AppCheckbox :disable="disabled" :leftLabel="true" v-bind="$attrs" />
     </q-item-section>
   </q-item>
 </template>
 
 <script>
-
 import AppCheckbox from 'src/components/common/AppCheckbox'
 
 export default {
@@ -50,5 +49,3 @@ export default {
   },
 }
 </script>
-
-<style scoped></style>

@@ -1,5 +1,5 @@
 <template>
-  <app-dialog v-model="enterOpenPgpKeyPassword" :close="close">
+  <AppDialog v-model="enterOpenPgpKeyPassword" :close="close">
     <template v-slot:content>
       <div class="q-px-lg dialog__title-text">
         <span>Enter password</span>
@@ -8,7 +8,7 @@
         <span>Please enter OpenPGP key's password to unlock the key.</span>
       </div>
       <q-item>
-        <app-input
+        <AppInput
             class="q-mx-sm"
             placeholder="Password"
             outlined
@@ -22,13 +22,13 @@
       </q-item>
     </template>
     <template v-slot:actions>
-      <button-dialog
+      <ButtonDialog
           class="q-ma-sm"
           :action="setOpenPgpKeyPassword"
           label="Unlock"
       />
     </template>
-  </app-dialog>
+  </AppDialog>
 </template>
 
 <script>
@@ -82,7 +82,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -3,7 +3,6 @@
     <path d="M1 16V14H5H11H15V16H1Z" fill="black"/>
     <path d="M6 1L10 1L10 8L12.5 8L8 12L3.5 8L6 8L6 1Z" fill="black"/>
   </svg>
-
 </template>
 
 <script>
@@ -15,7 +14,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

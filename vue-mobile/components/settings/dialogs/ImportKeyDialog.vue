@@ -1,13 +1,11 @@
 <template>
-  <app-dialog v-bind="$attrs" :close="close">
+  <AppDialog v-bind="$attrs" :close="close">
     <template v-slot:content>
       <div class="q-px-lg q-pb-sm dialog__title-text">
-            <span>{{
-                $t('OPENPGPWEBCLIENT.HEADING_IMPORT_KEY')
-              }}</span>
+        <span>{{ $t('OPENPGPWEBCLIENT.HEADING_IMPORT_KEY') }}</span>
       </div>
       <div v-if="!showKeys" class="q-mx-md">
-        <app-dialog-input
+        <AppDialogInput
             v-model="keysArmorToImport"
             type="textarea"
             :autofocus="true"
@@ -19,7 +17,7 @@
           <div class="q-mb-md">
             {{ $t('OPENPGPMOBILEWEBCLIENT.INFO_TEXT_CONTAINS_KEYS_FOR_IMPORT') }}
           </div>
-          <import-key-item keysToImport v-for="key in keysToImport" v-model="key.checked" :key="key.id" :pgpKey="key"/>
+          <ImportKeyItem keysToImport v-for="key in keysToImport" v-model="key.checked" :key="key.id" :pgpKey="key"/>
         </div>
 
         <div v-if="!keysToImport.length" class="q-mb-md">
@@ -30,46 +28,46 @@
           <div class="q-my-md">
             {{ $t('OPENPGPWEBCLIENT.INFO_TEXT_CONTAINS_KEYS_ALREADY_IN_SYSTEM') }}
           </div>
-          <import-key-item disabled v-for="key in keysAlreadyThere" :key="key.id" :pgpKey="key" />
+          <ImportKeyItem disabled v-for="key in keysAlreadyThere" :key="key.id" :pgpKey="key" />
         </div>
 
         <div v-if="keysPrivateExternal.length">
           <div class="q-my-md">
             {{ $t('OPENPGPWEBCLIENT.INFO_TEXT_CONTAINS_KEYS_EXTERNAL_PRIVATE') }}
           </div>
-          <import-key-item disabled v-for="key in keysPrivateExternal" :key="key.id" :pgpKey="key" />
+          <ImportKeyItem disabled v-for="key in keysPrivateExternal" :key="key.id" :pgpKey="key" />
         </div>
 
         <div v-if="keysPrivateNotImported.length">
           <div class="q-my-md">
             {{ $t('OPENPGPMOBILEWEBCLIENT.INFO_TEXT_CONTAINS_KEYS_EXTERNAL_NOT_IMPORTED') }}
           </div>
-          <import-key-item disabled v-for="key in keysPrivateNotImported" :key="key.id" :pgpKey="key" />
+          <ImportKeyItem disabled v-for="key in keysPrivateNotImported" :key="key.id" :pgpKey="key" />
         </div>
 
         <div v-if="myKeysNotImported.length">
           <div class="q-my-md">
             {{ $t('OPENPGPMOBILEWEBCLIENT.INFO_TEXT_NOT_CONTAINS_KEYS_EXTERNAL_NOT_IMPORTED') }}
           </div>
-          <import-key-item disabled v-for="key in myKeysNotImported" :key="key.id" :pgpKey="key" />
+          <ImportKeyItem disabled v-for="key in myKeysNotImported" :key="key.id" :pgpKey="key" />
         </div>
 
         <div v-if="keysBroken.length">
-          <import-key-item disabled keysBroken v-for="key in keysBroken" :key="key.id" :pgpKey="key" />
+          <ImportKeyItem disabled keysBroken v-for="key in keysBroken" :key="key.id" :pgpKey="key" />
         </div>
       </div>
 
     </template>
     <template v-slot:actions>
-      <button-dialog class="q-ma-sm"  v-if="!showKeys" :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')" />
-      <button-dialog class="q-ma-sm"
+      <ButtonDialog class="q-ma-sm"  v-if="!showKeys" :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')" />
+      <ButtonDialog class="q-ma-sm"
           v-if="showKeys"
           :action="importKeys"
           :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEYS')"
           :disabled="!keysToImport.length"
       />
     </template>
-  </app-dialog>
+  </AppDialog>
 </template>
 
 <script>
@@ -85,10 +83,10 @@ import AppDialog from "src/components/common/AppDialog";
 export default {
   name: 'ImportKeyDialog',
   components: {
+    AppDialog,
     AppDialogInput,
     ImportKeyItem,
-    AppDialog,
-    ButtonDialog
+    ButtonDialog,
   },
   props: {
     isExternalKeys: Boolean
@@ -183,5 +181,3 @@ export default {
   },
 }
 </script>
-
-<style scoped></style>
