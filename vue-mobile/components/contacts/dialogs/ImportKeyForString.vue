@@ -107,7 +107,6 @@ export default {
     contact: null,
     keysArmorToImport: '',
     saving: false,
-    showKeys: false,
     keysToImport: [],
     keysAlreadyThere: [],
     keysPrivateExternal: [],
