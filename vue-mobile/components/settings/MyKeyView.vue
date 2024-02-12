@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'pinia'
+import { mapActions, mapGetters } from 'pinia'
+import { useOpenPGPStore } from 'src/stores/index-all'
 
 import AppButton from 'src/components/common/AppButton'
 import DeleteKeyDialog from './dialogs/DeleteKeyDialog';
@@ -38,13 +39,13 @@ export default {
     keyArmor: {}
   }),
   computed: {
-    ...mapGetters('openpgpmobile', ['currentMyKey']),
+    ...mapGetters(useOpenPGPStore, ['currentMyKey']),
     keyName() {
       return this.keyArmor[0]?.getUserIds()[0]
     }
   },
   methods: {
-    ...mapActions('openpgpmobile', ['setCurrentMyKey', 'deleteMyKey']),
+    ...mapActions(useOpenPGPStore, ['setCurrentMyKey', 'deleteMyKey']),
     confirmDelete() {
       this.isDeleting = true
     },

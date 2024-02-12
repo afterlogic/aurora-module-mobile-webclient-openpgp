@@ -21,6 +21,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'pinia'
+import { useOpenPGPStore } from 'src/stores/index-all'
 
 import AppButton from 'src/components/common/AppButton'
 import DeleteKeyDialog from './dialogs/DeleteKeyDialog';
@@ -38,7 +39,7 @@ export default {
     keyArmor: {}
   }),
   computed: {
-    ...mapGetters('openpgpmobile', ['currentKeys']),
+    ...mapGetters(useOpenPGPStore, ['currentKeys']),
     key() {
       return this.currentKeys[0]
     },
@@ -47,7 +48,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('openpgpmobile', ['changeCurrentKeys', 'asyncRemoveExternalKey']),
+    ...mapActions(useOpenPGPStore, ['changeCurrentKeys', 'asyncRemoveExternalKey']),
     confirmDelete() {
       this.isDeleting = true
     },

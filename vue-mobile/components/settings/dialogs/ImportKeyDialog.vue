@@ -72,6 +72,7 @@
 
 <script>
 import {mapActions, mapGetters} from 'pinia'
+import { useOpenPGPStore } from 'src/stores/index-all'
 
 import { checkPgpKeys } from '../../../openpgp-utils'
 
@@ -109,7 +110,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('openpgpmobile', ['externalKeys', 'myPublicKeys', 'myPrivateKeys', 'filesKeys']),
+    ...mapGetters(useOpenPGPStore, ['externalKeys', 'myPublicKeys', 'myPrivateKeys', 'filesKeys']),
     showKeys() {
       return (
         this.keysBroken.length ||
@@ -122,7 +123,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('openpgpmobile', ['asyncAddPublicKeys', 'importMyKeys']),
+    ...mapActions(useOpenPGPStore, ['asyncAddPublicKeys', 'importMyKeys']),
     close() {
       if (this.showKeys) {
         this.clearKeys()

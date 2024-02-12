@@ -1,6 +1,6 @@
 import { getOpenPgpSettings } from "../settings";
-import store from 'src/stores'
-// import { useCoreStore } from 'src/stores/core-pinia'
+// import store from 'src/stores'
+import { useOpenPGPStore } from 'src/stores/index-all'
 // const coreStore = useCoreStore()
 let settings = null
 
@@ -24,7 +24,8 @@ OpenPgpKey.prototype.getDataToSave = function () {
 
 OpenPgpKey.prototype.getPassphrase = function () {
   if (!settings.rememberPassphrase) {
-    store.commit('openpgpmobile/setPassphrase', { sId: this.sId, sPassphrase: null })
+    // store.commit('openpgpmobile/setPassphrase', { sId: this.sId, sPassphrase: null })
+    useOpenPGPStore.setPassphrase(null)
     return null
   }
   return this.passphrase
@@ -32,7 +33,8 @@ OpenPgpKey.prototype.getPassphrase = function () {
 
 OpenPgpKey.prototype.setPassphrase = function (sPassphrase) {
   if (settings.rememberPassphrase) {
-    store.commit('openpgpmobile/setPassphrase', { sId: this.sId, sPassphrase })
+    // store.commit('openpgpmobile/setPassphrase', { sId: this.sId, sPassphrase })
+    useOpenPGPStore.setPassphrase(sPassphrase)
   }
 }
 

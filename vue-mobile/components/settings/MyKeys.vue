@@ -36,6 +36,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'pinia'
+import { useOpenPGPStore, useCoreStore } from 'src/stores/index-all'
 
 import AppButton from 'src/components/common/AppButton'
 
@@ -73,11 +74,11 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('openpgpmobile', ['myPublicKeys', 'myPrivateKeys', 'currentMyKey']),
-    ...mapGetters('core', ['userPublicId'])
+    ...mapGetters(useOpenPGPStore, ['myPublicKeys', 'myPrivateKeys', 'currentMyKey']),
+    ...mapGetters(useCoreStore, ['userPublicId'])
   },
   methods: {
-    ...mapActions('openpgpmobile', ['setCurrentMyKey', 'setMyPublicKeys', 'setMyPrivateKeys', 'setFilesKeys']),
+    ...mapActions(useOpenPGPStore, ['setCurrentMyKey', 'setMyPublicKeys', 'setMyPrivateKeys', 'setFilesKeys']),
     getFiles() {
       this.$refs.fileInput.$el.click()
     },

@@ -30,6 +30,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'pinia'
+import { useOpenPGPStore } from 'src/stores/index-all'
 
 import AppButton from 'src/components/common/AppButton'
 
@@ -78,10 +79,10 @@ export default {
     this.getExternalKeys()
   },
   computed: {
-    ...mapGetters('openpgpmobile', ['externalKeys']),
+    ...mapGetters(useOpenPGPStore, ['externalKeys']),
   },
   methods: {
-    ...mapActions('openpgpmobile', ['asyncGetExternalsKeys', 'changeCurrentKeys', 'setFilesKeys']),
+    ...mapActions(useOpenPGPStore, ['asyncGetExternalsKeys', 'changeCurrentKeys', 'setFilesKeys']),
     async getExternalKeys() {
       this.loading = true
       await this.asyncGetExternalsKeys()

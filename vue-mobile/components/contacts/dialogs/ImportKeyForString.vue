@@ -79,6 +79,7 @@ import ImportKeyItem from "../../settings/dialogs/ImportKeyItem";
 import OpenPgp from "../../../openpgp-helper";
 import eventBus from "src/event-bus";
 import { mapGetters } from "pinia"
+import { useOpenPGPStore, useCoreStore } from 'src/stores/index-all'
 
 export default {
   name: "ImportKeyForString",
@@ -89,8 +90,8 @@ export default {
     ImportKeyItem
   },
   computed: {
-    ...mapGetters('openpgpmobile', ['externalKeys', 'myPublicKeys', 'myPrivateKeys', 'filesKeys']),
-    ...mapGetters('core', ['userPublicId']),
+    ...mapGetters(useOpenPGPStore, ['externalKeys', 'myPublicKeys', 'myPrivateKeys', 'filesKeys']),
+    ...mapGetters(useCoreStore, ['userPublicId']),
     showKeys() {
       return (
           this.keysBroken.length ||

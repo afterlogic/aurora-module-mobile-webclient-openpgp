@@ -3,8 +3,7 @@ import _ from 'lodash'
 const openpgpHelper = require('openpgp')
 
 // import store from 'src/stores'
-import { useCoreStore} from 'src/stores/index-pinia'
-import { useOpenPGPStore} from './store/index-pinia'
+import { useCoreStore, useOpenPGPStore }  from 'src/stores/index-all'
 
 import addressUtils from 'src/utils/address'
 import types from 'src/utils/types'
@@ -788,7 +787,9 @@ OpenPgp.prototype.getAllKeys = function () {
    */
   (OpenPgp.prototype.getOwnKeysByEmails = function (aEmail, bIsPublic) {
     bIsPublic = !!bIsPublic
-    let aOpenPgpKeys = store.getters['openpgpmobile/externalKeys']
+    // let aOpenPgpKeys = store.getters['openpgpmobile/externalKeys']
+    const openpgpStore = useOpenPGPStore()
+    let aOpenPgpKeys = openpgpStore.externalKeys
     let aResult = []
     _.each(aEmail, (sEmail) => {
       let oKey = _.find(aOpenPgpKeys, (oKey) => {
@@ -808,7 +809,9 @@ OpenPgp.prototype.getAllKeys = function () {
  * @return {Object|null}
  */
 OpenPgp.prototype.getPrivateKeyByEmail = function (email) {
-  let openPgpKeys = store.getters['openpgpmobile/myPrivateKeys']
+  // let openPgpKeys = store.getters['openpgpmobile/myPrivateKeys']
+  const openpgpStore = useOpenPGPStore()
+  let openPgpKeys = openpgpStore.myPrivateKeys
   let privateKeys = _.filter(openPgpKeys, (key) => {
     let keyEmail = addressUtils.getEmailParts(key.email)
     return !key.isPublic && keyEmail.email === email

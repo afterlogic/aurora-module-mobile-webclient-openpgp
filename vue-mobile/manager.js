@@ -120,7 +120,7 @@ export default {
   },
 
   async initMyKeys() {
-    const OpenPGPStore = useOpenPGPStore()
+    const openPGPStore = useOpenPGPStore()
     
     await openPgpHelper.initKeys()
 
@@ -129,9 +129,9 @@ export default {
     // store.dispatch('openpgpmobile/setMyPublicKeys', aKeys.filter(key => key.isPublic))
     // store.dispatch('openpgpmobile/asyncGetExternalsKeys')
 
-    OpenPGPStore.setMyPrivateKeys(aKeys.filter(key => !key.isPublic))
-    OpenPGPStore.setMyPublicKeys(aKeys.filter(key => key.isPublic))
-    OpenPGPStore.asyncGetExternalsKeys()
+    openPGPStore.setMyPrivateKeys(aKeys.filter(key => !key.isPublic))
+    openPGPStore.setMyPublicKeys(aKeys.filter(key => key.isPublic))
+    openPGPStore.asyncGetExternalsKeys()
   },
 
   initSubscriptions (appData) {

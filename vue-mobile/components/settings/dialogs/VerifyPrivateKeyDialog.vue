@@ -33,6 +33,7 @@
 
 <script>
 import {mapActions, mapGetters} from 'pinia'
+import { useOpenPGPStore } from 'src/stores/index-all'
 
 import { verifyPrivateKeyPassword } from '../../../openpgp-utils'
 
@@ -50,10 +51,10 @@ export default {
     password: '',
   }),
   computed: {
-    ...mapGetters('openpgpmobile', ['currentMyKey']),
+    ...mapGetters(useOpenPGPStore, ['currentMyKey']),
   },
   methods: {
-    ...mapActions('openpgpmobile', []),
+    ...mapActions(useOpenPGPStore, []),
     close() {
       this.password = ''
     },

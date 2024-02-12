@@ -40,6 +40,7 @@
 
 <script>
 import {mapActions, mapGetters} from 'pinia'
+import { useOpenPGPStore, useCoreStore } from 'src/stores/index-all'
 
 import AppDialog from "src/components/common/AppDialog";
 // import AppDialogInput from 'src/components/common/AppDialogInput'
@@ -64,10 +65,10 @@ export default {
     this.mailInput = this.userPublicId
   },
   computed: {
-    ...mapGetters('core', ['userPublicId']),
+    ...mapGetters(useCoreStore, ['userPublicId']),
   },
   methods: {
-    ...mapActions('openpgpmobile', ['generateKeys']),
+    ...mapActions(useOpenPGPStore, ['generateKeys']),
     generate() {
       this.generateKeys({
         userId: this.mailInput,

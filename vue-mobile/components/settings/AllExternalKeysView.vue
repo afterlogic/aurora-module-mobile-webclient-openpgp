@@ -19,6 +19,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'pinia'
+import { useOpenPGPStore } from 'src/stores/index-all'
 
 import AppButton from 'src/components/common/AppButton'
 import { downloadKey } from '../../utils';
@@ -33,7 +34,7 @@ export default {
     keysFromArmor: [],
   }),
   computed: {
-    ...mapGetters('openpgpmobile', ['currentKeys']),
+    ...mapGetters(useOpenPGPStore, ['currentKeys']),
     armorText() {
       return this.currentKeys.reduce((acc, value) => {
         acc += value.armor
@@ -42,7 +43,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('openpgpmobile', ['changeCurrentKeys']),
+    ...mapActions(useOpenPGPStore, ['changeCurrentKeys']),
     sendAllKeys() {},
     downloadAllKeys() {
       return downloadKey(this.armorText, 'public_keys.asc')

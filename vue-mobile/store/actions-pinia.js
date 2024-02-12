@@ -74,5 +74,9 @@ export default {
 
   setCurrentMyKey(key) {
     this.currentMyKey = key
-  }
+  },
+
+  setPassphrase(passphrase) {
+    this.passphrase = passphrase
+  },
 }
