@@ -152,7 +152,7 @@ OpenPgp.prototype.splitKeys = function (sArmor) {
  */
 OpenPgp.prototype.isOwnEmail = function (sEmail) {
   const coreStore = useCoreStore()
-  const mailStore = useMailStore()
+  // const mailStore = useMailStore()
 
   if (coreStore.userPublicId === sEmail) {
     return true

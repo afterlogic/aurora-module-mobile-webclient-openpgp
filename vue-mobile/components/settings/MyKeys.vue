@@ -8,7 +8,7 @@
       {{ $t('OPENPGPWEBCLIENT.ERROR_NO_PUBLIC_KEYS_FOR_USERS_PLURAL') }}
     </div>
 
-    <open-pgp-tab v-for="key in myPublicKeys" :key="key" :label="key.email" @click="openKey(key)" />
+    <OpenPgpTab v-for="key in myPublicKeys" :key="key" :label="key.email" @click="openKey(key)" />
 
     <div class="q-my-md text-body1 text-weight-bold">
       {{ $t('OPENPGPWEBCLIENT.LABEL_PRIVATE_KEYS') }}
@@ -103,6 +103,7 @@ export default {
       }
     },
     openVerifyDialog(key) {
+      console.log('adsasd')
       this.setCurrentMyKey(key)
       askOpenPgpKeyPassword(this.userPublicId, this.$root._getParentComponent, this.check)
     },
