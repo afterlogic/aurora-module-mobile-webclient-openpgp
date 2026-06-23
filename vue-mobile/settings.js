@@ -19,4 +19,10 @@ export default {
 const getOpenPgpSettings = () => {
   return settings
 }
-export { getOpenPgpSettings }
+
+const setOpenPgpSettings = (enableOpenPgpInMail, rememberPassphrase) => {
+  settings.enableOpenPgpInMail = enableOpenPgpInMail
+  settings.rememberPassphrase = rememberPassphrase
+}
+
+export { getOpenPgpSettings, setOpenPgpSettings }

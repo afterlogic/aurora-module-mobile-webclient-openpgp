@@ -2,7 +2,9 @@ import _ from 'lodash'
 
 export const askOpenPgpKeyPassword = (sFullEmail, getParentComponent, fCallback) => {
   const oAppComponent = getParentComponent('App')
-  const oAskOpenPgpKeyPasswordComponent = oAppComponent ? oAppComponent.$refs.AskOpenPgpKeyPassword : null
+  const oAskOpenPgpKeyPasswordComponent = oAppComponent
+    ? (oAppComponent.moduleRefs?.AskOpenPgpKeyPassword ?? oAppComponent.$refs?.AskOpenPgpKeyPassword)
+    : null
   if (_.isFunction(oAskOpenPgpKeyPasswordComponent.askOpenPgpKeyPassword)) {
     oAskOpenPgpKeyPasswordComponent.askOpenPgpKeyPassword(sFullEmail, fCallback)
   } else if (oAskOpenPgpKeyPasswordComponent?.length > 0 ) {

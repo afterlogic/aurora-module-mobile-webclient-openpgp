@@ -5,11 +5,13 @@ import eventBus from 'src/event-bus'
 
 import { useOpenPGPStore } from './store/index-pinia'
 
-import { defineAsyncComponent, shallowRef } from "vue";
+import { defineAsyncComponent, markRaw } from 'vue'
 
 import settings from './settings'
-import { i18n } from "../../CoreMobileWebclient/vue-mobile/src/boot/i18n";
+import { i18n } from '../../CoreMobileWebclient/vue-mobile/src/boot/i18n'
 import openPgpHelper from './openpgp-helper'
+import enums from 'src/enums'
+import { useCoreStore } from 'src/stores/index-pinia'
 
 
 
@@ -30,18 +32,18 @@ const _getSettingsTabs = params => {
 const setComponents = (components) => {
   components.push({
     name: 'AskOpenPgpKeyPassword',
-    component: shallowRef(defineAsyncComponent(() => import('./components/common/AskOpenPgpKeyPassword'))),
+    component: markRaw(defineAsyncComponent(() => import('./components/common/AskOpenPgpKeyPassword'))),
   })
   components.push({
     name: 'FileUploadTypeSelectionDialog',
-    component: shallowRef(defineAsyncComponent(() => import('../../CoreParanoidEncryptionWebclientPlugin/vue-mobile/components/files/dialogs/FileUploadTypeSelectionDialog')))
+    component: markRaw(defineAsyncComponent(() => import('../../CoreParanoidEncryptionWebclientPlugin/vue-mobile/components/files/dialogs/FileUploadTypeSelectionDialog'))),
   })
 }
 
 const setContactsMobileWebclientComponents = (components) => {
   components.push({
     name: 'ImportKeyForString',
-    component: shallowRef(defineAsyncComponent(() => import('./components/contacts/dialogs/ImportKeyForString'))),
+    component: markRaw(defineAsyncComponent(() => import('./components/contacts/dialogs/ImportKeyForString'))),
   })
 }
 
@@ -73,6 +75,19 @@ const _getSettingsPageChildren = params => {
     {
       path: '/settings/open-pgp/my-keys/:key',
       component: () => import('./components/settings/MyKeyView'),
+    },
+  ])
+}
+
+const _getSettingsHeaderActions = params => {
+  if (!_.isArray(params.settingsHeaderActions)) {
+    params.settingsHeaderActions = []
+  }
+  params.settingsHeaderActions = params.settingsHeaderActions.concat([
+    {
+      settingsPath: '/settings/open-pgp',
+      labelLangConst: 'COREWEBCLIENT.ACTION_SAVE',
+      eventName: 'OpenPgpMobileWebclient::SaveSettings',
     },
   ])
 }
@@ -131,7 +146,12 @@ export default {
 
     openPGPStore.setMyPrivateKeys(aKeys.filter(key => !key.isPublic))
     openPGPStore.setMyPublicKeys(aKeys.filter(key => key.isPublic))
-    openPGPStore.asyncGetExternalsKeys()
+
+    const coreStore = useCoreStore()
+    const UserRoles = enums.getUserRoles()
+    if (coreStore.userRole && coreStore.userRole !== UserRoles.Anonymous) {
+      openPGPStore.asyncGetExternalsKeys()
+    }
   },
 
   initSubscriptions (appData) {
@@ -147,6 +167,9 @@ export default {
 
     eventBus.$off('SettingsMobileWebclient::GetSettingsHeaderTitles', _getSettingsHeaderTitles)
     eventBus.$on('SettingsMobileWebclient::GetSettingsHeaderTitles', _getSettingsHeaderTitles)
+
+    eventBus.$off('SettingsMobileWebclient::GetSettingsHeaderActions', _getSettingsHeaderActions)
+    eventBus.$on('SettingsMobileWebclient::GetSettingsHeaderActions', _getSettingsHeaderActions)
 
     eventBus.$off('ContactsMobileWebclient::setComponents', setContactsMobileWebclientComponents)
     eventBus.$on('ContactsMobileWebclient::setComponents', setContactsMobileWebclientComponents)

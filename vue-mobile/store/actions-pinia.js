@@ -79,4 +79,8 @@ export default {
   setPassphrase(passphrase) {
     this.passphrase = passphrase
   },
+
+  async asyncChangeOpenPgpSettings(parameters) {
+    return await openpgpWebApi.setOpenPgpSettings(parameters)
+  },
 }

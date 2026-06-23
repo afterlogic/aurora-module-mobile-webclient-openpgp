@@ -6,6 +6,7 @@ export default {
       moduleName: 'OpenPgpWebclient',
       methodName: 'GetPublicKeysFromContacts',
       parameters: {},
+      silentError: true,
     })
       .then(result => result || [])
       .catch(error => [])
@@ -31,5 +32,15 @@ export default {
     })
       .then(result => result || [])
       .catch(error => [])
+  },
+
+  setOpenPgpSettings: async (parameters) => {
+    return webApi.sendRequest({
+      moduleName: 'OpenPgpWebclient',
+      methodName: 'UpdateSettings',
+      parameters,
+    })
+      .then(result => result)
+      .catch(() => false)
   },
 }
