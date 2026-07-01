@@ -2,7 +2,7 @@
   <AppDialog v-model="showDialog" :close="close">
     <template v-slot:content>
       <div class="q-px-lg q-pb-sm dialog__title-text">
-        <span>hello</span>
+        <span>{{ $t('OPENPGPWEBCLIENT.HEADING_IMPORT_KEY') }}</span>
       </div>
       <AppDialogInput
           class="q-mx-lg"
@@ -10,7 +10,6 @@
           type="textarea"
           v-if="!showKeys"
           autofocus
-          @keyup.enter.stop="importKey"
       />
 
       <div v-if="showKeys" class="q-mx-lg q-mt-lg">
@@ -25,11 +24,11 @@
           {{ $t('OPENPGPWEBCLIENT.INFO_TEXT_CONTAINS_NO_KEYS_TO_IMPORT') }}
         </div>
 
-        <div v-if="keysAlreadyThere.length">
+        <div v-if="keysNotForContact.length">
           <div class="q-my-md">
-            {{ $t('OPENPGPWEBCLIENT.INFO_TEXT_CONTAINS_KEYS_ALREADY_IN_SYSTEM') }}
+            {{ disabledForContactHeading }}
           </div>
-          <ImportKeyItem disabled v-for="key in keysAlreadyThere" :key="key.id" :pgpKey="key" />
+          <ImportKeyItem disabled v-for="key in keysNotForContact" :key="key.id" :pgpKey="key" />
         </div>
 
         <div v-if="keysPrivateExternal.length">
@@ -39,20 +38,6 @@
           <ImportKeyItem disabled v-for="key in keysPrivateExternal" :key="key.id" :pgpKey="key" />
         </div>
 
-        <div v-if="keysPrivateNotImported.length">
-          <div class="q-my-md">
-            {{ $t('OPENPGPMOBILEWEBCLIENT.INFO_TEXT_CONTAINS_KEYS_EXTERNAL_NOT_IMPORTED') }}
-          </div>
-          <ImportKeyItem disabled v-for="key in keysPrivateNotImported" :key="key.id" :pgpKey="key" />
-        </div>
-
-        <div v-if="myKeysNotImported.length">
-          <div class="q-my-md">
-            {{ $t('OPENPGPMOBILEWEBCLIENT.INFO_TEXT_NOT_CONTAINS_KEYS_EXTERNAL_NOT_IMPORTED') }}
-          </div>
-          <ImportKeyItem disabled v-for="key in myKeysNotImported" :key="key.id" :pgpKey="key" />
-        </div>
-
         <div v-if="keysBroken.length">
           <ImportKeyItem disabled keysBroken v-for="key in keysBroken" :key="key.id" :pgpKey="key" />
         </div>
@@ -60,7 +45,7 @@
 
     </template>
     <template v-slot:actions>
-      <ButtonDialog class="q-ma-sm"  v-if="!showKeys" :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')" />
+      <ButtonDialog class="q-ma-sm" v-if="!showKeys" :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')" />
       <ButtonDialog class="q-ma-sm"
           v-if="showKeys"
           :action="importKey"
@@ -72,48 +57,47 @@
 </template>
 
 <script>
-import AppDialog from "src/components/common/AppDialog";
-import AppDialogInput from "src/components/common/AppDialogInput";
-import ButtonDialog from "src/components/common/ButtonDialog";
-import ImportKeyItem from "../../settings/dialogs/ImportKeyItem";
-import OpenPgp from "../../../openpgp-helper";
-import eventBus from "src/event-bus";
-import { mapGetters } from "pinia"
-import { useOpenPGPStore, useCoreStore } from 'src/stores/index-all'
+import addressUtils from 'src/utils/address'
+
+import AppDialog from 'src/components/common/AppDialog'
+import AppDialogInput from 'src/components/common/AppDialogInput'
+import ButtonDialog from 'src/components/common/ButtonDialog'
+import ImportKeyItem from '../../settings/dialogs/ImportKeyItem'
+import OpenPgp from '../../../openpgp-helper'
+import eventBus from 'src/event-bus'
 
 export default {
-  name: "ImportKeyForString",
+  name: 'ImportKeyForString',
   components: {
     AppDialog,
     AppDialogInput,
     ButtonDialog,
-    ImportKeyItem
+    ImportKeyItem,
   },
   computed: {
-    ...mapGetters(useOpenPGPStore, ['externalKeys', 'myPublicKeys', 'myPrivateKeys', 'filesKeys']),
-    ...mapGetters(useCoreStore, ['userPublicId']),
     showKeys() {
       return (
-          this.keysBroken.length ||
-          this.keysAlreadyThere.length ||
-          this.keysPrivateExternal.length ||
-          this.keysPrivateNotImported.length ||
-          this.myKeysNotImported.length ||
-          this.keysToImport.length
+          this.keysBroken.length > 0 ||
+          this.keysNotForContact.length > 0 ||
+          this.keysPrivateExternal.length > 0 ||
+          this.keysToImport.length > 0
       )
+    },
+    disabledForContactHeading() {
+      const contactEmail = this.getPrimaryContactEmail()
+      return this.$t('OPENPGPWEBCLIENT.INFO_TEXT_CONTAINS_NOT_PUBLIC_KEYS_OR_WITHOUT_EMAIL', {
+        EMAIL: contactEmail || '',
+      })
     },
   },
   data: () => ({
     showDialog: false,
     contact: null,
     keysArmorToImport: '',
-    saving: false,
     keysToImport: [],
-    keysAlreadyThere: [],
+    keysNotForContact: [],
     keysPrivateExternal: [],
-    myKeysNotImported: [],
     keysBroken: [],
-    keysPrivateNotImported: [],
   }),
   methods: {
     close() {
@@ -122,44 +106,99 @@ export default {
       this.clearKeys()
       this.keysArmorToImport = ''
     },
-    openDialog(contact) {
-      this.showDialog = true
+    openDialog(contact, armor = '') {
       this.contact = contact
-    },
-    async importKey() {
-      eventBus.$emit('ContactsMobileWebclient::setPgpKey', this.keysArmorToImport)
       this.clearKeys()
+      this.keysArmorToImport = armor || ''
+      this.showDialog = true
+      if (armor) {
+        this.$nextTick(() => {
+          this.check()
+        })
+      }
+    },
+    getPrimaryContactEmail() {
+      if (!this.contact) {
+        return ''
+      }
+      return this.contact.ViewEmail
+        || this.contact.PersonalEmail
+        || this.contact.BusinessEmail
+        || this.contact.OtherEmail
+        || ''
+    },
+    getContactEmails() {
+      if (!this.contact) {
+        return []
+      }
+      return [
+        this.contact.ViewEmail,
+        this.contact.PersonalEmail,
+        this.contact.BusinessEmail,
+        this.contact.OtherEmail,
+      ]
+        .filter(Boolean)
+        .map(email => addressUtils.getEmailParts(email).email.toLowerCase())
+    },
+    matchesContact(keyEmail) {
+      const contactEmails = this.getContactEmails()
+      if (!contactEmails.length) {
+        return true
+      }
+      const keyEmailParts = addressUtils.getEmailParts(keyEmail)
+      return contactEmails.includes(keyEmailParts.email.toLowerCase())
+    },
+    importKey() {
+      const keyToImport = this.keysToImport.find(key => key.checked)
+      if (keyToImport?.armor) {
+        eventBus.$emit('ContactsMobileWebclient::setPgpKey', keyToImport.armor)
+      }
       this.close()
     },
     clearKeys() {
       this.keysBroken = []
-      this.keysAlreadyThere = []
+      this.keysNotForContact = []
       this.keysPrivateExternal = []
-      this.keysPrivateNotImported = []
-      this.myKeysNotImported = []
       this.keysToImport = []
     },
     async check() {
-      console.log(this.contact, 'this.contact')
-      const keys = await OpenPgp.getKeysInfo(this.keysArmorToImport)
-      keys.forEach( key => {
-        if (key.sMail === this.contact.ViewEmail) {
-          this.keysToImport.push({
-            email: key.sMail,
-            addInfo: `(${key.iBitSize}, ${key.sType})`,
-            isExternal: false,
-            checked: true,
-          })
+      if (!this.keysArmorToImport.trim()) {
+        return
+      }
+
+      this.clearKeys()
+      const keys = await OpenPgp.getArmorInfo(this.keysArmorToImport)
+
+      keys.forEach(key => {
+        if (!key) {
+          return
+        }
+
+        const keyUsersIds = key.getUserIds()
+        const keyEmail = keyUsersIds.length > 0 ? keyUsersIds[0] : ''
+        const bitSize = key.primaryKey.params[0].byteLength() * 8
+        const keyData = {
+          id: key.getFingerprint(),
+          email: keyEmail,
+          armor: key.armor(),
+          addInfo: `(${bitSize}-bit, ${key.isPublic() ? 'public' : 'private'})`,
+          isExternal: false,
+          checked: true,
+        }
+
+        if (!addressUtils.isCorrectEmail(addressUtils.getEmailParts(keyEmail).email)) {
+          this.keysBroken.push({ ...keyData, checked: false })
+        } else if (!key.isPublic()) {
+          this.keysPrivateExternal.push({ ...keyData, checked: false })
+        } else if (this.matchesContact(keyEmail)) {
+          this.keysToImport.push(keyData)
         } else {
-          this.keysBroken.push({
-            email: key.sMail,
-            addInfo: `(${key.iBitSize}, ${key.sType})`,
-            isExternal: false,
-            checked: false,
-          })
+          this.keysNotForContact.push({ ...keyData, checked: false })
         }
       })
+
+      this.keysArmorToImport = ''
     },
-  }
+  },
 }
 </script>
