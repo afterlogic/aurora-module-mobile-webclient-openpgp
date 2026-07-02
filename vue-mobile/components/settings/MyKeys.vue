@@ -103,7 +103,6 @@ export default {
       }
     },
     openVerifyDialog(key) {
-      console.log('adsasd')
       this.setCurrentMyKey(key)
       askOpenPgpKeyPassword(this.userPublicId, this.$root._getParentComponent, this.check)
     },

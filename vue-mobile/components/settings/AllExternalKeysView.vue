@@ -12,7 +12,11 @@
   </q-scroll-area>
 
   <div class="q-pa-lg full-width flex items-center full-width" v-if="currentKeys.length">
-    <AppButton @click="sendAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_SEND_ALL')" />
+    <AppButton
+      @click="sendAllKeys"
+      :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_SEND_ALL')"
+      :disabled="!isSendAvailable"
+    />
     <AppButton @click="downloadAllKeys" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_DOWNLOAD_ALL')" class="q-mt-lg" />
   </div>
 </template>
@@ -22,6 +26,11 @@ import { mapActions, mapGetters } from 'pinia'
 import { useOpenPGPStore } from 'src/stores/index-all'
 
 import AppButton from 'src/components/common/AppButton'
+import notification from 'src/utils/notification'
+import {
+  composeMessageWithAttachmentContent,
+  isComposeAvailable,
+} from '../../../../MailMobileWebclient/vue-mobile/utils/compose'
 import { downloadKey } from '../../utils';
 import openPgpHelper from '../../openpgp-helper';
 
@@ -40,11 +49,29 @@ export default {
         acc += value.armor
         return acc += '\n'
       }, '')
-    }
+    },
+    isSendAvailable() {
+      return isComposeAvailable() && !!this.armorText
+    },
   },
   methods: {
     ...mapActions(useOpenPGPStore, ['changeCurrentKeys']),
-    sendAllKeys() {},
+    async sendAllKeys() {
+      if (!this.isSendAvailable) {
+        return
+      }
+
+      const fileName = `${this.$t('OPENPGPWEBCLIENT.TEXT_ALL_PUBLIC_KEYS_FILENAME')}.asc`
+      const isComposed = await composeMessageWithAttachmentContent({
+        content: this.armorText,
+        fileName,
+        router: this.$router,
+      })
+
+      if (!isComposed) {
+        notification.showError(this.$t('COREWEBCLIENT.ERROR_UNKNOWN'))
+      }
+    },
     downloadAllKeys() {
       return downloadKey(this.armorText, 'public_keys.asc')
     },
