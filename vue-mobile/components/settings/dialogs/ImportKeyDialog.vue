@@ -145,7 +145,7 @@ export default {
       const checkedExternalKeys = []
       const checkedMyKeys = []
       this.keysToImport.forEach(key => {
-        if (key.isExternal && key.checked) {
+        if ((this.isExternalKeys || key.isExternal) && key.checked) {
           checkedExternalKeys.push({
             Email: key.email.substring(key.email.lastIndexOf("<") + 1, key.email.lastIndexOf(">")),
             Key: key.armor,
