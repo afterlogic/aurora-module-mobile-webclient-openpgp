@@ -125,7 +125,7 @@ const _getSettingsHeaderTitles = params => {
 }
 
 export default {
-  moduleName: 'SettingsMobileWebclient',
+  moduleName: 'OpenPgpMobileWebclient',
 
   requiredModules: [],
 
