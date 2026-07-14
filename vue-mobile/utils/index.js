@@ -1,16 +1,21 @@
 import _ from 'lodash'
 
 export const askOpenPgpKeyPassword = (sFullEmail, getParentComponent, fCallback) => {
-  const oAppComponent = getParentComponent('App')
-  const oAskOpenPgpKeyPasswordComponent = oAppComponent
-    ? (oAppComponent.moduleRefs?.AskOpenPgpKeyPassword ?? oAppComponent.$refs?.AskOpenPgpKeyPassword)
-    : null
-  if (_.isFunction(oAskOpenPgpKeyPasswordComponent.askOpenPgpKeyPassword)) {
+  const oAppComponent = getParentComponent?.('App')
+  const oAskOpenPgpKeyPasswordComponent = oAppComponent?.getModuleRef
+    ? oAppComponent.getModuleRef('AskOpenPgpKeyPassword')
+    : (oAppComponent?.moduleRefs?.AskOpenPgpKeyPassword ?? oAppComponent?.$refs?.AskOpenPgpKeyPassword)
+
+  if (_.isFunction(oAskOpenPgpKeyPasswordComponent?.askOpenPgpKeyPassword)) {
     oAskOpenPgpKeyPasswordComponent.askOpenPgpKeyPassword(sFullEmail, fCallback)
-  } else if (oAskOpenPgpKeyPasswordComponent?.length > 0 ) {
-    if (_.isFunction(oAskOpenPgpKeyPasswordComponent[0].askOpenPgpKeyPassword)) {
+  } else if (oAskOpenPgpKeyPasswordComponent?.length > 0) {
+    if (_.isFunction(oAskOpenPgpKeyPasswordComponent[0]?.askOpenPgpKeyPassword)) {
       oAskOpenPgpKeyPasswordComponent[0].askOpenPgpKeyPassword(sFullEmail, fCallback)
+    } else if (_.isFunction(fCallback)) {
+      fCallback(null)
     }
+  } else if (_.isFunction(fCallback)) {
+    fCallback(null)
   }
 }
 

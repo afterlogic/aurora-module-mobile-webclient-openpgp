@@ -24,17 +24,15 @@ OpenPgpKey.prototype.getDataToSave = function () {
 
 OpenPgpKey.prototype.getPassphrase = function () {
   if (!settings.rememberPassphrase) {
-    // store.commit('openpgpmobile/setPassphrase', { sId: this.sId, sPassphrase: null })
-    useOpenPGPStore.setPassphrase(null)
     return null
   }
-  return this.passphrase
+  return this.passphrase ?? useOpenPGPStore().passphrase
 }
 
 OpenPgpKey.prototype.setPassphrase = function (sPassphrase) {
+  this.passphrase = sPassphrase
   if (settings.rememberPassphrase) {
-    // store.commit('openpgpmobile/setPassphrase', { sId: this.sId, sPassphrase })
-    useOpenPGPStore.setPassphrase(sPassphrase)
+    useOpenPGPStore().setPassphrase(sPassphrase)
   }
 }
 

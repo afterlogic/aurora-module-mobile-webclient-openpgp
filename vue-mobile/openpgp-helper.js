@@ -610,7 +610,7 @@ OpenPgp.prototype.signText = function (
   return new Promise(async (resolve) => {
     let sPassphrase = oPrivateKey.getPassphrase()
     if (sPassphrase === null) {
-      fAskForKeyPassword(oPrivateKey.sEmail, (sPassphrase) => {
+      fAskForKeyPassword(oPrivateKey.email, (sPassphrase) => {
         resolve(this.signTextWithPassphrase(sData, oPrivateKey, sPassphrase))
       })
     } else {
@@ -676,7 +676,7 @@ OpenPgp.prototype.signAndEncryptText = function (
   return new Promise(async (resolve) => {
     let sPassphrase = oPrivateKey.getPassphrase()
     if (sPassphrase === null) {
-      fAskForKeyPassword(oPrivateKey.sEmail, (sPassphrase) => {
+      fAskForKeyPassword(oPrivateKey.email, (sPassphrase) => {
         resolve(
           this.signAndEncryptTextWithPassphrase(
             sData,
@@ -724,7 +724,7 @@ OpenPgp.prototype.signAndEncryptTextWithPassphrase = async function (
       privateKeys: oOpenPgpKey, // for signing (optional)
     }
     try {
-      let oPgpResult = await v.encrypt(oOptions)
+      let oPgpResult = await openpgpHelper.encrypt(oOptions)
       if (oPgpResult && oPgpResult.data) {
         return { sEncryptedSignedData: oPgpResult.data }
       } else {
