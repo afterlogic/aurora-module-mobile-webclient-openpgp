@@ -1,5 +1,9 @@
 <template>
-  <q-scroll-area :thumb-style="{width: '5px'}" class="myKeys__list q-px-lg q-pt-lg">
+  <q-scroll-area
+    data-test-id="settings-openpgp-my-keys-page"
+    :thumb-style="{width: '5px'}"
+    class="myKeys__list q-px-lg q-pt-lg"
+  >
     <div class="q-mb-md text-body1 text-weight-bold">
       {{ $t('OPENPGPWEBCLIENT.LABEL_PUBLIC_KEYS') }}
     </div>

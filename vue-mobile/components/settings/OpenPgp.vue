@@ -1,7 +1,8 @@
 <template>
-  <div class="q-pa-lg settings">
+  <div class="q-pa-lg settings" data-test-id="settings-openpgp">
     <template v-if="isMailAvailable">
       <AppCheckbox
+        data-test-id="settings-openpgp-enable-mail"
         class="settings__label"
         left-label
         v-model="enableOpenPgpInMail"
@@ -22,10 +23,12 @@
     </div>
     <div class="q-my-md">
       <OpenPgpTab
+        data-test-id="settings-openpgp-external-keys"
         @click="$router.push('/settings/open-pgp/external-keys')"
         :label="$t('OPENPGPMOBILEWEBCLIENT.LABEL_EXTERNAL_PUBLIC_KEYS')"
       />
       <OpenPgpTab
+        data-test-id="settings-openpgp-my-keys"
         @click="$router.push('/settings/open-pgp/my-keys')"
         :label="$t('OPENPGPMOBILEWEBCLIENT.LABEL_MY_KEYS')"
       />
