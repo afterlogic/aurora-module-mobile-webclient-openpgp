@@ -27,9 +27,23 @@
 
   <div class="q-pa-lg full-width flex items-center">
     <div class="full-width">
-      <AppButton @click="showGenerateKeys = true" :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE_NEW_KEY')" />
-      <AppButton @click="showImportKeys = true" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')" class="q-mt-lg" />
-      <AppButton @click="getFiles" :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')" class="q-mt-lg" />
+      <AppButton
+        data-test-id="settings-openpgp-generate"
+        @click="showGenerateKeys = true"
+        :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE_NEW_KEY')"
+      />
+      <AppButton
+        data-test-id="settings-openpgp-import-text"
+        @click="showImportKeys = true"
+        :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_TEXT')"
+        class="q-mt-lg"
+      />
+      <AppButton
+        data-test-id="settings-openpgp-import-file"
+        @click="getFiles"
+        :label="$t('OPENPGPMOBILEWEBCLIENT.ACTION_IMPORT_KEY_FILE')"
+        class="q-mt-lg"
+      />
       <q-file ref="fileInput" v-model="files" class="hidden" multiple />
     </div>
   </div>

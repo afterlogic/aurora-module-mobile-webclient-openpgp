@@ -1,11 +1,12 @@
 <template>
-  <AppDialog v-bind="$attrs" :close="() => $emit('close')">
+  <AppDialog data-test-id="settings-openpgp-generate-dialog" v-bind="$attrs" :close="() => $emit('close')">
     <template v-slot:content>
       <div class="dialog__title-text q-mx-lg q-mb-lg">
         {{ $t('OPENPGPWEBCLIENT.HEADING_GENERATE_NEW_KEY') }}
       </div>
       <div class="q-mx-lg">
         <q-input
+            data-test-id="settings-openpgp-generate-email"
             outlined
             dense
             v-model="mailInput"
@@ -15,6 +16,7 @@
             class="q-mb-md"
         />
         <q-input
+            data-test-id="settings-openpgp-generate-password"
             outlined
             dense
             v-model="passInput"
@@ -24,6 +26,7 @@
             class="q-mb-md"
         />
         <q-select
+            data-test-id="settings-openpgp-generate-key-length"
             outlined
             dense
             v-model="keyLengthOption"
@@ -33,7 +36,12 @@
       </div>
     </template>
     <template v-slot:actions>
-      <ButtonDialog class="q-ma-sm" :action="generate" :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE')" />
+      <ButtonDialog
+        data-test-id="settings-openpgp-generate-submit"
+        class="q-ma-sm"
+        :action="generate"
+        :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE')"
+      />
     </template>
   </AppDialog>
 </template>

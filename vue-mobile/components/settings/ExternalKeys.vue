@@ -1,5 +1,10 @@
 <template>
-  <q-scroll-area :thumb-style="{width: '5px'}" class="keys_list q-px-lg q-pt-lg" v-if="!loading">
+  <q-scroll-area
+    data-test-id="settings-openpgp-external-keys-page"
+    :thumb-style="{width: '5px'}"
+    class="keys_list q-px-lg q-pt-lg"
+    v-if="!loading"
+  >
     <div v-if="!keysFromArmor.length" class="q-px-lg text-grey text-subtitle1 text-center">
       {{ $t('OPENPGPWEBCLIENT.INFO_EMPTY_PUBLIC_KEYS') }}
     </div>
