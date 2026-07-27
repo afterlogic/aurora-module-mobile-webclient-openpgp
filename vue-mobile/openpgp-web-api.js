@@ -45,7 +45,7 @@ export default {
       parameters: { ContactUUIDs: contactUUIDs },
       silentError: true,
     })
-      .then(result => result || [])
+      .then((result) => (Array.isArray(result) ? result : []))
       .catch(() => [])
   },
 
