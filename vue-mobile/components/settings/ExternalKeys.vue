@@ -21,14 +21,7 @@
     </div>
   </div>
 
-  <div class="q-mt-xl flex items-center justify-center" v-if="loading">
-    <q-circular-progress
-      indeterminate
-      size="40px"
-      color="primary"
-      class="q-ma-md"
-    />
-  </div>
+  <AppListLoader v-if="loading" initial />
 
   <ImportKeyDialog v-model="showImportKeys" @close="showImportKeys = false" @clear-files="clearFiles" is-external-keys />
 </template>
@@ -38,6 +31,7 @@ import { mapActions, mapGetters } from 'pinia'
 import { useOpenPGPStore } from 'src/stores/index-all'
 
 import AppButton from 'src/components/common/AppButton'
+import AppListLoader from 'src/components/common/AppListLoader'
 
 import ImportKeyDialog from './dialogs/ImportKeyDialog'
 import OpenPgpTab from './OpenPgpTab'
@@ -49,6 +43,7 @@ export default {
     OpenPgpTab,
     ImportKeyDialog,
     AppButton,
+    AppListLoader,
   },
   data: () => ({
     loading: false,
