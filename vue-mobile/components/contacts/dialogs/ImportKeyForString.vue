@@ -45,12 +45,19 @@
 
     </template>
     <template v-slot:actions>
-      <ButtonDialog class="q-ma-sm" v-if="!showKeys" :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')" />
-      <ButtonDialog class="q-ma-sm"
-          v-if="showKeys"
-          :action="importKey"
-          :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEYS')"
-          :disabled="!keysToImport.length"
+      <ButtonDialog
+        class="q-ma-sm"
+        v-if="!showKeys"
+        :action="check"
+        :disabled="!canCheck"
+        :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')"
+      />
+      <ButtonDialog
+        class="q-ma-sm"
+        v-if="showKeys"
+        :action="importKey"
+        :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEYS')"
+        :disabled="!canImport"
       />
     </template>
   </AppDialog>
@@ -82,6 +89,12 @@ export default {
           this.keysPrivateExternal.length > 0 ||
           this.keysToImport.length > 0
       )
+    },
+    canCheck() {
+      return !!(this.keysArmorToImport || '').trim()
+    },
+    canImport() {
+      return this.keysToImport.some((key) => key.checked)
     },
     disabledForContactHeading() {
       const contactEmail = this.getPrimaryContactEmail()
@@ -149,6 +162,9 @@ export default {
       return contactEmails.includes(keyEmailParts.email.toLowerCase())
     },
     importKey() {
+      if (!this.canImport) {
+        return
+      }
       const keyToImport = this.keysToImport.find(key => key.checked)
       if (keyToImport?.armor) {
         eventBus.$emit('ContactsMobileWebclient::setPgpKey', keyToImport.armor)

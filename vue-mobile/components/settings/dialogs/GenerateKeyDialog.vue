@@ -40,6 +40,7 @@
         data-test-id="settings-openpgp-generate-submit"
         class="q-ma-sm"
         :action="generate"
+        :disabled="!canGenerate"
         :label="$t('OPENPGPWEBCLIENT.ACTION_GENERATE')"
       />
     </template>
@@ -74,12 +75,18 @@ export default {
   },
   computed: {
     ...mapGetters(useCoreStore, ['userPublicId']),
+    canGenerate() {
+      return !!(this.mailInput || '').trim()
+    },
   },
   methods: {
     ...mapActions(useOpenPGPStore, ['generateKeys']),
     generate() {
+      if (!this.canGenerate) {
+        return
+      }
       this.generateKeys({
-        userId: this.mailInput,
+        userId: this.mailInput.trim(),
         password: this.passInput,
         keyLength: this.keyLengthOption,
         thenFn: () => this.$emit('close'),

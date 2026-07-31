@@ -56,14 +56,32 @@ export default {
   data: () => ({
     enableOpenPgpInMail: false,
     rememberPassphrase: false,
+    initialEnableOpenPgpInMail: false,
+    initialRememberPassphrase: false,
   }),
   computed: {
     isMailAvailable() {
       return modulesManager.isModuleAvailable('Mail')
     },
+    hasChanges() {
+      return (
+        this.enableOpenPgpInMail !== this.initialEnableOpenPgpInMail ||
+        this.rememberPassphrase !== this.initialRememberPassphrase
+      )
+    },
+  },
+  watch: {
+    hasChanges: {
+      immediate: true,
+      handler(hasChanges) {
+        eventBus.$emit('SettingsMobileWebclient::SetHeaderActionDisabled', !hasChanges)
+      },
+    },
   },
   mounted() {
     const openPgpSettings = getOpenPgpSettings()
+    this.initialEnableOpenPgpInMail = openPgpSettings.enableOpenPgpInMail
+    this.initialRememberPassphrase = openPgpSettings.rememberPassphrase
     this.enableOpenPgpInMail = openPgpSettings.enableOpenPgpInMail
     this.rememberPassphrase = openPgpSettings.rememberPassphrase
 
@@ -71,10 +89,14 @@ export default {
   },
   beforeUnmount() {
     eventBus.$off('OpenPgpMobileWebclient::SaveSettings', this.save)
+    eventBus.$emit('SettingsMobileWebclient::SetHeaderActionDisabled', false)
   },
   methods: {
     ...mapActions(useOpenPGPStore, ['asyncChangeOpenPgpSettings']),
     async save() {
+      if (!this.hasChanges) {
+        return
+      }
       eventBus.$emit('SettingsMobileWebclient::SetHeaderActionSaving', true)
       try {
         const parameters = {
@@ -84,6 +106,8 @@ export default {
         const result = await this.asyncChangeOpenPgpSettings(parameters)
         if (result) {
           setOpenPgpSettings(this.enableOpenPgpInMail, this.rememberPassphrase)
+          this.initialEnableOpenPgpInMail = this.enableOpenPgpInMail
+          this.initialRememberPassphrase = this.rememberPassphrase
         }
       } finally {
         eventBus.$emit('SettingsMobileWebclient::SetHeaderActionSaving', false)

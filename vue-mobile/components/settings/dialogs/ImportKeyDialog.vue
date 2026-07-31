@@ -59,12 +59,19 @@
 
     </template>
     <template v-slot:actions>
-      <ButtonDialog class="q-ma-sm"  v-if="!showKeys" :action="check" :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')" />
-      <ButtonDialog class="q-ma-sm"
-          v-if="showKeys"
-          :action="importKeys"
-          :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEYS')"
-          :disabled="!keysToImport.length"
+      <ButtonDialog
+        class="q-ma-sm"
+        v-if="!showKeys"
+        :action="check"
+        :disabled="!canCheck"
+        :label="$t('OPENPGPWEBCLIENT.ACTION_CHECK')"
+      />
+      <ButtonDialog
+        class="q-ma-sm"
+        v-if="showKeys"
+        :action="importKeys"
+        :label="$t('OPENPGPWEBCLIENT.ACTION_IMPORT_KEYS')"
+        :disabled="!canImport"
       />
     </template>
   </AppDialog>
@@ -121,6 +128,12 @@ export default {
         this.keysToImport.length
       )
     },
+    canCheck() {
+      return !!(this.keysArmorToImport || '').trim()
+    },
+    canImport() {
+      return this.keysToImport.some((key) => key.checked)
+    },
   },
   methods: {
     ...mapActions(useOpenPGPStore, ['asyncAddPublicKeys', 'importMyKeys']),
@@ -142,6 +155,9 @@ export default {
       this.keysToImport = []
     },
     async importKeys() {
+      if (!this.canImport) {
+        return
+      }
       const checkedExternalKeys = []
       const checkedMyKeys = []
       this.keysToImport.forEach(key => {
@@ -164,6 +180,9 @@ export default {
       }
     },
     async check() {
+      if (!this.canCheck) {
+        return
+      }
       const myKeys = [...this.myPublicKeys, ...this.myPrivateKeys]
       const keysFromArmor = await checkPgpKeys(
         this.keysArmorToImport,
